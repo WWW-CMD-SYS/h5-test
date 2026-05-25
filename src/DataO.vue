@@ -103,43 +103,29 @@ function animateCenterNumbers() {
   requestAnimationFrame(update)
 }
 
-// Animate all counter values (equivalent to numInit)
-function animateAllCounters() {
-  // Reset and animate top-left counter values
-  counterValues.value = [0, 0, 0, 0, 0, 0]
-  animateArrayValue(counterValues, 1, 300)
-  animateArrayValue(counterValues, 2, 500)
-  animateArrayValue(counterValues, 3, 400)
-  animateArrayValue(counterValues, 4, 350)
-  animateArrayValue(counterValues, 5, 363)
+// Set all counter values directly (no animation)
+function setAllCounters() {
+  // Top-left counter values
+  counterValues.value = [0, 300, 500, 400, 350, 363]
 
-  // Reset and animate top-right data
-  daysData.value = 0
-  weekData.value = 0
-  monthData.value = 0
-  someThing.value = 0
-  policyData.value = 0
-  animateNumber(daysData, 304)
-  animateNumber(weekData, 2044)
-  animateNumber(monthData, 909)
-  animateNumber(someThing, 980)
-  animateNumber(policyData, 200)
+  // Top-right data
+  daysData.value = 304
+  weekData.value = 2044
+  monthData.value = 909
+  someThing.value = 980
+  policyData.value = 200
 
-  // Animate center numbers
-  animateCenterNumbers()
+  // Center numbers
+  centerNums.value = [6, 6, 6, 6, 6]
 
-  // Reset and animate middle list values
-  const targets = [300, 500, 400, 350, 363]
-  middleListData.value = middleListData.value.map((item, i) => ({
-    ...item,
-    value: 0
-  }))
-  // Use setTimeout to ensure Vue has processed the reset before starting animation
-  setTimeout(() => {
-    targets.forEach((target, i) => {
-      animateArrayValue(middleListData, i, target)
-    })
-  }, 50)
+  // Middle list values
+  middleListData.value = [
+    { name: '测试11', value: 300 },
+    { name: '测试22', value: 500 },
+    { name: '测试33', value: 400 },
+    { name: '测试44', value: 350 },
+    { name: '测试55', value: 363 },
+  ]
 }
 
 // Base info horizontal bar chart
@@ -756,8 +742,8 @@ function initParticles() {
 
 // Main init
 function init() {
-  // Animate all counter values (equivalent to numInit)
-  animateAllCounters()
+  // Set all counter values directly (no animation)
+  setAllCounters()
 
   initParticles()
   initBaseChart()
@@ -771,12 +757,6 @@ function init() {
   initYearsNumChart()
   initContentChart()
   initPublicNumChart()
-
-  // Periodic numInit equivalent - re-trigger counter animations every 6s
-  const tid = setInterval(() => {
-    animateAllCounters()
-  }, 6000)
-  timerIds.push(tid)
 }
 
 onMounted(() => {
