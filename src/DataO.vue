@@ -791,7 +791,7 @@ function handleResize() {
         <div class="main_top_left">
           <div class="main_top_left_top">
             <img src="/images/main_top_left.png" />
-            <div class="main_top_left_top_title">XX公开数据展示</div>
+            <div class="main_top_left_top_title">法律法规合规</div>
             <div class="main_top_left_top_con">
               <div class="main_top_left_top_con_list">
                 <span class="main_top_left_c_l_n main_top_left_c_l_n1">{{ counterValues[1] }}</span>
@@ -887,7 +887,7 @@ function handleResize() {
         <div class="main_top_left main_top_right">
           <div class="main_top_left_top">
             <img src="/images/main_top_left.png" />
-            <div class="main_top_left_top_title">XX数据展示</div>
+            <div class="main_top_left_top_title">剂量与质量控制合规</div>
             <div class="main_top_left_top_con">
               <div class="main_top_left_top_con_left">
                 <span class="daysData">{{ daysData }}</span>

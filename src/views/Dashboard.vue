@@ -9,7 +9,7 @@
         <div class="live-dot"><div class="dot"></div>实时监测中</div>
       </div>
       <div class="hd-center">
-        <div class="hd-title">辐照企业数据总览</div>
+        <div class="hd-title">辐照企业大数据监管平台</div>
         <div class="hd-subtitle">IRRADIATION ENTERPRISE INTELLIGENCE PLATFORM</div>
       </div>
       <div class="hd-side">
@@ -319,6 +319,57 @@
         </div>
       </div>
 
+      <!-- ⑤ 剂量异常处置看板 -->
+      <div class="dose-disp-row">
+        <!-- 左侧：统计摘要 -->
+        <div class="tech-border dose-disp-stats">
+          <i class="corner-bl"></i><i class="corner-br"></i>
+          <div class="dose-disp-title">
+            <span class="dose-disp-title-icon">☢</span>
+            <span>剂量异常处置看板</span>
+            <span class="dose-disp-badge">本月</span>
+          </div>
+          <div class="dose-disp-stat-list">
+            <div v-for="stat in doseDispStats" :key="stat.key" class="dose-disp-stat-item">
+              <div class="dose-disp-stat-left">
+                <span class="dose-disp-stat-dot" :style="{ background: stat.color }"></span>
+                <span class="dose-disp-stat-label">{{ stat.label }}</span>
+              </div>
+              <div class="dose-disp-stat-right">
+                <span class="dose-disp-stat-val">{{ stat.value }}</span>
+                <span class="dose-disp-stat-trend" :style="{ color: stat.trendColor }">{{ stat.trend }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 中间：处置占比环形图 -->
+        <div class="tech-border dose-disp-chart">
+          <i class="corner-bl"></i><i class="corner-br"></i>
+          <div class="dose-disp-title">处置方式占比</div>
+          <div class="dose-disp-chart-wrap">
+            <canvas ref="doseDispChartRef"></canvas>
+          </div>
+        </div>
+
+        <!-- 右侧：最近处置记录 -->
+        <div class="tech-border dose-disp-events">
+          <i class="corner-bl"></i><i class="corner-br"></i>
+          <div class="dose-disp-title">最近处置记录</div>
+          <div class="dose-disp-event-list">
+            <div v-for="evt in doseDispEvents" :key="evt.id" class="dose-disp-event-item" :class="evt.result">
+              <div class="dose-disp-event-row1">
+                <span class="dose-disp-event-batch">{{ evt.batch }}</span>
+                <span class="dose-disp-event-result" :class="evt.result">{{ evt.resultLabel }}</span>
+              </div>
+              <div class="dose-disp-event-row2">
+                <span class="dose-disp-event-desc">{{ evt.desc }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ④ 底部：法律法规合规倒计时 -->
       <div class="tech-border compliance-footer">
         <i class="corner-bl"></i><i class="corner-br"></i>
@@ -389,6 +440,22 @@ function ackAlert(id) {
   const found = all.find(a => a.id === id)
   if (found) found.acked = true
 }
+
+/* ─── 剂量异常处置看板 ─── */
+const doseDispStats = reactive([
+  { key: 'total', label: '偏移批次数', value: '12', trend: '▸ +3 vs 上月', trendColor: 'var(--orange)', color: '#ff3366' },
+  { key: 'remedy', label: '补救再辐照', value: '8 (67%)', trend: '▸ 已恢复 7 批', trendColor: 'var(--green)', color: '#00ffaa' },
+  { key: 'reject', label: '判定不合格', value: '3 (25%)', trend: '▸ 已隔离销毁', trendColor: 'var(--red)', color: '#ff3366' },
+  { key: 'conditional', label: '有条件放行', value: '1 (8%)', trend: '▸ 偏差报告已签', trendColor: 'var(--orange)', color: '#ffaa33' },
+])
+
+const doseDispEvents = reactive([
+  { id: 1, batch: 'B2605-441', result: 'remedy', resultLabel: '再辐照', desc: '剂量偏低 23.1kGy → 补充至 25kGy，复检合格' },
+  { id: 2, batch: 'B2605-438', result: 'reject', resultLabel: '不合格', desc: '剂量超标 26.4kGy，材料变色降解，已报废' },
+  { id: 3, batch: 'B2605-433', result: 'conditional', resultLabel: '有条件放行', desc: '剂量偏高 26.1kGy，产品检测正常，偏差报告签批' },
+  { id: 4, batch: 'B2605-429', result: 'remedy', resultLabel: '再辐照', desc: '剂量偏低 22.8kGy → 补充至目标，复检合格' },
+  { id: 5, batch: 'B2605-421', result: 'reject', resultLabel: '不合格', desc: '剂量严重超标 27.2kGy，包装变形，已报废' },
+])
 
 /* ─── KPI 卡片 ─── */
 const kpiCards = reactive([
@@ -802,6 +869,7 @@ function drawStars() {
 const doseChartRef = ref(null)
 const prodChartRef = ref(null)
 const utilChartRef = ref(null)
+const doseDispChartRef = ref(null)
 let chartInstances = []
 
 function initCharts() {
@@ -870,6 +938,25 @@ function initCharts() {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { position: 'right', labels: { font: { size: 9 }, boxWidth: 10 } } },
       cutout: '60%',
+    },
+  }))
+
+  // 剂量异常处置占比
+  chartInstances.push(new Chart(doseDispChartRef.value, {
+    type: 'doughnut',
+    data: {
+      labels: ['补救再辐照', '判定不合格', '有条件放行'],
+      datasets: [{
+        data: [8, 3, 1],
+        backgroundColor: ['rgba(0,255,170,0.5)', 'rgba(255,51,102,0.5)', 'rgba(255,170,51,0.5)'],
+        borderColor: ['#00ffaa', '#ff3366', '#ffaa33'],
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 9 }, color: '#3a6a8a', boxWidth: 8, padding: 12 } } },
+      cutout: '55%',
     },
   }))
 }
@@ -949,8 +1036,7 @@ onUnmounted(() => {
   --yellow: #ffdd44;
   --font: 'PingFang SC','Microsoft YaHei',system-ui,sans-serif;
 
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
   background: var(--bg-main);
   color: var(--text-1);
   font-family: var(--font);
@@ -1071,14 +1157,13 @@ onUnmounted(() => {
   flex: 1;
   padding: 10px 14px;
   display: grid;
-  grid-template-rows: auto auto auto auto;
-  gap: 8px;
-  overflow: hidden;
-  min-height: 0;
+  grid-template-rows: auto auto auto auto auto;
+  gap: 20px;
 }
 
 /* ─── KPI 横排行 ─── */
 .kpi-row {
+  margin-top: 11rem;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 8px;
@@ -1450,6 +1535,150 @@ onUnmounted(() => {
   height: 100%;
   border-radius: 2px;
   transition: width .6s;
+}
+
+/* ─── 剂量异常处置看板 ─── */
+.dose-disp-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.4fr;
+  gap: 8px;
+  min-height: 0;
+  height: 160px;
+}
+.dose-disp-stats,
+.dose-disp-chart,
+.dose-disp-events {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.dose-disp-title {
+  font-size: 11px;
+  color: var(--text-2);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.dose-disp-title-icon {
+  font-size: 12px;
+  color: var(--red);
+}
+.dose-disp-badge {
+  margin-left: auto;
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 2px;
+  color: var(--cyan);
+  border: 1px solid rgba(0,220,255,0.3);
+  background: rgba(0,220,255,0.06);
+}
+.dose-disp-stat-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+}
+.dose-disp-stat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 8px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 4px;
+}
+.dose-disp-stat-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dose-disp-stat-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dose-disp-stat-label {
+  font-size: 11px;
+  color: var(--text-2);
+}
+.dose-disp-stat-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dose-disp-stat-val {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-1);
+  font-variant-numeric: tabular-nums;
+}
+.dose-disp-stat-trend {
+  font-size: 9px;
+}
+.dose-disp-chart-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dose-disp-event-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dose-disp-event-list::-webkit-scrollbar { width: 3px; }
+.dose-disp-event-list::-webkit-scrollbar-track { background: transparent; }
+.dose-disp-event-list::-webkit-scrollbar-thumb { background: rgba(0,220,255,0.12); border-radius: 2px; }
+.dose-disp-event-item {
+  padding: 5px 8px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 4px;
+  border-left: 2px solid transparent;
+}
+.dose-disp-event-item.remedy { border-left-color: #00ffaa; }
+.dose-disp-event-item.reject { border-left-color: #ff3366; }
+.dose-disp-event-item.conditional { border-left-color: #ffaa33; }
+.dose-disp-event-row1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+.dose-disp-event-batch {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-1);
+}
+.dose-disp-event-result {
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+.dose-disp-event-result.remedy {
+  color: #00ffaa;
+  background: rgba(0,255,170,0.08);
+  border: 1px solid rgba(0,255,170,0.25);
+}
+.dose-disp-event-result.reject {
+  color: #ff3366;
+  background: rgba(255,51,102,0.08);
+  border: 1px solid rgba(255,51,102,0.25);
+}
+.dose-disp-event-result.conditional {
+  color: #ffaa33;
+  background: rgba(255,170,51,0.08);
+  border: 1px solid rgba(255,170,51,0.25);
+}
+.dose-disp-event-desc {
+  font-size: 10px;
+  color: var(--text-3);
+  line-height: 1.3;
 }
 
 /* ─── 底部 ─── */
