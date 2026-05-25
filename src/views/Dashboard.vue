@@ -55,59 +55,186 @@
           </div>
           <div class="conveyor-panel-body">
             <div class="conveyor-panel-svg-wrap">
-              <svg class="conveyor-svg" viewBox="0 0 600 160" preserveAspectRatio="xMidYMid meet">
+              <svg class="conveyor-svg" viewBox="0 0 600 180" preserveAspectRatio="xMidYMid meet">
                 <defs>
+                  <!-- 箭头标记 -->
                   <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                    <path d="M0,0 L6,3 L0,6 Z" fill="#00dcff44"/>
+                    <path d="M0,0 L6,3 L0,6 Z" fill="#00dcff66"/>
                   </marker>
-                  <filter id="glow">
-                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                    <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  <!-- 强发光滤镜 -->
+                  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="3" result="blur1"/>
+                    <feGaussianBlur stdDeviation="6" result="blur2"/>
+                    <feMerge>
+                      <feMergeNode in="blur2"/>
+                      <feMergeNode in="blur1"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
                   </filter>
+                  <!-- 脉冲发光 -->
+                  <filter id="pulseGlow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="4" result="blur"/>
+                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                  <!-- 流动渐变 -->
+                  <linearGradient id="flowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#00dcff00"/>
+                    <stop offset="50%" stop-color="#00dcff"/>
+                    <stop offset="100%" stop-color="#00dcff00"/>
+                  </linearGradient>
+                  <!-- 扫描线渐变 -->
+                  <linearGradient id="scanGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#00dcff00"/>
+                    <stop offset="50%" stop-color="#00dcff"/>
+                    <stop offset="100%" stop-color="#00dcff00"/>
+                  </linearGradient>
+                  <!-- 轨道发光 -->
+                  <linearGradient id="trackGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#00dcff08"/>
+                    <stop offset="20%" stop-color="#00dcff20"/>
+                    <stop offset="50%" stop-color="#00dcff40"/>
+                    <stop offset="80%" stop-color="#00dcff20"/>
+                    <stop offset="100%" stop-color="#00dcff08"/>
+                  </linearGradient>
                 </defs>
-                <!-- 主轨道 -->
-                <line x1="30" y1="80" x2="570" y2="80" stroke="#00dcff18" stroke-width="20" stroke-linecap="round"/>
-                <line x1="30" y1="80" x2="570" y2="80" stroke="#00dcff0c" stroke-width="26" stroke-linecap="round"/>
 
-                <!-- 区域 -->
-                <rect x="18" y="44" width="80" height="72" rx="6" fill="rgba(0,220,255,0.04)" stroke="rgba(0,220,255,0.15)" stroke-width="1"/>
-                <text x="58" y="38" text-anchor="middle" font-size="9" fill="#3a6a8a">进货缓存</text>
+                <!-- ═══ 主轨道（滚轴输送带样式）═══ -->
+                <!-- 轨道底板 — 贯穿全部五个区域：进货缓存(14~102) → 入射检(108~196) → 辐照区(204~396) → 出射检(404~492) → 成品仓(498~586) -->
+                <rect x="14" y="84" width="572" height="12" rx="6" fill="rgba(0,220,255,0.06)" stroke="rgba(0,220,255,0.15)" stroke-width="1"/>
+                <!-- 滚轴（一系列小圆，15px 间距，覆盖 14~586） -->
+                <g opacity="0.4">
+                  <circle cx="22" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="37" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="52" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="67" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="82" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="97" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="112" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="127" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="142" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="157" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="172" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="187" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="202" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="217" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="232" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="247" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="262" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="277" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="292" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="307" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="322" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="337" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="352" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="367" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="382" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="397" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="412" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="427" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="442" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="457" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="472" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="487" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="502" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="517" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="532" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="547" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="562" cy="90" r="3" fill="#00dcff30"/>
+                  <circle cx="577" cy="90" r="3" fill="#00dcff30"/>
+                </g>
+                <!-- 轨道中心流动线 — 贯穿首尾 -->
+                <line x1="16" y1="90" x2="584" y2="90" stroke="#00dcff30" stroke-width="1.5" stroke-dasharray="6 3" opacity="0.6">
+                  <animate attributeName="stroke-dashoffset" from="0" to="-18" dur="0.8s" repeatCount="indefinite"/>
+                </line>
 
-                <rect x="110" y="44" width="80" height="72" rx="6" fill="rgba(0,255,170,0.03)" stroke="rgba(0,255,170,0.12)" stroke-width="1"/>
-                <text x="150" y="38" text-anchor="middle" font-size="9" fill="#3a6a8a">入射检</text>
 
-                <!-- 辐照区高亮 -->
-                <rect x="206" y="28" width="188" height="104" rx="8" fill="rgba(0,220,255,0.06)" stroke="#00dcff" stroke-width="1.5" stroke-dasharray="4 3" filter="url(#glow)"/>
-                <text x="300" y="20" text-anchor="middle" font-size="9" fill="#00dcff" filter="url(#glow)">▷ 辐照处理中</text>
+                <!-- ═══ 区域背景（带呼吸边框）═══ -->
+                <!-- 进货缓存 -->
+                <rect x="14" y="50" width="88" height="82" rx="8" fill="rgba(62,207,255,0.04)" stroke="rgba(62,207,255,0.15)" stroke-width="1"/>
+                <rect x="14" y="50" width="88" height="82" rx="8" fill="none" stroke="#3ecfff" stroke-width="1.5" stroke-dasharray="6 3" opacity="0.3">
+                  <animate attributeName="opacity" values="0.3;0.8;0.3" dur="3s" repeatCount="indefinite"/>
+                </rect>
+                <text x="58" y="42" text-anchor="middle" font-size="9" fill="#5aafcc" font-weight="500">进货缓存</text>
 
-                <rect x="406" y="44" width="80" height="72" rx="6" fill="rgba(0,255,170,0.03)" stroke="rgba(0,255,170,0.12)" stroke-width="1"/>
-                <text x="446" y="38" text-anchor="middle" font-size="9" fill="#3a6a8a">出射检</text>
+                <!-- 入射检 -->
+                <rect x="108" y="50" width="88" height="82" rx="8" fill="rgba(54,232,160,0.04)" stroke="rgba(54,232,160,0.12)" stroke-width="1"/>
+                <rect x="108" y="50" width="88" height="82" rx="8" fill="none" stroke="#36e8a0" stroke-width="1" stroke-dasharray="4 2" opacity="0.25">
+                  <animate attributeName="opacity" values="0.25;0.6;0.25" dur="2.5s" repeatCount="indefinite"/>
+                </rect>
+                <text x="152" y="42" text-anchor="middle" font-size="9" fill="#4aaa8a" font-weight="500">入射检</text>
 
-                <rect x="498" y="44" width="80" height="72" rx="6" fill="rgba(170,102,255,0.03)" stroke="rgba(170,102,255,0.12)" stroke-width="1"/>
-                <text x="538" y="38" text-anchor="middle" font-size="9" fill="#3a6a8a">成品仓</text>
+                <!-- ═══ 辐照区（核心高亮区域）═══ -->
+                <rect x="204" y="34" width="192" height="114" rx="10" fill="rgba(0,220,255,0.04)" stroke="#00dcff" stroke-width="2" filter="url(#glow)"/>
+                <rect x="204" y="34" width="192" height="114" rx="10" fill="none" stroke="#00dcff" stroke-width="1" stroke-dasharray="8 4" opacity="0.5">
+                  <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2s" repeatCount="indefinite"/>
+                </rect>
+                <!-- 扫描线 -->
+                <line x1="204" y1="34" x2="396" y2="34" stroke="#00dcff" stroke-width="1.5" filter="url(#glow)" opacity="0.6">
+                  <animate attributeName="y1" values="34;148;34" dur="3s" repeatCount="indefinite"/>
+                  <animate attributeName="y2" values="34;148;34" dur="3s" repeatCount="indefinite"/>
+                </line>
+                <!-- 脉冲波纹（辐照核心） -->
+                <circle cx="300" cy="91" r="20" fill="none" stroke="#00dcff" stroke-width="1" opacity="0">
+                  <animate attributeName="r" values="20;60" dur="2s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.6;0" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="300" cy="91" r="20" fill="none" stroke="#00dcff" stroke-width="1" opacity="0">
+                  <animate attributeName="r" values="20;60" dur="2s" begin="1s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.6;0" dur="2s" begin="1s" repeatCount="indefinite"/>
+                </circle>
+                <text x="300" y="24" text-anchor="middle" font-size="10" fill="#00dcff" font-weight="600" filter="url(#glow)">▶ 辐照处理中</text>
+
+                <!-- 出射检 -->
+                <rect x="404" y="50" width="88" height="82" rx="8" fill="rgba(54,232,160,0.04)" stroke="rgba(54,232,160,0.12)" stroke-width="1"/>
+                <rect x="404" y="50" width="88" height="82" rx="8" fill="none" stroke="#36e8a0" stroke-width="1" stroke-dasharray="4 2" opacity="0.25">
+                  <animate attributeName="opacity" values="0.25;0.6;0.25" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
+                </rect>
+                <text x="448" y="42" text-anchor="middle" font-size="9" fill="#4aaa8a" font-weight="500">出射检</text>
+
+                <!-- 成品仓 -->
+                <rect x="498" y="50" width="88" height="82" rx="8" fill="rgba(196,155,255,0.04)" stroke="rgba(196,155,255,0.12)" stroke-width="1"/>
+                <rect x="498" y="50" width="88" height="82" rx="8" fill="none" stroke="#c49bff" stroke-width="1" stroke-dasharray="6 3" opacity="0.3">
+                  <animate attributeName="opacity" values="0.3;0.7;0.3" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+                </rect>
+                <text x="542" y="42" text-anchor="middle" font-size="9" fill="#8a6fcc" font-weight="500">成品仓</text>
 
                 <!-- 货位 -->
                 <g ref="cargoGroupRef"></g>
 
-                <!-- 标签 -->
-                <text x="58"  y="88" text-anchor="middle" font-size="10" fill="#6ab0d0">缓存区</text>
-                <text x="150" y="88" text-anchor="middle" font-size="10" fill="#6ab0d0">检测中</text>
-                <text x="300" y="92" text-anchor="middle" font-size="12" font-weight="500" fill="#00dcff" filter="url(#glow)">辐照中</text>
-                <text x="300" y="108" text-anchor="middle" font-size="10" fill="#00dcff88">剂量: 25 kGy</text>
-                <text x="446" y="88" text-anchor="middle" font-size="10" fill="#6ab0d0">检测中</text>
-                <text x="538" y="88" text-anchor="middle" font-size="10" fill="#aa66ff">入库中</text>
+                <!-- 流动货物（在轨道上移动） -->
+                <g ref="movingCargoRef"></g>
 
-                <!-- 箭头 -->
-                <line x1="100" y1="80" x2="108" y2="80" stroke="#00dcff33" stroke-width="1.5" marker-end="url(#arr)"/>
-                <line x1="192" y1="80" x2="200" y2="80" stroke="#00dcff33" stroke-width="1.5" marker-end="url(#arr)"/>
-                <line x1="396" y1="80" x2="404" y2="80" stroke="#00dcff33" stroke-width="1.5" marker-end="url(#arr)"/>
-                <line x1="488" y1="80" x2="496" y2="80" stroke="#00dcff33" stroke-width="1.5" marker-end="url(#arr)"/>
+                <!-- ═══ 区域标签（带状态色）═══ -->
+                <text x="58"  y="98" text-anchor="middle" font-size="10" fill="#5aafcc" font-weight="500">缓存区</text>
+                <text x="152" y="98" text-anchor="middle" font-size="10" fill="#4aaa8a" font-weight="500">检测中</text>
+                <text x="300" y="48" text-anchor="middle" font-size="13" font-weight="600" fill="#00dcff" filter="url(#glow)">辐照中</text>
+                <text x="300" y="64" text-anchor="middle" font-size="10">
+                  <tspan fill="#00dcffaa">剂量: </tspan>
+                  <tspan fill="#7CFC00" font-weight="800">25</tspan>
+                  <tspan fill="#00dcffaa"> kGy</tspan>
+                </text>
+                <text x="448" y="98" text-anchor="middle" font-size="10" fill="#4aaa8a" font-weight="500">检测中</text>
+                <text x="542" y="98" text-anchor="middle" font-size="10" fill="#8a7fcc" font-weight="500">入库中</text>
 
-                <!-- 计数 -->
-                <text x="58"  y="110" text-anchor="middle" font-size="9" fill="#3a6a8a">{{ zoneCounts[0] }}</text>
-                <text x="150" y="110" text-anchor="middle" font-size="9" fill="#3a6a8a">{{ zoneCounts[1] }}</text>
-                <text x="446" y="110" text-anchor="middle" font-size="9" fill="#3a6a8a">{{ zoneCounts[2] }}</text>
-                <text x="538" y="110" text-anchor="middle" font-size="9" fill="#6a5fa8">{{ zoneCounts[3] }}</text>
+                <!-- ═══ 动态箭头（流动虚线）═══ -->
+                <line x1="102" y1="90" x2="106" y2="90" stroke="#00dcff" stroke-width="2" marker-end="url(#arr)" filter="url(#glow)">
+                  <animate attributeName="opacity" values="0.4;1;0.4" dur="1.5s" repeatCount="indefinite"/>
+                </line>
+                <line x1="196" y1="90" x2="200" y2="90" stroke="#00dcff" stroke-width="2" marker-end="url(#arr)" filter="url(#glow)">
+                  <animate attributeName="opacity" values="0.4;1;0.4" dur="1.5s" begin="0.5s" repeatCount="indefinite"/>
+                </line>
+                <line x1="400" y1="90" x2="404" y2="90" stroke="#00dcff" stroke-width="2" marker-end="url(#arr)" filter="url(#glow)">
+                  <animate attributeName="opacity" values="0.4;1;0.4" dur="1.5s" begin="0.3s" repeatCount="indefinite"/>
+                </line>
+                <line x1="494" y1="90" x2="498" y2="90" stroke="#00dcff" stroke-width="2" marker-end="url(#arr)" filter="url(#glow)">
+                  <animate attributeName="opacity" values="0.4;1;0.4" dur="1.5s" begin="0.8s" repeatCount="indefinite"/>
+                </line>
+
+                <!-- ═══ 货位计数 ═══ -->
+                <text x="58"  y="124" text-anchor="middle" font-size="9" fill="#3a8aaa">{{ zoneCounts[0] }}</text>
+                <text x="152" y="124" text-anchor="middle" font-size="9" fill="#3a8a7a">{{ zoneCounts[1] }}</text>
+                <text x="448" y="124" text-anchor="middle" font-size="9" fill="#3a8a7a">{{ zoneCounts[2] }}</text>
+                <text x="542" y="124" text-anchor="middle" font-size="9" fill="#7a6fbc">{{ zoneCounts[3] }}</text>
               </svg>
             </div>
             <div class="conveyor-panel-progress">
@@ -316,11 +443,11 @@ const cargoGroupRef = ref(null)
 const zoneCounts = ref(['', '', '', ''])
 
 const zones = [
-  { x: 22, y: 60, w: 72, count: 8, color: '#00dcff', cntIdx: 0 },
-  { x: 114, y: 60, w: 72, count: 3, color: '#00ffaa', cntIdx: 1 },
-  { x: 210, y: 55, w: 180, count: 6, color: '#00dcff', cntIdx: null, active: true },
-  { x: 410, y: 60, w: 72, count: 2, color: '#00ffaa', cntIdx: 2 },
-  { x: 502, y: 60, w: 72, count: 11, color: '#aa66ff', cntIdx: 3 },
+  { x: 18, y: 66, w: 80, count: 8, color: '#3ecfff', cntIdx: 0 },   // 浅天蓝 — 进货
+  { x: 112, y: 66, w: 80, count: 3, color: '#36e8a0', cntIdx: 1 },  // 翡翠绿 — 入射检
+  { x: 208, y: 60, w: 184, count: 6, color: '#00dcff', cntIdx: null, active: true }, // 亮青 — 辐照区
+  { x: 408, y: 66, w: 80, count: 2, color: '#36e8a0', cntIdx: 2 },  // 翡翠绿 — 出射检
+  { x: 502, y: 66, w: 80, count: 11, color: '#c49bff', cntIdx: 3 }, // 薰衣紫 — 成品仓
 ]
 
 function drawCargo() {
@@ -334,21 +461,131 @@ function drawCargo() {
     for (let i = 0; i < n; i++) {
       const cols = z.active ? 3 : 2
       const col = i % cols, row = Math.floor(i / cols)
-      const bw = z.active ? 18 : 16, bh = 16, gap = 4
+      const bw = z.active ? 24 : 20, bh = 18, gap = 5
       const gw = cols * (bw + gap) - gap
       const bx = z.x + (z.w - gw) / 2 + col * (bw + gap)
-      const by = 67 + row * (bh + 4)
-      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
-      rect.setAttribute('x', bx)
-      rect.setAttribute('y', by)
-      rect.setAttribute('width', bw)
-      rect.setAttribute('height', bh)
-      rect.setAttribute('rx', '2')
-      rect.setAttribute('fill', z.active ? 'rgba(0,220,255,0.25)' : 'rgba(255,255,255,0.05)')
-      rect.setAttribute('stroke', z.active ? '#00dcff' : 'rgba(255,255,255,0.1)')
-      rect.setAttribute('stroke-width', '1')
-      if (z.active) rect.style.animation = `glow ${1.5 + i * 0.2}s ease-in-out infinite alternate`
-      g.appendChild(rect)
+      const by = 72 + row * (bh + 4)
+
+      const group = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+      const zoneColors = ['#3ecfff', '#36e8a0', '#36e8a0', '#c49bff']
+      const zoneColor = z.active ? '#00dcff' : (zoneColors[z.cntIdx] || '#3ecfff')
+
+      // 底层光晕（活跃状态）
+      if (z.active) {
+        const glow = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+        glow.setAttribute('x', bx - 2)
+        glow.setAttribute('y', by - 2)
+        glow.setAttribute('width', bw + 4)
+        glow.setAttribute('height', bh + 7)
+        glow.setAttribute('rx', '3')
+        glow.setAttribute('fill', 'rgba(0,220,255,0.10)')
+        glow.setAttribute('filter', 'url(#glow)')
+        group.appendChild(glow)
+      }
+
+      // ═══ 托盘（底部扁矩形 — 更明显的木质感）═══
+      const pallet = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+      pallet.setAttribute('x', bx - 1)
+      pallet.setAttribute('y', by + bh - 3)
+      pallet.setAttribute('width', bw + 2)
+      pallet.setAttribute('height', 4)
+      pallet.setAttribute('rx', '1.5')
+      pallet.setAttribute('fill', z.active ? 'rgba(0,200,230,0.55)' : `${zoneColor}40`)
+      pallet.setAttribute('stroke', z.active ? 'rgba(0,220,255,0.5)' : `${zoneColor}50`)
+      pallet.setAttribute('stroke-width', '0.5')
+      group.appendChild(pallet)
+      // 托盘底部横档
+      const palletBar = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+      palletBar.setAttribute('x', bx + 3)
+      palletBar.setAttribute('y', by + bh - 2)
+      palletBar.setAttribute('width', bw - 4)
+      palletBar.setAttribute('height', 1.5)
+      palletBar.setAttribute('rx', '0.5')
+      palletBar.setAttribute('fill', z.active ? 'rgba(0,180,220,0.3)' : `${zoneColor}18`)
+      group.appendChild(palletBar)
+
+      // ═══ 货物箱体（主矩形，带圆角）═══
+      const box = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+      box.setAttribute('x', bx + 1)
+      box.setAttribute('y', by)
+      box.setAttribute('width', bw - 2)
+      box.setAttribute('height', bh - 3)
+      box.setAttribute('rx', '2')
+      if (z.active) {
+        box.setAttribute('fill', 'rgba(0,220,255,0.22)')
+        box.setAttribute('stroke', '#00dcff')
+        box.setAttribute('stroke-width', '1.2')
+      } else {
+        box.setAttribute('fill', `${zoneColor}20`)
+        box.setAttribute('stroke', `${zoneColor}60`)
+        box.setAttribute('stroke-width', '0.8')
+      }
+      group.appendChild(box)
+
+      // ═══ 箱体顶部高光（立体感）═══
+      const topLight = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+      topLight.setAttribute('x', bx + 3)
+      topLight.setAttribute('y', by + 1)
+      topLight.setAttribute('width', bw - 6)
+      topLight.setAttribute('height', 2.5)
+      topLight.setAttribute('rx', '1')
+      topLight.setAttribute('fill', z.active ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.08)')
+      group.appendChild(topLight)
+
+      // ═══ 箱体侧面阴影线（立体感）═══
+      const sideLine = document.createElementNS('http://www.w3.org/2000/svg', 'line')
+      sideLine.setAttribute('x1', bx + bw - 3)
+      sideLine.setAttribute('y1', by + 4)
+      sideLine.setAttribute('x2', bx + bw - 3)
+      sideLine.setAttribute('y2', by + bh - 6)
+      sideLine.setAttribute('stroke', z.active ? 'rgba(0,220,255,0.25)' : `${zoneColor}25`)
+      sideLine.setAttribute('stroke-width', '0.8')
+      group.appendChild(sideLine)
+
+      // ═══ 货物标签/条码示意（箱体正面小横线）═══
+      const label1 = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+      label1.setAttribute('x', bx + 4)
+      label1.setAttribute('y', by + 6)
+      label1.setAttribute('width', bw - 8)
+      label1.setAttribute('height', 1.8)
+      label1.setAttribute('rx', '0.5')
+      label1.setAttribute('fill', z.active ? 'rgba(0,220,255,0.35)' : `${zoneColor}35`)
+      group.appendChild(label1)
+
+      const label2 = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+      label2.setAttribute('x', bx + 4)
+      label2.setAttribute('y', by + 9.5)
+      label2.setAttribute('width', (bw - 8) * 0.6)
+      label2.setAttribute('height', 1.2)
+      label2.setAttribute('rx', '0.5')
+      label2.setAttribute('fill', z.active ? 'rgba(0,220,255,0.2)' : `${zoneColor}22`)
+      group.appendChild(label2)
+
+      // ═══ 状态指示灯（左上角小圆点）═══
+      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+      dot.setAttribute('cx', bx + 4)
+      dot.setAttribute('cy', by + 3.5)
+      dot.setAttribute('r', '1.5')
+      if (z.active) {
+        dot.setAttribute('fill', '#00ffaa')
+        dot.setAttribute('filter', 'url(#pulseGlow)')
+      } else {
+        dot.setAttribute('fill', zoneColor)
+        dot.setAttribute('opacity', '0.6')
+      }
+      group.appendChild(dot)
+
+      // 活跃状态添加呼吸动画
+      if (z.active) {
+        const anim = document.createElementNS('http://www.w3.org/2000/svg', 'animate')
+        anim.setAttribute('attributeName', 'opacity')
+        anim.setAttribute('values', '0.7;1;0.7')
+        anim.setAttribute('dur', `${1.2 + i * 0.15}s`)
+        anim.setAttribute('repeatCount', 'indefinite')
+        box.appendChild(anim)
+      }
+
+      g.appendChild(group)
     }
     if (z.cntIdx !== null) {
       zoneCounts.value[z.cntIdx] = `${z.count} 货位`
@@ -357,6 +594,171 @@ function drawCargo() {
 }
 
 let cargoTimer = null
+
+/* ─── 输送带流动货物动画 ─── */
+const movingCargoRef = ref(null)
+let movingItems = []
+let moveAnimId = null
+
+// 轨道区域定义（x坐标范围 + 统一色彩体系）— 与轨道底板 x=14, width=572 对齐
+const trackZones = [
+  { name: '进货缓存', x1: 14, x2: 102, color: '#3ecfff' },   // 浅天蓝
+  { name: '入射检', x1: 108, x2: 196, color: '#36e8a0' },     // 翡翠绿
+  { name: '辐照区', x1: 204, x2: 396, color: '#00dcff' },     // 亮青
+  { name: '出射检', x1: 404, x2: 492, color: '#36e8a0' },     // 翡翠绿
+  { name: '成品仓', x1: 498, x2: 586, color: '#c49bff' },     // 薰衣紫
+]
+
+function createMovingCargo() {
+  const g = movingCargoRef.value
+  if (!g) return
+
+  // 从起始区域色系随机选色（不再用橙色 #ffaa33）
+  const colors = ['#3ecfff', '#36e8a0', '#c49bff', '#5ee8c0']
+  const color = colors[Math.floor(Math.random() * colors.length)]
+  const id = 'mc_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
+
+  const group = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+  group.setAttribute('id', id)
+
+  // 托盘（比箱体宽一圈）
+  const pallet = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+  pallet.setAttribute('x', -13)
+  pallet.setAttribute('y', 7)
+  pallet.setAttribute('width', 26)
+  pallet.setAttribute('height', 3.5)
+  pallet.setAttribute('rx', '1.5')
+  pallet.setAttribute('fill', color + '50')
+  pallet.setAttribute('stroke', color + '40')
+  pallet.setAttribute('stroke-width', '0.5')
+  group.appendChild(pallet)
+  // 托盘底部横档
+  const palletBar = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+  palletBar.setAttribute('x', -9)
+  palletBar.setAttribute('y', 8.5)
+  palletBar.setAttribute('width', 18)
+  palletBar.setAttribute('height', 1.2)
+  palletBar.setAttribute('rx', '0.5')
+  palletBar.setAttribute('fill', color + '20')
+  group.appendChild(palletBar)
+
+  // 箱体（主矩形）
+  const box = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+  box.setAttribute('x', -10)
+  box.setAttribute('y', -7)
+  box.setAttribute('width', 20)
+  box.setAttribute('height', 14)
+  box.setAttribute('rx', '2')
+  box.setAttribute('fill', color + '25')
+  box.setAttribute('stroke', color + '90')
+  box.setAttribute('stroke-width', '0.8')
+  group.appendChild(box)
+
+  // 顶部高光
+  const highlight = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+  highlight.setAttribute('x', -8)
+  highlight.setAttribute('y', -6)
+  highlight.setAttribute('width', 16)
+  highlight.setAttribute('height', 2.5)
+  highlight.setAttribute('rx', '1')
+  highlight.setAttribute('fill', 'rgba(255,255,255,0.12)')
+  group.appendChild(highlight)
+
+  // 标签线1
+  const label1 = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+  label1.setAttribute('x', -7)
+  label1.setAttribute('y', -1)
+  label1.setAttribute('width', 14)
+  label1.setAttribute('height', 1.8)
+  label1.setAttribute('rx', '0.5')
+  label1.setAttribute('fill', color + '40')
+  group.appendChild(label1)
+
+  // 标签线2
+  const label2 = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+  label2.setAttribute('x', -7)
+  label2.setAttribute('y', 2.5)
+  label2.setAttribute('width', 8)
+  label2.setAttribute('height', 1.2)
+  label2.setAttribute('rx', '0.5')
+  label2.setAttribute('fill', color + '28')
+  group.appendChild(label2)
+
+  // 状态灯
+  const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+  dot.setAttribute('cx', 7)
+  dot.setAttribute('cy', -4)
+  dot.setAttribute('r', '1.3')
+  dot.setAttribute('fill', '#00ffaa')
+  dot.setAttribute('opacity', '0.7')
+  group.appendChild(dot)
+
+  g.appendChild(group)
+
+  movingItems.push({
+    id,
+    el: group,
+    x: 16,  // 从轨道左边界(14) + 2px 偏移开始
+    y: 90,
+    speed: 0.8 + Math.random() * 0.6,
+    color,
+  })
+}
+
+function updateMovingCargo() {
+  const g = movingCargoRef.value
+  if (!g) return
+
+  // 每隔一段时间生成新货物
+  if (Math.random() < 0.015 && movingItems.length < 8) {
+    createMovingCargo()
+  }
+
+  // 更新每个流动货物的位置
+  for (let i = movingItems.length - 1; i >= 0; i--) {
+    const item = movingItems[i]
+    item.x += item.speed
+
+    // 根据位置计算Y轴轻微波动（模拟轨道震动）
+    const wave = Math.sin(item.x * 0.05) * 1.5
+    item.y = 90 + wave
+
+    // 更新DOM位置
+    item.el.setAttribute('transform', `translate(${item.x}, ${item.y})`)
+
+    // 判断当前所在区域，改变颜色（平滑过渡）
+    const zone = trackZones.find(z => item.x >= z.x1 && item.x <= z.x2)
+    if (zone && zone.color !== item.color) {
+      item.color = zone.color
+      // 更新箱体颜色
+      const rects = item.el.querySelectorAll('rect')
+      const box = rects[2] // 第3个rect是箱体
+      if (box) {
+        box.setAttribute('fill', zone.color + '25')
+        box.setAttribute('stroke', zone.color + '90')
+      }
+      const pallet = rects[0] // 第1个rect是托盘
+      if (pallet) {
+        pallet.setAttribute('fill', zone.color + '50')
+        pallet.setAttribute('stroke', zone.color + '40')
+      }
+      const palletBar = rects[1] // 第2个rect是横档
+      if (palletBar) palletBar.setAttribute('fill', zone.color + '20')
+      const label1 = rects[4] // 第5个rect是标签1
+      if (label1) label1.setAttribute('fill', zone.color + '40')
+      const label2 = rects[5] // 第6个rect是标签2
+      if (label2) label2.setAttribute('fill', zone.color + '28')
+    }
+
+    // 到达终点（轨道右边界 586 + 货物半宽），移除
+    if (item.x > 596) {
+      g.removeChild(item.el)
+      movingItems.splice(i, 1)
+    }
+  }
+
+  moveAnimId = requestAnimationFrame(updateMovingCargo)
+}
 
 /* ─── 星空背景 ─── */
 const starCanvasRef = ref(null)
@@ -498,6 +900,8 @@ onMounted(() => {
       zones[4].count = 8 + Math.floor(Math.random() * 5)
       drawCargo()
     }, 3000)
+    // 启动流动货物动画
+    updateMovingCargo()
   })
 
   // 图表
@@ -511,6 +915,9 @@ onUnmounted(() => {
   if (clockTimer) clearInterval(clockTimer)
   if (complianceTimer) clearInterval(complianceTimer)
   if (cargoTimer) clearInterval(cargoTimer)
+
+  // 取消流动货物动画
+  if (moveAnimId) cancelAnimationFrame(moveAnimId)
 
   // 取消星空动画
   if (starAnimId) cancelAnimationFrame(starAnimId)
@@ -741,7 +1148,7 @@ onUnmounted(() => {
   display: grid;
   grid-template-columns: 1fr 1.8fr 1fr;
   gap: 8px;
-  height: 200px;
+  height: 220px;
   min-height: 0;
 }
 
