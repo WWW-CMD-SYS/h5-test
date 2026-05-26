@@ -63,7 +63,6 @@
             <div class="cv2-header-right">
               <span class="cv2-tag cv2-tag-cyan"><span class="cv2-tag-dot"></span>Co-60 #1</span>
               <span class="cv2-tag cv2-tag-dim">批次 B2605-441</span>
-              <span class="cv2-tag cv2-tag-green">25 kGy</span>
             </div>
           </div>
           <!-- SVG 流程 -->
@@ -324,33 +323,25 @@
               </line>
             </svg>
           </div>
-          <!-- 底部进度 -->
-          <div class="cv2-progress-row">
-            <div class="cv2-prog-item">
-              <div class="cv2-prog-labels">
-                <span class="cv2-prog-name">已辐照</span>
-                <span class="cv2-prog-val cv2-cyan">312 <em>/ 400</em></span>
+          <!-- 底部：剂量显示 + 进度整合区 -->
+          <div class="cv2-dose-bar">
+            <div class="cv2-dose-inline">
+              <!-- 左侧：大字号剂量 -->
+              <div class="cv2-dose-block">
+                <div class="cv2-dose-num-wrap">
+                  剂量 : <span class="cv2-dose-num">{{ realtimeDose }}</span>
+                  <span class="cv2-dose-num-unit">kGy</span>
+                </div>
               </div>
-              <div class="cv2-prog-track">
-                <div class="cv2-prog-fill cv2-fill-cyan" style="width:78%"><span class="cv2-spark"></span></div>
-              </div>
-            </div>
-            <div class="cv2-prog-item">
-              <div class="cv2-prog-labels">
-                <span class="cv2-prog-name">在线时长</span>
-                <span class="cv2-prog-val cv2-green">6.4 <em>/ 8h</em></span>
-              </div>
-              <div class="cv2-prog-track">
-                <div class="cv2-prog-fill cv2-fill-green" style="width:80%"><span class="cv2-spark"></span></div>
-              </div>
-            </div>
-            <div class="cv2-prog-item">
-              <div class="cv2-prog-labels">
-                <span class="cv2-prog-name">今日目标</span>
-                <span class="cv2-prog-val cv2-green">4287 <em>/ 5000</em></span>
-              </div>
-              <div class="cv2-prog-track">
-                <div class="cv2-prog-fill cv2-fill-green" style="width:86%"><span class="cv2-spark"></span></div>
+              <!-- 右侧：进度 + 范围 -->
+              <div class="cv2-dose-range-block">
+                <div class="cv2-dose-sample-bar">
+                  <div class="cv2-dose-sample-fill" :style="{ width: dosePercent + '%' }"><span class="cv2-dose-sample-glow"></span></div>
+                  <div class="cv2-dose-sample-dot" :style="{ left: dosePercent + '%' }"></div>
+                  <div class="cv2-dose-sample-ticks">
+                    <span>23.75</span><span style="color:#7fff00">25.00</span><span>26.25</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -376,48 +367,6 @@
             </template>
             <div v-else style="padding:20px;text-align:center;color:var(--text-3);font-size:11px">
               暂无未确认设备异常报警 · 系统正常
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Dose Hero：实时辐照剂量突出展示（位于输送线下方） -->
-      <div class="dose-hero">
-        <div class="dose-hero-bg"></div>
-        <div class="dose-hero-inner">
-          <div class="dose-hero-left">
-            <div class="dose-hero-label">实时辐照剂量</div>
-            <div class="dose-hero-value-wrap">
-              <span class="dose-hero-value">{{ realtimeDose }}</span>
-              <span class="dose-hero-unit">kGy</span>
-              <span class="dose-hero-status"><span class="dose-hero-dot"></span>运行中</span>
-            </div>
-          </div>
-          <div class="dose-hero-mid">
-            <div class="dose-hero-range-bar">
-              <div class="dhr-track">
-                <div class="dhr-fill" :style="{ width: dosePercent + '%' }">
-                  <div class="dhr-glow"></div>
-                </div>
-                <div class="dhr-dot" :style="{ left: dosePercent + '%' }"></div>
-              </div>
-              <div class="dhr-ticks">
-                <span>23.75</span><span style="color:#7fff00;font-weight:600">25.00</span><span>26.25</span>
-              </div>
-            </div>
-          </div>
-          <div class="dose-hero-right">
-            <div class="dhs-item">
-              <span class="dhs-label">剂量率</span>
-              <span class="dhs-val">3.2 <em>kGy/h</em></span>
-            </div>
-            <div class="dhs-item">
-              <span class="dhs-label">累计</span>
-              <span class="dhs-val">1,247 <em>kGy</em></span>
-            </div>
-            <div class="dhs-item">
-              <span class="dhs-label">进度</span>
-              <span class="dhs-val green">312 <em>/ 400</em></span>
             </div>
           </div>
         </div>
@@ -1251,168 +1200,6 @@ onUnmounted(() => {
 .tech-border :deep(.corner-bl) { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
 .tech-border :deep(.corner-br) { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
 
-/* ─── 剂量英雄条 ─── */
-.dose-hero {
-  position: relative;
-  z-index: 8;
-  margin: 0 0 10px 0;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid rgba(0,229,255,0.3);
-  background: linear-gradient(135deg, rgba(0,15,40,0.95) 0%, rgba(0,25,55,0.9) 50%, rgba(0,10,30,0.95) 100%);
-  box-shadow: 0 0 30px rgba(0,229,255,0.08), inset 0 1px 0 rgba(0,229,255,0.1);
-  flex-shrink: 0;
-}
-.dose-hero-bg {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 50% 80% at 30% 50%, rgba(0,229,255,0.06) 0%, transparent 70%),
-    radial-gradient(ellipse 30% 60% at 70% 50%, rgba(127,255,0,0.04) 0%, transparent 60%);
-  pointer-events: none;
-}
-.dose-hero-inner {
-  position: relative;
-  display: grid;
-  grid-template-columns: 200px 1fr 280px;
-  align-items: center;
-  padding: 10px 20px;
-  gap: 20px;
-}
-.dose-hero-left {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.dose-hero-label {
-  font-size: 10px;
-  color: rgba(0,229,255,0.6);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-.dose-hero-value-wrap {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-}
-.dose-hero-value {
-  font-size: 48px;
-  font-weight: 700;
-  color: #7fff00;
-  line-height: 1;
-  text-shadow: 0 0 20px rgba(127,255,0,0.4), 0 0 40px rgba(127,255,0,0.15);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -1px;
-}
-.dose-hero-unit {
-  font-size: 16px;
-  color: rgba(127,255,0,0.7);
-  font-weight: 500;
-}
-.dose-hero-status {
-  font-size: 11px;
-  color: rgba(0,229,255,0.8);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-top: 2px;
-}
-.dose-hero-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: #00ffaa;
-  box-shadow: 0 0 8px #00ffaa;
-  animation: dosePulse 1s ease-in-out infinite;
-}
-@keyframes dosePulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 8px #00ffaa, 0 0 16px rgba(0,255,170,0.5); }
-  50% { opacity: 0.4; box-shadow: 0 0 3px #00ffaa, 0 0 6px rgba(0,255,170,0.2); }
-}
-.dose-hero-mid {
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-}
-.dose-hero-range-bar {
-  width: 100%;
-}
-.dhr-track {
-  height: 8px;
-  background: rgba(0,229,255,0.08);
-  border-radius: 4px;
-  position: relative;
-  overflow: visible;
-  border: 1px solid rgba(0,229,255,0.15);
-}
-.dhr-fill {
-  height: 100%;
-  border-radius: 4px;
-  background: linear-gradient(90deg, #0044aa, #00e5ff, #7fff00);
-  box-shadow: 0 0 12px rgba(0,229,255,0.4);
-  position: relative;
-  transition: width 0.8s ease;
-  min-width: 2px;
-}
-.dhr-glow {
-  position: absolute;
-  right: 0; top: -4px;
-  width: 20px; height: 16px;
-  background: radial-gradient(ellipse, rgba(127,255,0,0.5) 0%, transparent 70%);
-  border-radius: 50%;
-}
-.dhr-dot {
-  position: absolute;
-  top: 50%; transform: translate(-50%, -50%);
-  width: 14px; height: 14px;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 10px rgba(127,255,0,0.8), 0 0 20px rgba(0,229,255,0.4), 0 0 4px #7fff00;
-  transition: left 0.8s ease;
-  z-index: 2;
-}
-.dhr-ticks {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 6px;
-  font-size: 10px;
-  color: rgba(0,229,255,0.4);
-  font-variant-numeric: tabular-nums;
-}
-.dose-hero-right {
-  display: flex;
-  gap: 16px;
-  justify-content: flex-end;
-}
-.dhs-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1px;
-  padding: 4px 10px;
-  border-radius: 6px;
-  background: rgba(0,229,255,0.04);
-  border: 1px solid rgba(0,229,255,0.1);
-}
-.dhs-label {
-  font-size: 9px;
-  color: rgba(0,229,255,0.45);
-  letter-spacing: 0.5px;
-}
-.dhs-val {
-  font-size: 14px;
-  font-weight: 600;
-  color: #e0f7ff;
-  font-variant-numeric: tabular-nums;
-}
-.dhs-val em {
-  font-style: normal;
-  font-size: 9px;
-  font-weight: 400;
-  color: rgba(0,229,255,0.4);
-  margin-left: 2px;
-}
-.dhs-val.green { color: #7fff00; }
-
 /* ─── 顶部发光标题栏 ─── */
 .hd {
   position: relative;
@@ -1565,7 +1352,7 @@ onUnmounted(() => {
   display: grid;
   grid-template-columns: 1fr 1.8fr 1fr;
   gap: 10px;
-  height: 300px;
+  height: 380px;
   min-height: 0;
 }
 
@@ -2068,15 +1855,17 @@ onUnmounted(() => {
 ═══════════════════════════════════════════ */
 .conveyor-v2 {
   position: relative;
-  padding: 12px 14px 10px;
+  padding: 10px 12px 8px;
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  background: linear-gradient(145deg, rgba(0,6,20,0.95) 0%, rgba(0,14,35,0.92) 100%);
-  border: 1px solid rgba(0,229,255,0.22);
-  border-radius: 8px;
+  gap: 8px;
+  background: linear-gradient(155deg, rgba(0,5,18,0.97) 0%, rgba(0,12,32,0.94) 40%, rgba(0,8,22,0.96) 100%);
+  border: 1px solid rgba(0,229,255,0.25);
+  border-radius: 10px;
   overflow: hidden;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 0 24px rgba(0,229,255,0.06), 0 2px 8px rgba(0,0,0,0.4);
 }
 /* 微光背景 */
 .conveyor-v2::before {
@@ -2084,11 +1873,11 @@ onUnmounted(() => {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,229,255,0.04) 0%, transparent 70%),
-    radial-gradient(ellipse 30% 40% at 15% 50%, rgba(26,240,255,0.03) 0%, transparent 60%),
-    radial-gradient(ellipse 30% 40% at 85% 50%, rgba(180,100,255,0.03) 0%, transparent 60%);
+    radial-gradient(ellipse 55% 45% at 48% 55%, rgba(0,229,255,0.05) 0%, transparent 65%),
+    radial-gradient(ellipse 25% 35% at 15% 45%, rgba(26,240,255,0.04) 0%, transparent 55%),
+    radial-gradient(ellipse 20% 30% at 85% 50%, rgba(180,100,255,0.03) 0%, transparent 50%);
   pointer-events: none;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 /* 顶部横线 */
 .conveyor-v2::after {
@@ -2103,52 +1892,53 @@ onUnmounted(() => {
 /* 四角装饰 */
 .cv2-corner {
   position: absolute;
-  width: 10px; height: 10px;
+  width: 12px; height: 12px;
   pointer-events: none;
   z-index: 2;
 }
-.cv2-tl { top: 0; left: 0; border-top: 2px solid #00e5ff; border-left: 2px solid #00e5ff; border-radius: 8px 0 0 0; }
-.cv2-tr { top: 0; right: 0; border-top: 2px solid #00e5ff; border-right: 2px solid #00e5ff; border-radius: 0 8px 0 0; }
-.cv2-bl { bottom: 0; left: 0; border-bottom: 2px solid rgba(0,229,255,0.55); border-left: 2px solid rgba(0,229,255,0.55); border-radius: 0 0 0 8px; }
-.cv2-br { bottom: 0; right: 0; border-bottom: 2px solid rgba(0,229,255,0.55); border-right: 2px solid rgba(0,229,255,0.55); border-radius: 0 0 8px 0; }
+.cv2-tl { top: 1px; left: 1px; border-top: 2px solid rgba(0,229,255,0.8); border-left: 2px solid rgba(0,229,255,0.8); border-radius: 10px 0 0 0; box-shadow: -1px -1px 4px rgba(0,229,255,0.15); }
+.cv2-tr { top: 1px; right: 1px; border-top: 2px solid rgba(0,229,255,0.8); border-right: 2px solid rgba(0,229,255,0.8); border-radius: 0 10px 0 0; box-shadow: 1px -1px 4px rgba(0,229,255,0.15); }
+.cv2-bl { bottom: 1px; left: 1px; border-bottom: 2px solid rgba(0,229,255,0.5); border-left: 2px solid rgba(0,229,255,0.5); border-radius: 0 0 0 10px; }
+.cv2-br { bottom: 1px; right: 1px; border-bottom: 2px solid rgba(0,229,255,0.5); border-right: 2px solid rgba(0,229,255,0.5); border-radius: 0 0 10px 0; }
 
 /* 标题栏 */
 .cv2-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(0,229,255,0.12);
+  padding: 2px 0 5px;
+  border-bottom: 1px solid rgba(0,229,255,0.1);
   flex-shrink: 0;
 }
 .cv2-header-left {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
 }
 .cv2-live-dot {
-  width: 7px; height: 7px;
+  width: 6px; height: 6px;
   border-radius: 50%;
   background: #00ffaa;
-  box-shadow: 0 0 6px #00ffaa, 0 0 12px rgba(0,255,170,0.5);
-  animation: cv2pulse 1s ease-in-out infinite;
+  box-shadow: 0 0 5px #00ffaa, 0 0 10px rgba(0,255,170,0.4);
+  animation: cv2pulse 1.2s ease-in-out infinite;
   flex-shrink: 0;
 }
 @keyframes cv2pulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 6px #00ffaa, 0 0 12px rgba(0,255,170,0.5); }
-  50% { opacity: 0.5; box-shadow: 0 0 3px #00ffaa, 0 0 6px rgba(0,255,170,0.3); }
+  0%, 100% { opacity: 1; box-shadow: 0 0 5px #00ffaa, 0 0 10px rgba(0,255,170,0.5); }
+  50% { opacity: 0.45; box-shadow: 0 0 2px #00ffaa, 0 0 5px rgba(0,255,170,0.2); }
 }
 .cv2-title {
   font-size: 13px;
-  font-weight: 600;
-  color: #e8f8ff;
-  letter-spacing: 0.5px;
+  font-weight: 700;
+  color: #ecf9ff;
+  letter-spacing: 1px;
+  text-shadow: 0 0 12px rgba(0,229,255,0.3);
 }
-.cv2-sep { color: rgba(0,229,255,0.4); font-size: 12px; }
+.cv2-sep { color: rgba(0,229,255,0.35); font-size: 11px; }
 .cv2-subtitle {
-  font-size: 11px;
-  color: rgba(0,229,255,0.65);
-  letter-spacing: 0.3px;
+  font-size: 10px;
+  color: rgba(0,229,255,0.55);
+  letter-spacing: 0.5px;
 }
 .cv2-header-right {
   display: flex;
@@ -2182,33 +1972,31 @@ onUnmounted(() => {
   border-color: rgba(0,229,255,0.15);
   background: rgba(0,229,255,0.04);
 }
-.cv2-tag-green {
-  color: #7fff00;
-  border-color: rgba(127,255,0,0.4);
-  background: rgba(127,255,0,0.08);
-  font-weight: 700;
-}
 
 /* SVG 容器 */
 .cv2-svg-wrap {
   flex: 1;
   min-height: 0;
-  background: rgba(0,0,0,0.22);
-  border: 1px solid rgba(0,229,255,0.1);
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(0,229,255,0.12);
   border-radius: 6px;
-  padding: 4px 6px;
+  padding: 6px 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
+  box-shadow: inset 0 0 30px rgba(0,229,255,0.03);
 }
 .cv2-svg-wrap::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0,229,255,0.025) 0%, transparent 70%);
+  background:
+    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,229,255,0.03) 0%, transparent 65%),
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,229,255,0.015) 2px, rgba(0,229,255,0.015) 3px);
   pointer-events: none;
+  border-radius: 6px;
 }
 .cv2-svg {
   width: 100%;
@@ -2216,75 +2004,148 @@ onUnmounted(() => {
   max-height: none;
 }
 
-/* 进度条区域 */
-.cv2-progress-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
+/* ─── 剂量展示 + 进度整合区 ─── */
+.cv2-dose-bar {
   flex-shrink: 0;
+  padding: 6px 10px 6px;
+  background: linear-gradient(135deg, rgba(0,10,28,0.7) 0%, rgba(0,16,38,0.65) 100%);
+  border: 1px solid rgba(0,229,255,0.14);
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
 }
-.cv2-prog-item {
-  padding: 4px 8px 5px;
-  background: rgba(0,0,0,0.25);
-  border-radius: 4px;
-  border: 1px solid rgba(0,229,255,0.07);
+.cv2-dose-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 25% 50%, rgba(0,229,255,0.04) 0%, transparent 55%);
+  pointer-events: none;
+  border-radius: 6px;
 }
-.cv2-prog-labels {
+.cv2-dose-inline {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 左侧：剂量数值 */
+.cv2-dose-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  padding-right: 12px;
+  border-right: 1px solid rgba(0,229,255,0.12);
+}
+.cv2-dose-num-wrap {
+  display: flex;
   align-items: baseline;
-  margin-bottom: 4px;
+  gap: 3px;
 }
-.cv2-prog-name {
-  font-size: 10px;
-  color: rgba(0,229,255,0.55);
-  letter-spacing: 0.3px;
+.cv2-dose-num {
+  font-size: 28px;
+  font-weight: 800;
+  color: #7fff00;
+  line-height: 1;
+  text-shadow: 0 0 16px rgba(127,255,0,0.45), 0 0 32px rgba(127,255,0,0.15);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -1px;
 }
-.cv2-prog-val {
+.cv2-dose-num-unit {
+  font-size: 12px;
+  color: rgba(127,255,0,0.65);
+  font-weight: 600;
+}
+
+/* 右侧：进度条区域 */
+.cv2-dose-range-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+}
+.cv2-dose-range-top {
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+}
+.cv2-dose-range-val {
   font-size: 11px;
   font-weight: 600;
+  color: #7fff00;
   font-variant-numeric: tabular-nums;
 }
-.cv2-prog-val em {
-  font-style: normal;
-  font-size: 9px;
-  font-weight: 400;
-  color: rgba(255,255,255,0.3);
-  margin-left: 1px;
-}
-.cv2-cyan { color: #00e5ff; }
-.cv2-green { color: #7fff00; }
-.cv2-prog-track {
-  height: 4px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 2px;
+.cv2-dose-range-track {
+  height: 5px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 3px;
   overflow: hidden;
   position: relative;
 }
-.cv2-prog-fill {
+.cv2-dose-range-fill {
   height: 100%;
-  border-radius: 2px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #007755, #00e5ff, #7fff00);
+  box-shadow: 0 0 8px rgba(0,229,255,0.35);
   position: relative;
   transition: width 0.8s ease;
 }
-.cv2-fill-cyan {
-  background: linear-gradient(90deg, #0066aa, #00e5ff);
-  box-shadow: 0 0 6px rgba(0,229,255,0.5);
-}
-.cv2-fill-green {
-  background: linear-gradient(90deg, #336600, #7fff00);
-  box-shadow: 0 0 6px rgba(127,255,0,0.4);
-}
-/* 进度条末端光点 */
-.cv2-spark {
+.cv2-dose-range-spark {
   position: absolute;
   right: 0; top: 50%;
   transform: translateY(-50%);
-  width: 4px; height: 4px;
+  width: 5px; height: 5px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 0 4px #fff, 0 0 8px currentColor;
+  box-shadow: 0 0 5px #fff, 0 0 10px rgba(127,255,0,0.6);
   animation: cv2sparkblink 1.5s ease-in-out infinite;
+}
+
+/* 剂量范围样本条 */
+.cv2-dose-sample-bar {
+  height: 18px;
+  position: relative;
+  margin-top: 2px;
+}
+.cv2-dose-sample-fill {
+  height: 6px;
+  margin-top: 2px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #003377, #00aaff, #00e5ff, #7fff00);
+  box-shadow: 0 0 8px rgba(0,229,255,0.3);
+  position: relative;
+  min-width: 2px;
+  transition: width 0.8s ease;
+}
+.cv2-dose-sample-glow {
+  position: absolute;
+  right: 0; top: -3px;
+  width: 16px; height: 12px;
+  background: radial-gradient(ellipse, rgba(127,255,0,0.4) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.cv2-dose-sample-dot {
+  position: absolute;
+  top: 5px;
+  transform: translateX(-50%);
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(127,255,0,0.7), 0 0 16px rgba(0,229,255,0.3);
+  transition: left 0.8s ease;
+  z-index: 2;
+}
+.cv2-dose-sample-ticks {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: rgba(0,229,255,0.3);
+  font-variant-numeric: tabular-nums;
 }
 @keyframes cv2sparkblink {
   0%, 100% { opacity: 1; }
