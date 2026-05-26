@@ -6,7 +6,10 @@
     <!-- Header -->
     <header class="hd">
       <div class="hd-side">
-        <div class="live-dot"><div class="dot"></div>实时监测中</div>
+        <div class="live-dot">
+          <div class="dot"></div>
+          实时监测中
+        </div>
       </div>
       <div class="hd-center">
         <div class="hd-title">辐照企业大数据监管平台</div>
@@ -75,11 +78,18 @@
                 <filter id="cv2glow" x="-60%" y="-60%" width="220%" height="220%">
                   <feGaussianBlur stdDeviation="4" result="b1"/>
                   <feGaussianBlur stdDeviation="9" result="b2"/>
-                  <feMerge><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  <feMerge>
+                    <feMergeNode in="b2"/>
+                    <feMergeNode in="b1"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
                 </filter>
                 <filter id="cv2soft" x="-30%" y="-30%" width="160%" height="160%">
                   <feGaussianBlur stdDeviation="2" result="b"/>
-                  <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  <feMerge>
+                    <feMergeNode in="b"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
                 </filter>
                 <radialGradient id="cv2irrad" cx="50%" cy="50%" r="50%">
                   <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.2"/>
@@ -100,7 +110,9 @@
                   <stop offset="75%" stop-color="#00e5ff" stop-opacity="0.55"/>
                   <stop offset="100%" stop-color="#00e5ff" stop-opacity="0.08"/>
                 </linearGradient>
-                <clipPath id="cv2clip"><rect x="204" y="24" width="212" height="120" rx="10"/></clipPath>
+                <clipPath id="cv2clip">
+                  <rect x="204" y="24" width="212" height="120" rx="10"/>
+                </clipPath>
               </defs>
 
               <!-- 背景点阵 -->
@@ -117,7 +129,8 @@
 
               <!-- ══ 主传送轨道 ══ -->
               <rect x="8" y="82" width="604" height="16" rx="8" fill="rgba(0,0,0,0.5)"/>
-              <rect x="8" y="80" width="604" height="16" rx="8" fill="rgba(0,18,38,0.85)" stroke="rgba(0,229,255,0.28)" stroke-width="1.2"/>
+              <rect x="8" y="80" width="604" height="16" rx="8" fill="rgba(0,18,38,0.85)" stroke="rgba(0,229,255,0.28)"
+                    stroke-width="1.2"/>
               <rect x="8" y="80" width="604" height="4" rx="3" fill="url(#cv2rail)" opacity="0.55"/>
               <rect x="8" y="92" width="604" height="4" rx="3" fill="rgba(0,229,255,0.04)"/>
               <!-- 精细滚轴 -->
@@ -163,45 +176,70 @@
                 <rect x="605" y="81" width="2.5" height="14" rx="1.2"/>
               </g>
               <!-- 流动虚线 -->
-              <line x1="8" y1="88" x2="612" y2="88" stroke="#00e5ff" stroke-width="1.2" stroke-dasharray="9 6" opacity="0.38">
+              <line x1="8" y1="88" x2="612" y2="88" stroke="#00e5ff" stroke-width="1.2" stroke-dasharray="9 6"
+                    opacity="0.38">
                 <animate attributeName="stroke-dashoffset" from="0" to="-30" dur="0.65s" repeatCount="indefinite"/>
               </line>
 
               <!-- ══ 进货缓存区 ══ -->
-              <rect x="10" y="42" width="93" height="94" rx="8" fill="rgba(0,180,255,0.04)" stroke="rgba(26,240,255,0.22)" stroke-width="1"/>
+              <rect x="10" y="42" width="93" height="94" rx="8" fill="rgba(0,180,255,0.04)"
+                    stroke="rgba(26,240,255,0.22)" stroke-width="1"/>
               <line x1="10" y1="50" x2="103" y2="50" stroke="rgba(26,240,255,0.4)" stroke-width="0.8"/>
-              <rect x="10" y="42" width="93" height="94" rx="8" fill="none" stroke="#1af0ff" stroke-width="1.3" stroke-dasharray="5 4" opacity="0.18">
+              <rect x="10" y="42" width="93" height="94" rx="8" fill="none" stroke="#1af0ff" stroke-width="1.3"
+                    stroke-dasharray="5 4" opacity="0.18">
                 <animate attributeName="opacity" values="0.18;0.52;0.18" dur="3.1s" repeatCount="indefinite"/>
               </rect>
-              <rect x="18" y="28" width="70" height="16" rx="3" fill="rgba(0,8,24,0.9)" stroke="rgba(26,240,255,0.45)" stroke-width="0.8"/>
-              <text x="53" y="40" text-anchor="middle" font-size="8.5" fill="#1af0ff" font-weight="700" letter-spacing="1.2">进货缓存</text>
-              <text x="56" y="122" text-anchor="middle" font-size="9" fill="rgba(26,240,255,0.7)" font-weight="500">缓存区</text>
-              <text x="56" y="133" text-anchor="middle" font-size="8" fill="rgba(26,240,255,0.45)">{{ zoneCounts[0] }}</text>
+              <rect x="18" y="28" width="70" height="16" rx="3" fill="rgba(0,8,24,0.9)" stroke="rgba(26,240,255,0.45)"
+                    stroke-width="0.8"/>
+              <text x="53" y="40" text-anchor="middle" font-size="8.5" fill="#1af0ff" font-weight="700"
+                    letter-spacing="1.2">进货缓存
+              </text>
+              <text x="56" y="122" text-anchor="middle" font-size="9" fill="rgba(26,240,255,0.7)" font-weight="500">
+                缓存区
+              </text>
+              <text x="56" y="133" text-anchor="middle" font-size="8" fill="rgba(26,240,255,0.45)">{{
+                  zoneCounts[0]
+                }}
+              </text>
 
               <!-- ══ 入射检区 ══ -->
-              <rect x="108" y="42" width="90" height="94" rx="8" fill="rgba(0,255,160,0.04)" stroke="rgba(0,255,160,0.18)" stroke-width="1"/>
+              <rect x="108" y="42" width="90" height="94" rx="8" fill="rgba(0,255,160,0.04)"
+                    stroke="rgba(0,255,160,0.18)" stroke-width="1"/>
               <line x1="108" y1="50" x2="198" y2="50" stroke="rgba(0,255,160,0.32)" stroke-width="0.8"/>
-              <rect x="108" y="42" width="90" height="94" rx="8" fill="none" stroke="#00ffa0" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.16">
+              <rect x="108" y="42" width="90" height="94" rx="8" fill="none" stroke="#00ffa0" stroke-width="1.2"
+                    stroke-dasharray="4 3" opacity="0.16">
                 <animate attributeName="opacity" values="0.16;0.48;0.16" dur="2.7s" repeatCount="indefinite"/>
               </rect>
-              <rect x="119" y="28" width="60" height="16" rx="3" fill="rgba(0,8,20,0.9)" stroke="rgba(0,255,160,0.4)" stroke-width="0.8"/>
-              <text x="149" y="40" text-anchor="middle" font-size="8.5" fill="#00ffa0" font-weight="700" letter-spacing="1.2">入射检</text>
-              <text x="153" y="122" text-anchor="middle" font-size="9" fill="rgba(0,255,160,0.7)" font-weight="500">检测中</text>
-              <text x="153" y="133" text-anchor="middle" font-size="8" fill="rgba(0,255,160,0.45)">{{ zoneCounts[1] }}</text>
+              <rect x="119" y="28" width="60" height="16" rx="3" fill="rgba(0,8,20,0.9)" stroke="rgba(0,255,160,0.4)"
+                    stroke-width="0.8"/>
+              <text x="149" y="40" text-anchor="middle" font-size="8.5" fill="#00ffa0" font-weight="700"
+                    letter-spacing="1.2">入射检
+              </text>
+              <text x="153" y="122" text-anchor="middle" font-size="9" fill="rgba(0,255,160,0.7)" font-weight="500">
+                检测中
+              </text>
+              <text x="153" y="133" text-anchor="middle" font-size="8" fill="rgba(0,255,160,0.45)">{{
+                  zoneCounts[1]
+                }}
+              </text>
 
               <!-- ══ 辐照核心区 ══ -->
               <!-- 背景光晕层 -->
               <rect x="200" y="20" width="220" height="126" rx="12" fill="rgba(0,229,255,0.04)" filter="url(#cv2glow)"/>
               <!-- 主容器 -->
-              <rect x="204" y="24" width="212" height="118" rx="10" fill="url(#cv2irrad)" stroke="#00e5ff" stroke-width="2.5" filter="url(#cv2soft)"/>
+              <rect x="204" y="24" width="212" height="118" rx="10" fill="url(#cv2irrad)" stroke="#00e5ff"
+                    stroke-width="2.5" filter="url(#cv2soft)"/>
               <!-- 内边框 -->
-              <rect x="209" y="29" width="202" height="108" rx="7" fill="none" stroke="rgba(0,229,255,0.28)" stroke-width="0.8"/>
+              <rect x="209" y="29" width="202" height="108" rx="7" fill="none" stroke="rgba(0,229,255,0.28)"
+                    stroke-width="0.8"/>
               <!-- 流动边框 -->
-              <rect x="204" y="24" width="212" height="118" rx="10" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-dasharray="14 7" opacity="0.55">
+              <rect x="204" y="24" width="212" height="118" rx="10" fill="none" stroke="#00e5ff" stroke-width="1.5"
+                    stroke-dasharray="14 7" opacity="0.55">
                 <animate attributeName="stroke-dashoffset" from="0" to="-42" dur="1.4s" repeatCount="indefinite"/>
               </rect>
               <!-- 扫描光束（加宽加亮） -->
-              <rect x="209" y="24" width="202" height="6" fill="url(#cv2scanbeam)" opacity="0.8" clip-path="url(#cv2clip)">
+              <rect x="209" y="24" width="202" height="6" fill="url(#cv2scanbeam)" opacity="0.8"
+                    clip-path="url(#cv2clip)">
                 <animate attributeName="y" values="24;142;24" dur="2.2s" repeatCount="indefinite"/>
               </rect>
 
@@ -269,56 +307,89 @@
               </circle>
 
               <!-- 顶部运行标签 -->
-              <rect x="245" y="25" width="130" height="17" rx="4" fill="rgba(0,229,255,0.16)" stroke="rgba(0,229,255,0.7)" stroke-width="0.8"/>
+              <rect x="245" y="25" width="130" height="17" rx="4" fill="rgba(0,229,255,0.16)"
+                    stroke="rgba(0,229,255,0.7)" stroke-width="0.8"/>
               <circle cx="256" cy="33.5" r="3.2" fill="#00ffaa">
                 <animate attributeName="opacity" values="1;0.2;1" dur="0.7s" repeatCount="indefinite"/>
               </circle>
-              <text x="295" y="37.5" text-anchor="middle" font-size="9" fill="#00e5ff" font-weight="700" letter-spacing="1.5" filter="url(#cv2soft)">▶ 辐照处理中</text>
-              <!-- 中心文字 -->
-              <text x="310" y="62" text-anchor="middle" font-size="14" font-weight="800" fill="rgba(0,229,255,0.95)" letter-spacing="1" filter="url(#cv2soft)">辐照中</text>
-              <text x="310" y="125" text-anchor="middle" font-size="10">
-                <tspan fill="rgba(0,229,255,0.6)">剂量 </tspan>
+              <text x="260" y="2" text-anchor="middle" font-size="20">
+                <tspan fill="rgba(0,229,255,0.6)">剂量</tspan>
                 <tspan fill="#7fff00" font-weight="900" font-size="16">25</tspan>
                 <tspan fill="rgba(0,229,255,0.6)" font-size="9"> kGy</tspan>
+                <tspan fill="rgba(0,229,255,0.6)">速度$\text{m/min}$</tspan>
+                <tspan fill="rgba(0,229,255,0.6)">高压（MeV）</tspan>
+                <tspan fill="rgba(0,229,255,0.6)">束流（mA）</tspan>
+              </text>
+              <text x="295" y="37.5" text-anchor="middle" font-size="9" fill="#00e5ff" font-weight="700"
+                    letter-spacing="1.5" filter="url(#cv2soft)">▶ 辐照处理中
+              </text>
+              <!-- 中心文字 -->
+              <text x="310" y="62" text-anchor="middle" font-size="14" font-weight="800" fill="rgba(0,229,255,0.95)"
+                    letter-spacing="1" filter="url(#cv2soft)">辐照中
+              </text>
+              <!-- ══ 出射检区 ══ -->
+              <rect x="416" y="42" width="90" height="94" rx="8" fill="rgba(0,255,160,0.04)"
+                    stroke="rgba(0,255,160,0.18)" stroke-width="1"/>
+              <line x1="416" y1="50" x2="506" y2="50" stroke="rgba(0,255,160,0.32)" stroke-width="0.8"/>
+              <rect x="416" y="42" width="90" height="94" rx="8" fill="none" stroke="#00ffa0" stroke-width="1.2"
+                    stroke-dasharray="4 3" opacity="0.16">
+                <animate attributeName="opacity" values="0.16;0.48;0.16" dur="2.7s" begin="0.9s"
+                         repeatCount="indefinite"/>
+              </rect>
+              <rect x="427" y="28" width="60" height="16" rx="3" fill="rgba(0,8,20,0.9)" stroke="rgba(0,255,160,0.4)"
+                    stroke-width="0.8"/>
+              <text x="457" y="40" text-anchor="middle" font-size="8.5" fill="#00ffa0" font-weight="700"
+                    letter-spacing="1.2">出射检
+              </text>
+              <text x="461" y="122" text-anchor="middle" font-size="9" fill="rgba(0,255,160,0.7)" font-weight="500">
+                检测中
+              </text>
+              <text x="461" y="133" text-anchor="middle" font-size="8" fill="rgba(0,255,160,0.45)">{{
+                  zoneCounts[2]
+                }}
               </text>
 
-              <!-- ══ 出射检区 ══ -->
-              <rect x="416" y="42" width="90" height="94" rx="8" fill="rgba(0,255,160,0.04)" stroke="rgba(0,255,160,0.18)" stroke-width="1"/>
-              <line x1="416" y1="50" x2="506" y2="50" stroke="rgba(0,255,160,0.32)" stroke-width="0.8"/>
-              <rect x="416" y="42" width="90" height="94" rx="8" fill="none" stroke="#00ffa0" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.16">
-                <animate attributeName="opacity" values="0.16;0.48;0.16" dur="2.7s" begin="0.9s" repeatCount="indefinite"/>
-              </rect>
-              <rect x="427" y="28" width="60" height="16" rx="3" fill="rgba(0,8,20,0.9)" stroke="rgba(0,255,160,0.4)" stroke-width="0.8"/>
-              <text x="457" y="40" text-anchor="middle" font-size="8.5" fill="#00ffa0" font-weight="700" letter-spacing="1.2">出射检</text>
-              <text x="461" y="122" text-anchor="middle" font-size="9" fill="rgba(0,255,160,0.7)" font-weight="500">检测中</text>
-              <text x="461" y="133" text-anchor="middle" font-size="8" fill="rgba(0,255,160,0.45)">{{ zoneCounts[2] }}</text>
-
               <!-- ══ 成品仓区 ══ -->
-              <rect x="513" y="42" width="99" height="94" rx="8" fill="rgba(160,100,255,0.04)" stroke="rgba(180,120,255,0.2)" stroke-width="1"/>
+              <rect x="513" y="42" width="99" height="94" rx="8" fill="rgba(160,100,255,0.04)"
+                    stroke="rgba(180,120,255,0.2)" stroke-width="1"/>
               <line x1="513" y1="50" x2="612" y2="50" stroke="rgba(180,120,255,0.3)" stroke-width="0.8"/>
-              <rect x="513" y="42" width="99" height="94" rx="8" fill="none" stroke="#cc99ff" stroke-width="1.3" stroke-dasharray="6 4" opacity="0.18">
-                <animate attributeName="opacity" values="0.18;0.55;0.18" dur="3.4s" begin="1.8s" repeatCount="indefinite"/>
+              <rect x="513" y="42" width="99" height="94" rx="8" fill="none" stroke="#cc99ff" stroke-width="1.3"
+                    stroke-dasharray="6 4" opacity="0.18">
+                <animate attributeName="opacity" values="0.18;0.55;0.18" dur="3.4s" begin="1.8s"
+                         repeatCount="indefinite"/>
               </rect>
-              <rect x="524" y="28" width="60" height="16" rx="3" fill="rgba(8,5,28,0.9)" stroke="rgba(180,120,255,0.42)" stroke-width="0.8"/>
-              <text x="554" y="40" text-anchor="middle" font-size="8.5" fill="#cc99ff" font-weight="700" letter-spacing="1.2">成品仓</text>
-              <text x="562" y="122" text-anchor="middle" font-size="9" fill="rgba(180,120,255,0.7)" font-weight="500">入库中</text>
-              <text x="562" y="133" text-anchor="middle" font-size="8" fill="rgba(180,120,255,0.45)">{{ zoneCounts[3] }}</text>
+              <rect x="524" y="28" width="60" height="16" rx="3" fill="rgba(8,5,28,0.9)" stroke="rgba(180,120,255,0.42)"
+                    stroke-width="0.8"/>
+              <text x="554" y="40" text-anchor="middle" font-size="8.5" fill="#cc99ff" font-weight="700"
+                    letter-spacing="1.2">成品仓
+              </text>
+              <text x="562" y="122" text-anchor="middle" font-size="9" fill="rgba(180,120,255,0.7)" font-weight="500">
+                入库中
+              </text>
+              <text x="562" y="133" text-anchor="middle" font-size="8" fill="rgba(180,120,255,0.45)">{{
+                  zoneCounts[3]
+                }}
+              </text>
 
               <!-- 货位 & 流动货物 -->
               <g ref="cargoGroupRef"></g>
               <g ref="movingCargoRef"></g>
 
               <!-- 区间箭头 -->
-              <line x1="103" y1="88" x2="107" y2="88" stroke="#00e5ff" stroke-width="2.2" marker-end="url(#cv2arr)" filter="url(#cv2soft)">
+              <line x1="103" y1="88" x2="107" y2="88" stroke="#00e5ff" stroke-width="2.2" marker-end="url(#cv2arr)"
+                    filter="url(#cv2soft)">
                 <animate attributeName="opacity" values="0.3;1;0.3" dur="1.3s" repeatCount="indefinite"/>
               </line>
-              <line x1="198" y1="88" x2="202" y2="88" stroke="#00e5ff" stroke-width="2.2" marker-end="url(#cv2arr)" filter="url(#cv2soft)">
+              <line x1="198" y1="88" x2="202" y2="88" stroke="#00e5ff" stroke-width="2.2" marker-end="url(#cv2arr)"
+                    filter="url(#cv2soft)">
                 <animate attributeName="opacity" values="0.3;1;0.3" dur="1.3s" begin="0.43s" repeatCount="indefinite"/>
               </line>
-              <line x1="416" y1="88" x2="420" y2="88" stroke="#00e5ff" stroke-width="2.2" marker-end="url(#cv2arr)" filter="url(#cv2soft)">
+              <line x1="416" y1="88" x2="420" y2="88" stroke="#00e5ff" stroke-width="2.2" marker-end="url(#cv2arr)"
+                    filter="url(#cv2soft)">
                 <animate attributeName="opacity" values="0.3;1;0.3" dur="1.3s" begin="0.26s" repeatCount="indefinite"/>
               </line>
-              <line x1="506" y1="88" x2="510" y2="88" stroke="#00e5ff" stroke-width="2.2" marker-end="url(#cv2arr)" filter="url(#cv2soft)">
+              <line x1="506" y1="88" x2="510" y2="88" stroke="#00e5ff" stroke-width="2.2" marker-end="url(#cv2arr)"
+                    filter="url(#cv2soft)">
                 <animate attributeName="opacity" values="0.3;1;0.3" dur="1.3s" begin="0.7s" repeatCount="indefinite"/>
               </line>
             </svg>
@@ -329,14 +400,15 @@
               <!-- 左侧：大字号剂量 -->
               <div class="cv2-dose-block">
                 <div class="cv2-dose-num-wrap">
-                  剂量 : <span class="cv2-dose-num">{{ realtimeDose }}</span>
+                  实时剂量 : <span class="cv2-dose-num">{{ realtimeDose }}</span>
                   <span class="cv2-dose-num-unit">kGy</span>
                 </div>
               </div>
               <!-- 右侧：进度 + 范围 -->
               <div class="cv2-dose-range-block">
                 <div class="cv2-dose-sample-bar">
-                  <div class="cv2-dose-sample-fill" :style="{ width: dosePercent + '%' }"><span class="cv2-dose-sample-glow"></span></div>
+                  <div class="cv2-dose-sample-fill" :style="{ width: dosePercent + '%' }"><span
+                      class="cv2-dose-sample-glow"></span></div>
                   <div class="cv2-dose-sample-dot" :style="{ left: dosePercent + '%' }"></div>
                   <div class="cv2-dose-sample-ticks">
                     <span>23.75</span><span style="color:#7fff00">25.00</span><span>26.25</span>
@@ -495,10 +567,13 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, onUnmounted, nextTick } from 'vue'
+import {ref, reactive, computed, onMounted, onUnmounted, nextTick} from 'vue'
 import Chart from 'chart.js/auto'
+
 /* ─── 工具函数 ─── */
-function pad(n) { return String(n).padStart(2, '0') }
+function pad(n) {
+  return String(n).padStart(2, '0')
+}
 
 /* ─── 时钟 ─── */
 const clock = ref('--:--:--')
@@ -514,12 +589,44 @@ function tick() {
 
 /* ─── 警报数据 ─── */
 const doseAlerts = reactive([
-  { id: 'D001', time: '07:15', type: 'critical', level: '严重', desc: 'Co-60 #1 批次 B2605-438 实测剂量 26.42 kGy，超上限 5.68%', device: 'Co-60 #1', acked: false },
-  { id: 'D002', time: '09:32', type: 'warn', level: '警告', desc: 'EB-1 批次 B2605-445 剂量偏低 23.1 kGy，低于下限 7.6%', device: 'EB-1', acked: false },
+  {
+    id: 'D001',
+    time: '07:15',
+    type: 'critical',
+    level: '严重',
+    desc: 'Co-60 #1 批次 B2605-438 实测剂量 26.42 kGy，超上限 5.68%',
+    device: 'Co-60 #1',
+    acked: false
+  },
+  {
+    id: 'D002',
+    time: '09:32',
+    type: 'warn',
+    level: '警告',
+    desc: 'EB-1 批次 B2605-445 剂量偏低 23.1 kGy，低于下限 7.6%',
+    device: 'EB-1',
+    acked: false
+  },
 ])
 const deviceAlerts = reactive([
-  { id: 'V001', time: '08:42', type: 'warn', level: '警告', desc: 'EB-1 加速器预防性维护窗口启动，计划停机 4h', device: 'EB-1', acked: false },
-  { id: 'V002', time: '10:05', type: 'critical', level: '严重', desc: '辐照室温度传感器 T-03 读数漂移 ±0.8℃，超阈值', device: 'T-03', acked: false },
+  {
+    id: 'V001',
+    time: '08:42',
+    type: 'warn',
+    level: '警告',
+    desc: 'EB-1 加速器预防性维护窗口启动，计划停机 4h',
+    device: 'EB-1',
+    acked: false
+  },
+  {
+    id: 'V002',
+    time: '10:05',
+    type: 'critical',
+    level: '严重',
+    desc: '辐照室温度传感器 T-03 读数漂移 ±0.8℃，超阈值',
+    device: 'T-03',
+    acked: false
+  },
 ])
 
 const doseUnacked = computed(() => doseAlerts.filter(a => !a.acked))
@@ -535,18 +642,58 @@ function ackAlert(id) {
 
 /* ─── 剂量异常处置看板 ─── */
 const doseDispStats = reactive([
-  { key: 'total', label: '偏移批次数', value: '12', trend: '▸ +3 vs 上月', trendColor: 'var(--orange)', color: '#ff3366' },
-  { key: 'remedy', label: '补救再辐照', value: '8 (67%)', trend: '▸ 已恢复 7 批', trendColor: 'var(--green)', color: '#00ffaa' },
-  { key: 'reject', label: '判定不合格', value: '3 (25%)', trend: '▸ 已隔离销毁', trendColor: 'var(--red)', color: '#ff3366' },
-  { key: 'conditional', label: '有条件放行', value: '1 (8%)', trend: '▸ 偏差报告已签', trendColor: 'var(--orange)', color: '#ffaa33' },
+  {
+    key: 'total',
+    label: '偏移批次数',
+    value: '12',
+    trend: '▸ +3 vs 上月',
+    trendColor: 'var(--orange)',
+    color: '#ff3366'
+  },
+  {
+    key: 'remedy',
+    label: '补救再辐照',
+    value: '8 (67%)',
+    trend: '▸ 已恢复 7 批',
+    trendColor: 'var(--green)',
+    color: '#00ffaa'
+  },
+  {
+    key: 'reject',
+    label: '判定不合格',
+    value: '3 (25%)',
+    trend: '▸ 已隔离销毁',
+    trendColor: 'var(--red)',
+    color: '#ff3366'
+  },
+  {
+    key: 'conditional',
+    label: '有条件放行',
+    value: '1 (8%)',
+    trend: '▸ 偏差报告已签',
+    trendColor: 'var(--orange)',
+    color: '#ffaa33'
+  },
 ])
 
 const doseDispEvents = reactive([
-  { id: 1, batch: 'B2605-441', result: 'remedy', resultLabel: '再辐照', desc: '剂量偏低 23.1kGy → 补充至 25kGy，复检合格' },
-  { id: 2, batch: 'B2605-438', result: 'reject', resultLabel: '不合格', desc: '剂量超标 26.4kGy，材料变色降解，已报废' },
-  { id: 3, batch: 'B2605-433', result: 'conditional', resultLabel: '有条件放行', desc: '剂量偏高 26.1kGy，产品检测正常，偏差报告签批' },
-  { id: 4, batch: 'B2605-429', result: 'remedy', resultLabel: '再辐照', desc: '剂量偏低 22.8kGy → 补充至目标，复检合格' },
-  { id: 5, batch: 'B2605-421', result: 'reject', resultLabel: '不合格', desc: '剂量严重超标 27.2kGy，包装变形，已报废' },
+  {
+    id: 1,
+    batch: 'B2605-441',
+    result: 'remedy',
+    resultLabel: '再辐照',
+    desc: '剂量偏低 23.1kGy → 补充至 25kGy，复检合格'
+  },
+  {id: 2, batch: 'B2605-438', result: 'reject', resultLabel: '不合格', desc: '剂量超标 26.4kGy，材料变色降解，已报废'},
+  {
+    id: 3,
+    batch: 'B2605-433',
+    result: 'conditional',
+    resultLabel: '有条件放行',
+    desc: '剂量偏高 26.1kGy，产品检测正常，偏差报告签批'
+  },
+  {id: 4, batch: 'B2605-429', result: 'remedy', resultLabel: '再辐照', desc: '剂量偏低 22.8kGy → 补充至目标，复检合格'},
+  {id: 5, batch: 'B2605-421', result: 'reject', resultLabel: '不合格', desc: '剂量严重超标 27.2kGy，包装变形，已报废'},
 ])
 
 /* ─── 剂量英雄条数据 ─── */
@@ -558,20 +705,65 @@ const dosePercent = computed(() => {
 
 /* ─── KPI 卡片 ─── */
 const kpiCards = reactive([
-  { key: 'prod', cls: 'c1', label: '今日产量', icon: '📦', value: '4,287', unit: '件', trend: '↑ 8.3% 较昨日', trendColor: 'green' },
-  { key: 'util', cls: 'c2', label: '设备利用率', icon: '⚙', value: '87.6', unit: '%', trend: '↑ 2.1% 较昨日', trendColor: 'green' },
-  { key: 'pass', cls: 'c3', label: '批次合格率', icon: '✓', value: '99.2', unit: '%', trend: '↓ 0.3% 较昨日', trendColor: 'orange' },
-  { key: 'tat', cls: 'c4', label: '平均周转时效', icon: '⏱', value: '18.4', unit: 'h', trend: '↓ 1.2h 优于目标', trendColor: 'green' },
-  { key: 'rev', cls: 'c5', label: '本月营收', icon: '💰', value: '1,824', unit: '万元', trend: '↑ 12.5% 较上月', trendColor: 'green' },
+  {
+    key: 'prod',
+    cls: 'c1',
+    label: '今日产量',
+    icon: '📦',
+    value: '4,287',
+    unit: '件',
+    trend: '↑ 8.3% 较昨日',
+    trendColor: 'green'
+  },
+  {
+    key: 'util',
+    cls: 'c2',
+    label: '设备利用率',
+    icon: '⚙',
+    value: '87.6',
+    unit: '%',
+    trend: '↑ 2.1% 较昨日',
+    trendColor: 'green'
+  },
+  {
+    key: 'pass',
+    cls: 'c3',
+    label: '批次合格率',
+    icon: '✓',
+    value: '99.2',
+    unit: '%',
+    trend: '↓ 0.3% 较昨日',
+    trendColor: 'orange'
+  },
+  {
+    key: 'tat',
+    cls: 'c4',
+    label: '平均周转时效',
+    icon: '⏱',
+    value: '18.4',
+    unit: 'h',
+    trend: '↓ 1.2h 优于目标',
+    trendColor: 'green'
+  },
+  {
+    key: 'rev',
+    cls: 'c5',
+    label: '本月营收',
+    icon: '💰',
+    value: '1,824',
+    unit: '万元',
+    trend: '↑ 12.5% 较上月',
+    trendColor: 'green'
+  },
 ])
 
 /* ─── 合规倒计时 ─── */
 const complianceItems = reactive([
-  { label: '剂量验证', deadline: new Date('2026-06-01T09:00:00'), cycleDesc: '每季度' },
-  { label: '源执照到期', deadline: new Date('2026-06-15T00:00:00'), cycleDesc: '5年周期' },
-  { label: '环保检查', deadline: new Date('2026-08-20T00:00:00'), cycleDesc: '每年' },
-  { label: '个人剂量监测', deadline: new Date('2026-05-28T09:00:00'), cycleDesc: '每月' },
-  { label: '应急演练', deadline: new Date('2026-12-10T00:00:00'), cycleDesc: '每年' },
+  {label: '剂量验证', deadline: new Date('2026-06-01T09:00:00'), cycleDesc: '每季度'},
+  {label: '源执照到期', deadline: new Date('2026-06-15T00:00:00'), cycleDesc: '5年周期'},
+  {label: '环保检查', deadline: new Date('2026-08-20T00:00:00'), cycleDesc: '每年'},
+  {label: '个人剂量监测', deadline: new Date('2026-05-28T09:00:00'), cycleDesc: '每月'},
+  {label: '应急演练', deadline: new Date('2026-12-10T00:00:00'), cycleDesc: '每年'},
 ])
 
 function getUrgency(deadline) {
@@ -593,13 +785,13 @@ function formatCD(deadline) {
 }
 
 const complianceDisplay = computed(() =>
-  complianceItems.map(item => ({
-    label: item.label,
-    urgency: getUrgency(item.deadline),
-    cd: formatCD(item.deadline),
-    deadlineStr: `${item.deadline.getFullYear()}-${pad(item.deadline.getMonth() + 1)}-${pad(item.deadline.getDate())}`,
-    cycleDesc: item.cycleDesc,
-  }))
+    complianceItems.map(item => ({
+      label: item.label,
+      urgency: getUrgency(item.deadline),
+      cd: formatCD(item.deadline),
+      deadlineStr: `${item.deadline.getFullYear()}-${pad(item.deadline.getMonth() + 1)}-${pad(item.deadline.getDate())}`,
+      cycleDesc: item.cycleDesc,
+    }))
 )
 
 let complianceTimer = null
@@ -610,11 +802,11 @@ const cargoGroupRef = ref(null)
 const zoneCounts = ref(['', '', '', ''])
 
 const zones = [
-  { x: 10, y: 55, w: 93, count: 8, color: '#1af0ff', cntIdx: 0 },    // 进货缓存
-  { x: 108, y: 55, w: 90, count: 3, color: '#00ffa0', cntIdx: 1 },   // 入射检
-  { x: 204, y: 47, w: 212, count: 6, color: '#00e5ff', cntIdx: null, active: true }, // 辐照区
-  { x: 416, y: 55, w: 90, count: 2, color: '#00ffa0', cntIdx: 2 },   // 出射检
-  { x: 513, y: 55, w: 99, count: 11, color: '#cc99ff', cntIdx: 3 },  // 成品仓
+  {x: 10, y: 55, w: 93, count: 8, color: '#1af0ff', cntIdx: 0},    // 进货缓存
+  {x: 108, y: 55, w: 90, count: 3, color: '#00ffa0', cntIdx: 1},   // 入射检
+  {x: 204, y: 47, w: 212, count: 6, color: '#00e5ff', cntIdx: null, active: true}, // 辐照区
+  {x: 416, y: 55, w: 90, count: 2, color: '#00ffa0', cntIdx: 2},   // 出射检
+  {x: 513, y: 55, w: 99, count: 11, color: '#cc99ff', cntIdx: 3},  // 成品仓
 ]
 
 function drawCargo() {
@@ -769,11 +961,11 @@ let moveAnimId = null
 
 // 轨道区域定义（x坐标范围 + 统一色彩体系）— 与轨道底板 x=14, width=572 对齐
 const trackZones = [
-  { name: '进货缓存', x1: 10, x2: 103, color: '#1af0ff' },
-  { name: '入射检', x1: 108, x2: 198, color: '#00ffa0' },
-  { name: '辐照区', x1: 204, x2: 416, color: '#00e5ff' },
-  { name: '出射检', x1: 416, x2: 506, color: '#00ffa0' },
-  { name: '成品仓', x1: 513, x2: 612, color: '#cc99ff' },
+  {name: '进货缓存', x1: 10, x2: 103, color: '#1af0ff'},
+  {name: '入射检', x1: 108, x2: 198, color: '#00ffa0'},
+  {name: '辐照区', x1: 204, x2: 416, color: '#00e5ff'},
+  {name: '出射检', x1: 416, x2: 506, color: '#00ffa0'},
+  {name: '成品仓', x1: 513, x2: 612, color: '#cc99ff'},
 ]
 
 function createMovingCargo() {
@@ -983,7 +1175,7 @@ function initCharts() {
   chartInstances.push(new Chart(doseChartRef.value, {
     type: 'line',
     data: {
-      labels: Array.from({ length: 20 }, (_, i) => `B${String(i + 1).padStart(2, '0')}`),
+      labels: Array.from({length: 20}, (_, i) => `B${String(i + 1).padStart(2, '0')}`),
       datasets: [
         {
           label: '实测剂量',
@@ -994,15 +1186,36 @@ function initCharts() {
           pointRadius: (ctx) => doseData[ctx.dataIndex] > upperLimit || doseData[ctx.dataIndex] < lowerLimit ? 4 : 2,
           pointBackgroundColor: (ctx) => doseData[ctx.dataIndex] > upperLimit || doseData[ctx.dataIndex] < lowerLimit ? '#ff3366' : '#00dcff',
         },
-        { label: '目标均值', data: Array(20).fill(target), borderColor: '#00ffaa', borderWidth: 1, borderDash: [4, 3], pointRadius: 0 },
-        { label: '控制限', data: Array(20).fill(upperLimit), borderColor: 'rgba(255,51,102,0.4)', borderWidth: 1, borderDash: [3, 3], pointRadius: 0 },
-        { label: '控制限', data: Array(20).fill(lowerLimit), borderColor: 'rgba(255,51,102,0.4)', borderWidth: 1, borderDash: [3, 3], pointRadius: 0 },
+        {
+          label: '目标均值',
+          data: Array(20).fill(target),
+          borderColor: '#00ffaa',
+          borderWidth: 1,
+          borderDash: [4, 3],
+          pointRadius: 0
+        },
+        {
+          label: '控制限',
+          data: Array(20).fill(upperLimit),
+          borderColor: 'rgba(255,51,102,0.4)',
+          borderWidth: 1,
+          borderDash: [3, 3],
+          pointRadius: 0
+        },
+        {
+          label: '控制限',
+          data: Array(20).fill(lowerLimit),
+          borderColor: 'rgba(255,51,102,0.4)',
+          borderWidth: 1,
+          borderDash: [3, 3],
+          pointRadius: 0
+        },
       ],
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: { x: { ticks: { font: { size: 9 } } }, y: { min: 23, max: 27, ticks: { font: { size: 9 } } } },
+      plugins: {legend: {display: false}},
+      scales: {x: {ticks: {font: {size: 9}}}, y: {min: 23, max: 27, ticks: {font: {size: 9}}}},
     },
   }))
 
@@ -1012,14 +1225,26 @@ function initCharts() {
     data: {
       labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
       datasets: [
-        { label: '实际产量', data: [3200, 3500, 3100, 3800, 4100, 3950, 4200, 4050, 4300, 4100, 4500, 4287], backgroundColor: 'rgba(0,220,255,0.5)', borderColor: '#00dcff', borderWidth: 1 },
-        { label: '计划产量', data: [3500, 3500, 3500, 4000, 4000, 4000, 4500, 4500, 4500, 4500, 4500, 5000], backgroundColor: 'rgba(0,255,170,0.15)', borderColor: '#00ffaa', borderWidth: 1 },
+        {
+          label: '实际产量',
+          data: [3200, 3500, 3100, 3800, 4100, 3950, 4200, 4050, 4300, 4100, 4500, 4287],
+          backgroundColor: 'rgba(0,220,255,0.5)',
+          borderColor: '#00dcff',
+          borderWidth: 1
+        },
+        {
+          label: '计划产量',
+          data: [3500, 3500, 3500, 4000, 4000, 4000, 4500, 4500, 4500, 4500, 4500, 5000],
+          backgroundColor: 'rgba(0,255,170,0.15)',
+          borderColor: '#00ffaa',
+          borderWidth: 1
+        },
       ],
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: { x: { ticks: { font: { size: 9 } } }, y: { ticks: { font: { size: 9 } } } },
+      plugins: {legend: {display: false}},
+      scales: {x: {ticks: {font: {size: 9}}}, y: {ticks: {font: {size: 9}}}},
     },
   }))
 
@@ -1036,7 +1261,7 @@ function initCharts() {
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'right', labels: { font: { size: 9 }, boxWidth: 10 } } },
+      plugins: {legend: {position: 'right', labels: {font: {size: 9}, boxWidth: 10}}},
       cutout: '60%',
     },
   }))
@@ -1055,7 +1280,7 @@ function initCharts() {
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom', labels: { font: { size: 9 }, color: '#3a6a8a', boxWidth: 8, padding: 12 } } },
+      plugins: {legend: {position: 'bottom', labels: {font: {size: 9}, color: '#3a6a8a', boxWidth: 8, padding: 12}}},
       cutout: '55%',
     },
   }))
@@ -1123,14 +1348,18 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 .irradiation-dashboard {
   --bg-main: #020617;
-  --bg-panel: rgba(4,16,42,0.75);
-  --bg-card: rgba(8,24,54,0.65);
-  --border: rgba(0,229,255,0.18);
-  --border-hi: rgba(0,229,255,0.5);
+  --bg-panel: rgba(4, 16, 42, 0.75);
+  --bg-card: rgba(8, 24, 54, 0.65);
+  --border: rgba(0, 229, 255, 0.18);
+  --border-hi: rgba(0, 229, 255, 0.5);
   --text-1: #e4f4ff;
   --text-2: #5ca8c8;
   --text-3: #2a5870;
@@ -1140,9 +1369,9 @@ onUnmounted(() => {
   --red: #ff3355;
   --purple: #9966ff;
   --yellow: #ffdd44;
-  --font: 'PingFang SC','Microsoft YaHei',system-ui,sans-serif;
-  --glass: rgba(4,16,42,0.65);
-  --glass-border: rgba(0,229,255,0.12);
+  --font: 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --glass: rgba(4, 16, 42, 0.65);
+  --glass-border: rgba(0, 229, 255, 0.12);
 
   min-height: 100vh;
   background: radial-gradient(ellipse 60% 50% at 50% 0%, #0a1a35 0%, #020617 60%, #010514 100%);
@@ -1158,11 +1387,12 @@ onUnmounted(() => {
 .irradiation-dashboard::before {
   content: '';
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background-image:
-    linear-gradient(rgba(0,220,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,220,255,0.03) 1px, transparent 1px);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(rgba(0, 220, 255, 0.03) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(0, 220, 255, 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
   z-index: 1;
   pointer-events: none;
@@ -1171,8 +1401,10 @@ onUnmounted(() => {
 /* ─── 星空背景 ─── */
 .irradiation-dashboard > canvas {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 0;
   pointer-events: none;
 }
@@ -1185,19 +1417,41 @@ onUnmounted(() => {
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 }
+
 .tech-border::before, .tech-border::after,
 .tech-border :deep(.corner-bl), .tech-border :deep(.corner-br) {
   content: '';
   position: absolute;
-  width: 10px; height: 10px;
+  width: 10px;
+  height: 10px;
   border-color: var(--cyan);
   border-style: solid;
   pointer-events: none;
 }
-.tech-border::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
-.tech-border::after { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
-.tech-border :deep(.corner-bl) { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
-.tech-border :deep(.corner-br) { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+.tech-border::before {
+  top: -1px;
+  left: -1px;
+  border-width: 2px 0 0 2px;
+}
+
+.tech-border::after {
+  top: -1px;
+  right: -1px;
+  border-width: 2px 2px 0 0;
+}
+
+.tech-border :deep(.corner-bl) {
+  bottom: -1px;
+  left: -1px;
+  border-width: 0 0 2px 2px;
+}
+
+.tech-border :deep(.corner-br) {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 2px 2px 0;
+}
 
 /* ─── 顶部发光标题栏 ─── */
 .hd {
@@ -1207,38 +1461,46 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   padding: 8px 24px;
-  background: linear-gradient(180deg, rgba(0,20,50,0.98) 0%, rgba(0,10,30,0.9) 100%);
-  border-bottom: 1px solid rgba(0,229,255,0.2);
+  background: linear-gradient(180deg, rgba(0, 20, 50, 0.98) 0%, rgba(0, 10, 30, 0.9) 100%);
+  border-bottom: 1px solid rgba(0, 229, 255, 0.2);
   flex-shrink: 0;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
+
 .hd::after {
   content: '';
   position: absolute;
-  bottom: -1px; left: 15%; right: 15%;
+  bottom: -1px;
+  left: 15%;
+  right: 15%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,229,255,0.8), #00e5ff, rgba(0,229,255,0.8), transparent);
-  box-shadow: 0 0 15px rgba(0,229,255,0.6), 0 0 30px rgba(0,229,255,0.2);
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.8), #00e5ff, rgba(0, 229, 255, 0.8), transparent);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.6), 0 0 30px rgba(0, 229, 255, 0.2);
 }
+
 .hd-center {
   position: absolute;
-  left: 50%; transform: translateX(-50%);
+  left: 50%;
+  transform: translateX(-50%);
   text-align: center;
 }
+
 .hd-title {
   font-size: 21px;
   font-weight: 700;
   letter-spacing: 5px;
   color: var(--cyan);
-  text-shadow: 0 0 25px rgba(0,229,255,0.5), 0 0 50px rgba(0,229,255,0.15);
+  text-shadow: 0 0 25px rgba(0, 229, 255, 0.5), 0 0 50px rgba(0, 229, 255, 0.15);
 }
+
 .hd-subtitle {
   font-size: 10px;
   color: var(--text-3);
   letter-spacing: 2px;
   margin-top: 2px;
 }
+
 .hd-side {
   display: flex;
   align-items: center;
@@ -1246,21 +1508,36 @@ onUnmounted(() => {
   font-size: 11px;
   color: var(--text-2);
 }
+
 .hd-side .clock {
   font-variant-numeric: tabular-nums;
   color: var(--cyan);
   font-size: 13px;
 }
+
 .live-dot {
-  display: flex; align-items: center; gap: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
+
 .dot {
-  width: 7px; height: 7px; border-radius: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
   background: var(--green);
-  box-shadow: 0 0 8px var(--green), 0 0 16px rgba(127,255,0,0.4);
+  box-shadow: 0 0 8px var(--green), 0 0 16px rgba(127, 255, 0, 0.4);
   animation: blink 2s infinite;
 }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1
+  }
+  50% {
+    opacity: .25
+  }
+}
 
 /* ─── 主布局 ─── */
 .main {
@@ -1280,6 +1557,7 @@ onUnmounted(() => {
   gap: 10px;
   min-height: 0;
 }
+
 .kpi-card {
   padding: 12px 16px;
   display: flex;
@@ -1295,41 +1573,87 @@ onUnmounted(() => {
   min-height: 0;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
+
 .kpi-card:hover {
-  border-color: rgba(0,229,255,0.3);
-  box-shadow: 0 0 20px rgba(0,229,255,0.06);
+  border-color: rgba(0, 229, 255, 0.3);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.06);
 }
+
 .kpi-card::after {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 2px;
 }
-.kpi-card.c1::after { background: linear-gradient(90deg, var(--cyan), transparent); }
-.kpi-card.c2::after { background: linear-gradient(90deg, var(--green), transparent); }
-.kpi-card.c3::after { background: linear-gradient(90deg, var(--orange), transparent); }
-.kpi-card.c4::after { background: linear-gradient(90deg, var(--purple), transparent); }
-.kpi-card.c5::after { background: linear-gradient(90deg, var(--yellow), transparent); }
+
+.kpi-card.c1::after {
+  background: linear-gradient(90deg, var(--cyan), transparent);
+}
+
+.kpi-card.c2::after {
+  background: linear-gradient(90deg, var(--green), transparent);
+}
+
+.kpi-card.c3::after {
+  background: linear-gradient(90deg, var(--orange), transparent);
+}
+
+.kpi-card.c4::after {
+  background: linear-gradient(90deg, var(--purple), transparent);
+}
+
+.kpi-card.c5::after {
+  background: linear-gradient(90deg, var(--yellow), transparent);
+}
+
 .kpi-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .kpi-card-label {
   font-size: 11px;
   color: var(--text-3);
 }
+
 .kpi-card-icon {
-  width: 22px; height: 22px;
+  width: 22px;
+  height: 22px;
   border-radius: 4px;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 11px;
 }
-.kpi-card.c1 .kpi-card-icon { background: rgba(0,220,255,0.1); color: var(--cyan); }
-.kpi-card.c2 .kpi-card-icon { background: rgba(0,255,170,0.1); color: var(--green); }
-.kpi-card.c3 .kpi-card-icon { background: rgba(255,170,51,0.1); color: var(--orange); }
-.kpi-card.c4 .kpi-card-icon { background: rgba(170,102,255,0.1); color: var(--purple); }
-.kpi-card.c5 .kpi-card-icon { background: rgba(255,221,68,0.1); color: var(--yellow); }
+
+.kpi-card.c1 .kpi-card-icon {
+  background: rgba(0, 220, 255, 0.1);
+  color: var(--cyan);
+}
+
+.kpi-card.c2 .kpi-card-icon {
+  background: rgba(0, 255, 170, 0.1);
+  color: var(--green);
+}
+
+.kpi-card.c3 .kpi-card-icon {
+  background: rgba(255, 170, 51, 0.1);
+  color: var(--orange);
+}
+
+.kpi-card.c4 .kpi-card-icon {
+  background: rgba(170, 102, 255, 0.1);
+  color: var(--purple);
+}
+
+.kpi-card.c5 .kpi-card-icon {
+  background: rgba(255, 221, 68, 0.1);
+  color: var(--yellow);
+}
+
 .kpi-card-val {
   font-size: 20px;
   font-weight: 600;
@@ -1337,11 +1661,13 @@ onUnmounted(() => {
   font-variant-numeric: tabular-nums;
   line-height: 1.2;
 }
+
 .kpi-card-unit {
   font-size: 12px;
   color: var(--text-2);
   margin-left: 3px;
 }
+
 .kpi-card-trend {
   font-size: 10px;
 }
@@ -1362,13 +1688,15 @@ onUnmounted(() => {
   flex-direction: column;
   gap: 8px;
 }
+
 .conveyor-panel-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(0,220,255,0.1);
+  border-bottom: 1px solid rgba(0, 220, 255, 0.1);
 }
+
 .conveyor-panel-title {
   font-size: 13px;
   font-weight: 500;
@@ -1377,10 +1705,12 @@ onUnmounted(() => {
   align-items: center;
   gap: 6px;
 }
+
 .conveyor-panel-sub {
   font-size: 10px;
   color: var(--text-3);
 }
+
 .conveyor-panel-body {
   flex: 1;
   min-height: 0;
@@ -1388,30 +1718,35 @@ onUnmounted(() => {
   flex-direction: column;
   gap: 6px;
 }
+
 .conveyor-panel-svg-wrap {
   flex: 1;
   min-height: 0;
-  background: rgba(0,0,0,0.15);
-  border: 1px solid rgba(0,220,255,0.08);
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 220, 255, 0.08);
   border-radius: 6px;
   padding: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .conveyor-panel-svg-wrap .conveyor-svg {
   width: 100%;
   height: 100%;
   max-height: none;
 }
+
 .conveyor-panel-progress {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 6px;
 }
+
 .conveyor-panel-progress .progress-item {
   padding: 4px 8px;
 }
+
 .alert-panel {
   padding: 12px 14px;
   display: flex;
@@ -1422,27 +1757,40 @@ onUnmounted(() => {
   border: 1px solid var(--glass-border);
   border-radius: 8px;
 }
+
 .alert-panel-header {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 10px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(0,220,255,0.1);
+  border-bottom: 1px solid rgba(0, 220, 255, 0.1);
 }
+
 .alert-panel-icon {
-  width: 24px; height: 24px;
+  width: 24px;
+  height: 24px;
   border-radius: 4px;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 13px;
 }
-.alert-panel-icon.dose { background: rgba(255,51,102,0.15); }
-.alert-panel-icon.device { background: rgba(255,170,51,0.15); }
+
+.alert-panel-icon.dose {
+  background: rgba(255, 51, 102, 0.15);
+}
+
+.alert-panel-icon.device {
+  background: rgba(255, 170, 51, 0.15);
+}
+
 .alert-panel-title {
   font-size: 13px;
   font-weight: 500;
   color: var(--text-1);
 }
+
 .alert-panel-badge {
   margin-left: auto;
   font-size: 11px;
@@ -1450,15 +1798,17 @@ onUnmounted(() => {
   border-radius: 3px;
   border: 1px solid transparent;
 }
+
 .alert-panel-badge.dose {
   color: var(--red);
-  border-color: rgba(255,51,102,0.4);
-  background: rgba(255,51,102,0.08);
+  border-color: rgba(255, 51, 102, 0.4);
+  background: rgba(255, 51, 102, 0.08);
 }
+
 .alert-panel-badge.device {
   color: var(--orange);
-  border-color: rgba(255,170,51,0.4);
-  background: rgba(255,170,51,0.08);
+  border-color: rgba(255, 170, 51, 0.4);
+  background: rgba(255, 170, 51, 0.08);
 }
 
 .alert-list {
@@ -1468,52 +1818,78 @@ onUnmounted(() => {
   flex-direction: column;
   gap: 6px;
 }
+
 .alert-item {
   display: grid;
   grid-template-columns: 50px 70px 1fr 80px 70px;
   gap: 8px;
   align-items: center;
   padding: 7px 10px;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   font-size: 11px;
   border-left: 2px solid transparent;
   transition: background .2s;
 }
-.alert-item:hover { background: rgba(0,220,255,0.05); }
-.alert-item.critical { border-left-color: var(--red); }
-.alert-item.warn { border-left-color: var(--orange); }
-.alert-item-time { color: var(--text-3); font-size: 10px; }
+
+.alert-item:hover {
+  background: rgba(0, 220, 255, 0.05);
+}
+
+.alert-item.critical {
+  border-left-color: var(--red);
+}
+
+.alert-item.warn {
+  border-left-color: var(--orange);
+}
+
+.alert-item-time {
+  color: var(--text-3);
+  font-size: 10px;
+}
+
 .alert-item-level {
   font-size: 10px;
   padding: 1px 6px;
   border-radius: 3px;
   text-align: center;
 }
+
 .alert-item-level.critical {
   color: var(--red);
-  background: rgba(255,51,102,0.1);
-  border: 1px solid rgba(255,51,102,0.3);
+  background: rgba(255, 51, 102, 0.1);
+  border: 1px solid rgba(255, 51, 102, 0.3);
 }
+
 .alert-item-level.warn {
   color: var(--orange);
-  background: rgba(255,170,51,0.1);
-  border: 1px solid rgba(255,170,51,0.3);
+  background: rgba(255, 170, 51, 0.1);
+  border: 1px solid rgba(255, 170, 51, 0.3);
 }
-.alert-item-desc { color: var(--text-2); line-height: 1.4; }
-.alert-item-device { color: var(--text-3); }
+
+.alert-item-desc {
+  color: var(--text-2);
+  line-height: 1.4;
+}
+
+.alert-item-device {
+  color: var(--text-3);
+}
+
 .alert-item-ack {
   padding: 2px 8px;
   border-radius: 3px;
   font-size: 10px;
-  border: 1px solid rgba(0,220,255,0.3);
+  border: 1px solid rgba(0, 220, 255, 0.3);
   background: none;
   color: var(--text-2);
   cursor: pointer;
   transition: all .15s;
 }
+
 .alert-item-ack:hover {
-  background: rgba(0,220,255,0.1);
+  background: rgba(0, 220, 255, 0.1);
   color: var(--cyan);
   border-color: var(--cyan);
 }
@@ -1526,6 +1902,7 @@ onUnmounted(() => {
   min-height: 0;
   height: 160px;
 }
+
 .chart-row-card {
   padding: 10px 12px;
   background: var(--glass);
@@ -1537,6 +1914,7 @@ onUnmounted(() => {
   flex-direction: column;
   min-height: 0;
 }
+
 .chart-row-title {
   font-size: 12px;
   font-weight: 500;
@@ -1549,16 +1927,19 @@ onUnmounted(() => {
   gap: 8px;
   flex-shrink: 0;
 }
+
 .chart-row-title::before,
 .chart-row-title::after {
   content: '';
   width: 24px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,229,255,0.35));
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.35));
 }
+
 .chart-row-title::after {
-  background: linear-gradient(90deg, rgba(0,229,255,0.35), transparent);
+  background: linear-gradient(90deg, rgba(0, 229, 255, 0.35), transparent);
 }
+
 .chart-row-wrap {
   position: relative;
   flex: 1;
@@ -1570,25 +1951,29 @@ onUnmounted(() => {
   flex-shrink: 0;
   padding: 10px 16px;
   min-height: 0;
-  border-color: rgba(255,51,85,0.15) !important;
-  background: linear-gradient(180deg, rgba(255,51,85,0.04) 0%, rgba(0,10,25,0.7) 100%) !important;
+  border-color: rgba(255, 51, 85, 0.15) !important;
+  background: linear-gradient(180deg, rgba(255, 51, 85, 0.04) 0%, rgba(0, 10, 25, 0.7) 100%) !important;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   border-radius: 8px;
 }
+
 .compliance-footer::before,
 .compliance-footer::after {
-  border-color: rgba(255,51,102,0.4) !important;
+  border-color: rgba(255, 51, 102, 0.4) !important;
 }
+
 .compliance-footer :deep(.corner-bl),
 .compliance-footer :deep(.corner-br) {
-  border-color: rgba(255,51,102,0.4) !important;
+  border-color: rgba(255, 51, 102, 0.4) !important;
 }
+
 .comp-footer-inner {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
+
 .comp-footer-header {
   display: flex;
   align-items: center;
@@ -1601,11 +1986,12 @@ onUnmounted(() => {
   grid-template-columns: repeat(5, 1fr);
   gap: 10px;
 }
+
 .comp-item {
   text-align: center;
   padding: 6px 4px;
   border-radius: 4px;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
   border: 1px solid transparent;
   display: flex;
   flex-direction: column;
@@ -1613,22 +1999,43 @@ onUnmounted(() => {
   justify-content: center;
   min-height: 0;
 }
-.comp-item.urgent { border-color: rgba(255,51,102,0.4); }
-.comp-item.warning { border-color: rgba(255,170,51,0.35); }
-.comp-item.safe { border-color: rgba(0,255,170,0.2); }
+
+.comp-item.urgent {
+  border-color: rgba(255, 51, 102, 0.4);
+}
+
+.comp-item.warning {
+  border-color: rgba(255, 170, 51, 0.35);
+}
+
+.comp-item.safe {
+  border-color: rgba(0, 255, 170, 0.2);
+}
+
 .comp-item-label {
   font-size: 10px;
   color: var(--text-3);
   margin-bottom: 4px;
 }
+
 .comp-item-cd {
   font-size: 16px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
-.comp-item-cd.urgent { color: var(--red); }
-.comp-item-cd.warning { color: var(--orange); }
-.comp-item-cd.safe { color: var(--green); }
+
+.comp-item-cd.urgent {
+  color: var(--red);
+}
+
+.comp-item-cd.warning {
+  color: var(--orange);
+}
+
+.comp-item-cd.safe {
+  color: var(--green);
+}
+
 .comp-item-deadline {
   font-size: 9px;
   color: var(--text-3);
@@ -1641,11 +2048,13 @@ onUnmounted(() => {
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
+
 .progress-item {
   padding: 8px 10px;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 4px;
 }
+
 .progress-label {
   display: flex;
   justify-content: space-between;
@@ -1653,13 +2062,18 @@ onUnmounted(() => {
   color: var(--text-3);
   margin-bottom: 4px;
 }
-.progress-label span:last-child { color: var(--text-2); }
+
+.progress-label span:last-child {
+  color: var(--text-2);
+}
+
 .progress-bar {
   height: 3px;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 2px;
   overflow: hidden;
 }
+
 .progress-fill {
   height: 100%;
   border-radius: 2px;
@@ -1674,6 +2088,7 @@ onUnmounted(() => {
   min-height: 0;
   height: 160px;
 }
+
 .dose-disp-stats,
 .dose-disp-chart,
 .dose-disp-events {
@@ -1687,6 +2102,7 @@ onUnmounted(() => {
   border: 1px solid var(--glass-border);
   border-radius: 8px;
 }
+
 .dose-disp-title {
   font-size: 12px;
   font-weight: 500;
@@ -1697,19 +2113,22 @@ onUnmounted(() => {
   gap: 6px;
   flex-shrink: 0;
 }
+
 .dose-disp-title-icon {
   font-size: 12px;
   color: var(--red);
 }
+
 .dose-disp-badge {
   margin-left: auto;
   font-size: 9px;
   padding: 1px 6px;
   border-radius: 2px;
   color: var(--cyan);
-  border: 1px solid rgba(0,220,255,0.3);
-  background: rgba(0,220,255,0.06);
+  border: 1px solid rgba(0, 220, 255, 0.3);
+  background: rgba(0, 220, 255, 0.06);
 }
+
 .dose-disp-stat-list {
   flex: 1;
   display: flex;
@@ -1717,42 +2136,51 @@ onUnmounted(() => {
   gap: 4px;
   justify-content: center;
 }
+
 .dose-disp-stat-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 5px 8px;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 4px;
 }
+
 .dose-disp-stat-left {
   display: flex;
   align-items: center;
   gap: 6px;
 }
+
 .dose-disp-stat-dot {
-  width: 5px; height: 5px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   flex-shrink: 0;
 }
+
 .dose-disp-stat-label {
   font-size: 11px;
   color: var(--text-2);
 }
+
 .dose-disp-stat-right {
   display: flex;
   align-items: center;
   gap: 8px;
 }
+
 .dose-disp-stat-val {
   font-size: 13px;
   font-weight: 500;
   color: var(--text-1);
   font-variant-numeric: tabular-nums;
 }
+
 .dose-disp-stat-trend {
   font-size: 9px;
 }
+
 .dose-disp-chart-wrap {
   flex: 1;
   min-height: 0;
@@ -1760,6 +2188,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
 }
+
 .dose-disp-event-list {
   flex: 1;
   overflow-y: auto;
@@ -1767,49 +2196,76 @@ onUnmounted(() => {
   flex-direction: column;
   gap: 4px;
 }
-.dose-disp-event-list::-webkit-scrollbar { width: 3px; }
-.dose-disp-event-list::-webkit-scrollbar-track { background: transparent; }
-.dose-disp-event-list::-webkit-scrollbar-thumb { background: rgba(0,220,255,0.12); border-radius: 2px; }
+
+.dose-disp-event-list::-webkit-scrollbar {
+  width: 3px;
+}
+
+.dose-disp-event-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dose-disp-event-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 220, 255, 0.12);
+  border-radius: 2px;
+}
+
 .dose-disp-event-item {
   padding: 5px 8px;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   border-left: 2px solid transparent;
 }
-.dose-disp-event-item.remedy { border-left-color: #00ffaa; }
-.dose-disp-event-item.reject { border-left-color: #ff3366; }
-.dose-disp-event-item.conditional { border-left-color: #ffaa33; }
+
+.dose-disp-event-item.remedy {
+  border-left-color: #00ffaa;
+}
+
+.dose-disp-event-item.reject {
+  border-left-color: #ff3366;
+}
+
+.dose-disp-event-item.conditional {
+  border-left-color: #ffaa33;
+}
+
 .dose-disp-event-row1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 2px;
 }
+
 .dose-disp-event-batch {
   font-size: 11px;
   font-weight: 500;
   color: var(--text-1);
 }
+
 .dose-disp-event-result {
   font-size: 9px;
   padding: 1px 5px;
   border-radius: 2px;
 }
+
 .dose-disp-event-result.remedy {
   color: #00ffaa;
-  background: rgba(0,255,170,0.08);
-  border: 1px solid rgba(0,255,170,0.25);
+  background: rgba(0, 255, 170, 0.08);
+  border: 1px solid rgba(0, 255, 170, 0.25);
 }
+
 .dose-disp-event-result.reject {
   color: #ff3366;
-  background: rgba(255,51,102,0.08);
-  border: 1px solid rgba(255,51,102,0.25);
+  background: rgba(255, 51, 102, 0.08);
+  border: 1px solid rgba(255, 51, 102, 0.25);
 }
+
 .dose-disp-event-result.conditional {
   color: #ffaa33;
-  background: rgba(255,170,51,0.08);
-  border: 1px solid rgba(255,170,51,0.25);
+  background: rgba(255, 170, 51, 0.08);
+  border: 1px solid rgba(255, 170, 51, 0.25);
 }
+
 .dose-disp-event-desc {
   font-size: 10px;
   color: var(--text-3);
@@ -1824,29 +2280,50 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   padding: 8px 24px;
-  background: rgba(0,8,22,0.95);
+  background: rgba(0, 8, 22, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(0,229,255,0.15);
+  border-top: 1px solid rgba(0, 229, 255, 0.15);
   font-size: 10px;
   color: var(--text-3);
   flex-shrink: 0;
 }
 
 /* ─── 滚动条 ─── */
-.alert-list::-webkit-scrollbar { width: 4px; }
-.alert-list::-webkit-scrollbar-track { background: transparent; }
-.alert-list::-webkit-scrollbar-thumb { background: rgba(0,220,255,0.15); border-radius: 2px; }
-.alert-list::-webkit-scrollbar-thumb:hover { background: rgba(0,220,255,0.3); }
+.alert-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.alert-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.alert-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 220, 255, 0.15);
+  border-radius: 2px;
+}
+
+.alert-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 220, 255, 0.3);
+}
 
 /* ─── 动画 ─── */
 @keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
 }
+
 @keyframes glow {
-  from { fill: rgba(0,220,255,0.15); }
-  to { fill: rgba(0,220,255,0.4); }
+  from {
+    fill: rgba(0, 220, 255, 0.15);
+  }
+  to {
+    fill: rgba(0, 220, 255, 0.4);
+  }
 }
 
 /* ═══════════════════════════════════════════
@@ -1858,47 +2335,81 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  background: linear-gradient(155deg, rgba(0,5,18,0.97) 0%, rgba(0,12,32,0.94) 40%, rgba(0,8,22,0.96) 100%);
-  border: 1px solid rgba(0,229,255,0.25);
+  background: linear-gradient(155deg, rgba(0, 5, 18, 0.97) 0%, rgba(0, 12, 32, 0.94) 40%, rgba(0, 8, 22, 0.96) 100%);
+  border: 1px solid rgba(0, 229, 255, 0.25);
   border-radius: 10px;
   overflow: hidden;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  box-shadow: 0 0 24px rgba(0,229,255,0.06), 0 2px 8px rgba(0,0,0,0.4);
+  box-shadow: 0 0 24px rgba(0, 229, 255, 0.06), 0 2px 8px rgba(0, 0, 0, 0.4);
 }
+
 /* 微光背景 */
 .conveyor-v2::before {
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 55% 45% at 48% 55%, rgba(0,229,255,0.05) 0%, transparent 65%),
-    radial-gradient(ellipse 25% 35% at 15% 45%, rgba(26,240,255,0.04) 0%, transparent 55%),
-    radial-gradient(ellipse 20% 30% at 85% 50%, rgba(180,100,255,0.03) 0%, transparent 50%);
+  background: radial-gradient(ellipse 55% 45% at 48% 55%, rgba(0, 229, 255, 0.05) 0%, transparent 65%),
+  radial-gradient(ellipse 25% 35% at 15% 45%, rgba(26, 240, 255, 0.04) 0%, transparent 55%),
+  radial-gradient(ellipse 20% 30% at 85% 50%, rgba(180, 100, 255, 0.03) 0%, transparent 50%);
   pointer-events: none;
   border-radius: 10px;
 }
+
 /* 顶部横线 */
 .conveyor-v2::after {
   content: '';
   position: absolute;
-  top: 0; left: 10%; right: 10%;
+  top: 0;
+  left: 10%;
+  right: 10%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,229,255,0.6), rgba(0,229,255,0.8), rgba(0,229,255,0.6), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.6), rgba(0, 229, 255, 0.8), rgba(0, 229, 255, 0.6), transparent);
   border-radius: 1px;
 }
 
 /* 四角装饰 */
 .cv2-corner {
   position: absolute;
-  width: 12px; height: 12px;
+  width: 12px;
+  height: 12px;
   pointer-events: none;
   z-index: 2;
 }
-.cv2-tl { top: 1px; left: 1px; border-top: 2px solid rgba(0,229,255,0.8); border-left: 2px solid rgba(0,229,255,0.8); border-radius: 10px 0 0 0; box-shadow: -1px -1px 4px rgba(0,229,255,0.15); }
-.cv2-tr { top: 1px; right: 1px; border-top: 2px solid rgba(0,229,255,0.8); border-right: 2px solid rgba(0,229,255,0.8); border-radius: 0 10px 0 0; box-shadow: 1px -1px 4px rgba(0,229,255,0.15); }
-.cv2-bl { bottom: 1px; left: 1px; border-bottom: 2px solid rgba(0,229,255,0.5); border-left: 2px solid rgba(0,229,255,0.5); border-radius: 0 0 0 10px; }
-.cv2-br { bottom: 1px; right: 1px; border-bottom: 2px solid rgba(0,229,255,0.5); border-right: 2px solid rgba(0,229,255,0.5); border-radius: 0 0 10px 0; }
+
+.cv2-tl {
+  top: 1px;
+  left: 1px;
+  border-top: 2px solid rgba(0, 229, 255, 0.8);
+  border-left: 2px solid rgba(0, 229, 255, 0.8);
+  border-radius: 10px 0 0 0;
+  box-shadow: -1px -1px 4px rgba(0, 229, 255, 0.15);
+}
+
+.cv2-tr {
+  top: 1px;
+  right: 1px;
+  border-top: 2px solid rgba(0, 229, 255, 0.8);
+  border-right: 2px solid rgba(0, 229, 255, 0.8);
+  border-radius: 0 10px 0 0;
+  box-shadow: 1px -1px 4px rgba(0, 229, 255, 0.15);
+}
+
+.cv2-bl {
+  bottom: 1px;
+  left: 1px;
+  border-bottom: 2px solid rgba(0, 229, 255, 0.5);
+  border-left: 2px solid rgba(0, 229, 255, 0.5);
+  border-radius: 0 0 0 10px;
+}
+
+.cv2-br {
+  bottom: 1px;
+  right: 1px;
+  border-bottom: 2px solid rgba(0, 229, 255, 0.5);
+  border-right: 2px solid rgba(0, 229, 255, 0.5);
+  border-radius: 0 0 10px 0;
+}
 
 /* 标题栏 */
 .cv2-header {
@@ -1906,14 +2417,16 @@ onUnmounted(() => {
   align-items: center;
   position: relative;
   padding: 2px 0 5px;
-  border-bottom: 1px solid rgba(0,229,255,0.1);
+  border-bottom: 1px solid rgba(0, 229, 255, 0.1);
   flex-shrink: 0;
 }
+
 .cv2-header-left {
   display: flex;
   align-items: center;
   gap: 7px;
 }
+
 .cv2-header-right {
   display: flex;
   align-items: center;
@@ -1922,31 +2435,47 @@ onUnmounted(() => {
   left: 50%;
   transform: translateX(-50%);
 }
+
 .cv2-live-dot {
-  width: 6px; height: 6px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #00ffaa;
-  box-shadow: 0 0 5px #00ffaa, 0 0 10px rgba(0,255,170,0.4);
+  box-shadow: 0 0 5px #00ffaa, 0 0 10px rgba(0, 255, 170, 0.4);
   animation: cv2pulse 1.2s ease-in-out infinite;
   flex-shrink: 0;
 }
+
 @keyframes cv2pulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 5px #00ffaa, 0 0 10px rgba(0,255,170,0.5); }
-  50% { opacity: 0.45; box-shadow: 0 0 2px #00ffaa, 0 0 5px rgba(0,255,170,0.2); }
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 5px #00ffaa, 0 0 10px rgba(0, 255, 170, 0.5);
+  }
+  50% {
+    opacity: 0.45;
+    box-shadow: 0 0 2px #00ffaa, 0 0 5px rgba(0, 255, 170, 0.2);
+  }
 }
+
 .cv2-title {
   font-size: 13px;
   font-weight: 700;
   color: #ecf9ff;
   letter-spacing: 1px;
-  text-shadow: 0 0 12px rgba(0,229,255,0.3);
+  text-shadow: 0 0 12px rgba(0, 229, 255, 0.3);
 }
-.cv2-sep { color: rgba(0,229,255,0.35); font-size: 11px; }
+
+.cv2-sep {
+  color: rgba(0, 229, 255, 0.35);
+  font-size: 11px;
+}
+
 .cv2-subtitle {
   font-size: 10px;
-  color: rgba(0,229,255,0.55);
+  color: rgba(0, 229, 255, 0.55);
   letter-spacing: 0.5px;
 }
+
 .cv2-tag {
   display: inline-flex;
   align-items: center;
@@ -1957,30 +2486,34 @@ onUnmounted(() => {
   font-weight: 500;
   letter-spacing: 0.3px;
 }
+
 .cv2-tag-dot {
-  width: 5px; height: 5px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: currentColor;
   animation: cv2pulse 1s ease-in-out infinite;
 }
+
 .cv2-tag-cyan {
   font-size: 12px;
   color: #00e5ff;
-  border-color: rgba(0,229,255,0.4);
-  background: rgba(0,229,255,0.08);
+  border-color: rgba(0, 229, 255, 0.4);
+  background: rgba(0, 229, 255, 0.08);
 }
+
 .cv2-tag-dim {
   color: #FFD700;
-  border-color: rgba(0,229,255,0.15);
-  background: rgba(0,229,255,0.04);
+  border-color: rgba(0, 229, 255, 0.15);
+  background: rgba(0, 229, 255, 0.04);
 }
 
 /* SVG 容器 */
 .cv2-svg-wrap {
   flex: 1;
   min-height: 0;
-  background: rgba(0,0,0,0.3);
-  border: 1px solid rgba(0,229,255,0.12);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 229, 255, 0.12);
   border-radius: 6px;
   padding: 6px 8px;
   display: flex;
@@ -1988,18 +2521,19 @@ onUnmounted(() => {
   justify-content: center;
   position: relative;
   overflow: hidden;
-  box-shadow: inset 0 0 30px rgba(0,229,255,0.03);
+  box-shadow: inset 0 0 30px rgba(0, 229, 255, 0.03);
 }
+
 .cv2-svg-wrap::before {
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,229,255,0.03) 0%, transparent 65%),
-    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,229,255,0.015) 2px, rgba(0,229,255,0.015) 3px);
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0, 229, 255, 0.03) 0%, transparent 65%),
+  repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 229, 255, 0.015) 2px, rgba(0, 229, 255, 0.015) 3px);
   pointer-events: none;
   border-radius: 6px;
 }
+
 .cv2-svg {
   width: 100%;
   height: 100%;
@@ -2010,21 +2544,23 @@ onUnmounted(() => {
 .cv2-dose-bar {
   flex-shrink: 0;
   padding: 6px 10px 6px;
-  background: linear-gradient(135deg, rgba(0,10,28,0.7) 0%, rgba(0,16,38,0.65) 100%);
-  border: 1px solid rgba(0,229,255,0.14);
+  background: linear-gradient(135deg, rgba(0, 10, 28, 0.7) 0%, rgba(0, 16, 38, 0.65) 100%);
+  border: 1px solid rgba(0, 229, 255, 0.14);
   border-radius: 6px;
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(4px);
 }
+
 .cv2-dose-bar::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 70% 50% at 25% 50%, rgba(0,229,255,0.04) 0%, transparent 55%);
+  background: radial-gradient(ellipse 70% 50% at 25% 50%, rgba(0, 229, 255, 0.04) 0%, transparent 55%);
   pointer-events: none;
   border-radius: 6px;
 }
+
 .cv2-dose-inline {
   display: flex;
   align-items: center;
@@ -2038,25 +2574,28 @@ onUnmounted(() => {
   justify-content: center;
   min-width: 72px;
   padding-right: 12px;
-  border-right: 1px solid rgba(0,229,255,0.12);
+  border-right: 1px solid rgba(0, 229, 255, 0.12);
 }
+
 .cv2-dose-num-wrap {
   display: flex;
   align-items: baseline;
   gap: 3px;
 }
+
 .cv2-dose-num {
   font-size: 28px;
   font-weight: 800;
   color: #7fff00;
   line-height: 1;
-  text-shadow: 0 0 16px rgba(127,255,0,0.45), 0 0 32px rgba(127,255,0,0.15);
+  text-shadow: 0 0 16px rgba(127, 255, 0, 0.45), 0 0 32px rgba(127, 255, 0, 0.15);
   font-variant-numeric: tabular-nums;
   letter-spacing: -1px;
 }
+
 .cv2-dose-num-unit {
   font-size: 12px;
-  color: rgba(127,255,0,0.65);
+  color: rgba(127, 255, 0, 0.65);
   font-weight: 600;
 }
 
@@ -2069,40 +2608,47 @@ onUnmounted(() => {
   gap: 4px;
   min-width: 0;
 }
+
 .cv2-dose-range-top {
   display: flex;
   justify-content: flex-end;
   align-items: baseline;
 }
+
 .cv2-dose-range-val {
   font-size: 11px;
   font-weight: 600;
   color: #7fff00;
   font-variant-numeric: tabular-nums;
 }
+
 .cv2-dose-range-track {
   height: 5px;
-  background: rgba(255,255,255,0.04);
+  background: rgba(255, 255, 255, 0.04);
   border-radius: 3px;
   overflow: hidden;
   position: relative;
 }
+
 .cv2-dose-range-fill {
   height: 100%;
   border-radius: 3px;
   background: linear-gradient(90deg, #007755, #00e5ff, #7fff00);
-  box-shadow: 0 0 8px rgba(0,229,255,0.35);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.35);
   position: relative;
   transition: width 0.8s ease;
 }
+
 .cv2-dose-range-spark {
   position: absolute;
-  right: 0; top: 50%;
+  right: 0;
+  top: 50%;
   transform: translateY(-50%);
-  width: 5px; height: 5px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 0 5px #fff, 0 0 10px rgba(127,255,0,0.6);
+  box-shadow: 0 0 5px #fff, 0 0 10px rgba(127, 255, 0, 0.6);
   animation: cv2sparkblink 1.5s ease-in-out infinite;
 }
 
@@ -2112,46 +2658,60 @@ onUnmounted(() => {
   position: relative;
   margin-top: 2px;
 }
+
 .cv2-dose-sample-fill {
   height: 6px;
   margin-top: 2px;
   border-radius: 3px;
   background: linear-gradient(90deg, #003377, #00aaff, #00e5ff, #7fff00);
-  box-shadow: 0 0 8px rgba(0,229,255,0.3);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
   position: relative;
   min-width: 2px;
   transition: width 0.8s ease;
 }
+
 .cv2-dose-sample-glow {
   position: absolute;
-  right: 0; top: -3px;
-  width: 16px; height: 12px;
-  background: radial-gradient(ellipse, rgba(127,255,0,0.4) 0%, transparent 70%);
+  right: 0;
+  top: -3px;
+  width: 16px;
+  height: 12px;
+  background: radial-gradient(ellipse, rgba(127, 255, 0, 0.4) 0%, transparent 70%);
   border-radius: 50%;
 }
+
 .cv2-dose-sample-dot {
   position: absolute;
   top: 5px;
   transform: translateX(-50%);
-  width: 12px; height: 12px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 0 8px rgba(127,255,0,0.7), 0 0 16px rgba(0,229,255,0.3);
+  box-shadow: 0 0 8px rgba(127, 255, 0, 0.7), 0 0 16px rgba(0, 229, 255, 0.3);
   transition: left 0.8s ease;
   z-index: 2;
 }
+
 .cv2-dose-sample-ticks {
   position: absolute;
-  bottom: 0; left: 0; right: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: space-between;
   font-size: 9px;
-  color: rgba(0,229,255,0.3);
+  color: rgba(0, 229, 255, 0.3);
   font-variant-numeric: tabular-nums;
 }
+
 @keyframes cv2sparkblink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
 }
 
 </style>
