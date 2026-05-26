@@ -394,26 +394,35 @@
               </line>
             </svg>
           </div>
-          <!-- 底部：剂量显示 + 进度整合区 -->
-          <div class="cv2-dose-bar">
+          <!-- 底部：剂量率-速度匹配曲线 + 工艺异常预警 -->
+          <div class="cv2-dose-bar" :class="{ 'anomaly-warning': anomalyActive }">
             <div class="cv2-dose-inline">
-              <!-- 左侧：大字号剂量 -->
-              <div class="cv2-dose-block">
-                <div class="cv2-dose-num-wrap">
-                  实时剂量 : <span class="cv2-dose-num">{{ realtimeDose }}</span>
-                  <span class="cv2-dose-num-unit">kGy</span>
+              <!-- 左侧：实时数值面板 -->
+              <div class="cv2-dose-metrics">
+                <div class="cv2-metric-row">
+                  <span class="cv2-metric-label">束流/源强</span>
+                  <span class="cv2-metric-val" :class="{ 'anomaly': anomalyDoseRate }">{{ currentDoseRate }}%</span>
                 </div>
+                <div class="cv2-metric-row">
+                  <span class="cv2-metric-label">传送速度</span>
+                  <span class="cv2-metric-val" :class="{ 'anomaly': anomalySpeed }">{{ currentSpeed }}%</span>
+                </div>
+                <div class="cv2-metric-status" :class="matchStatus.cls">{{ matchStatus.text }}</div>
               </div>
-              <!-- 右侧：进度 + 范围 -->
-              <div class="cv2-dose-range-block">
-                <div class="cv2-dose-sample-bar">
-                  <div class="cv2-dose-sample-fill" :style="{ width: dosePercent + '%' }"><span
-                      class="cv2-dose-sample-glow"></span></div>
-                  <div class="cv2-dose-sample-dot" :style="{ left: dosePercent + '%' }"></div>
-                  <div class="cv2-dose-sample-ticks">
-                    <span>23.75</span><span style="color:#7fff00">25.00</span><span>26.25</span>
-                  </div>
-                </div>
+              <!-- 中间：双曲线图 -->
+              <div class="cv2-dose-chart-wrap">
+                <canvas ref="doseSpeedChartRef"></canvas>
+              </div>
+              <!-- 右侧：预警指示器 -->
+              <div class="cv2-anomaly-indicator" v-if="anomalyActive">
+                <div class="cv2-anomaly-icon">⚠</div>
+                <div class="cv2-anomaly-text">过度照射风险</div>
+                <div class="cv2-anomaly-sub">速度下降 · 剂量未变</div>
+              </div>
+              <div class="cv2-anomaly-indicator ok" v-else>
+                <div class="cv2-anomaly-icon">✓</div>
+                <div class="cv2-anomaly-text">工艺匹配正常</div>
+                <div class="cv2-anomaly-sub">剂量均匀</div>
               </div>
             </div>
           </div>
@@ -696,12 +705,78 @@ const doseDispEvents = reactive([
   {id: 5, batch: 'B2605-421', result: 'reject', resultLabel: '不合格', desc: '剂量严重超标 27.2kGy，包装变形，已报废'},
 ])
 
-/* ─── 剂量英雄条数据 ─── */
-const realtimeDose = ref(25.0)
-const dosePercent = computed(() => {
-  const low = 23.75, high = 26.25
-  return Math.min(100, Math.max(0, ((realtimeDose.value - low) / (high - low)) * 100))
+/* ─── 剂量率-速度匹配曲线数据 ─── */
+const doseSpeedChartRef = ref(null)
+let doseSpeedChart = null
+
+const MAX_DATA_POINTS = 50
+const doseRateHistory = reactive(Array(MAX_DATA_POINTS).fill(100))
+const speedHistory = reactive(Array(MAX_DATA_POINTS).fill(100))
+const currentDoseRate = ref(100)
+const currentSpeed = ref(100)
+const anomalyActive = ref(false)
+const anomalyDoseRate = ref(false)
+const anomalySpeed = ref(false)
+
+const matchStatus = computed(() => {
+  if (anomalyActive.value) {
+    return { text: '异常 · 匹配失衡', cls: 'status-anomaly' }
+  }
+  const variance = Math.abs(currentDoseRate.value - currentSpeed.value)
+  if (variance < 3) return { text: '匹配优秀', cls: 'status-good' }
+  if (variance < 8) return { text: '匹配正常', cls: 'status-ok' }
+  return { text: '匹配偏差', cls: 'status-warn' }
 })
+
+function updateDoseSpeedData() {
+  // Shift history
+  for (let i = 0; i < MAX_DATA_POINTS - 1; i++) {
+    doseRateHistory[i] = doseRateHistory[i + 1]
+    speedHistory[i] = speedHistory[i + 1]
+  }
+
+  // Generate new values with small random variations
+  let newDoseRate = 100 + (Math.random() - 0.5) * 4
+  let newSpeed = 100 + (Math.random() - 0.5) * 3
+
+  // Occasionally simulate anomaly: speed drops while dose rate stays high
+  const anomalyChance = 0.02 // 2% chance per tick
+  if (Math.random() < anomalyChance) {
+    newSpeed = 55 + Math.random() * 15 // Speed drops to 55-70%
+    newDoseRate = 98 + Math.random() * 4 // Dose rate stays normal/high
+  }
+
+  // Clamp values
+  newDoseRate = Math.max(50, Math.min(130, newDoseRate))
+  newSpeed = Math.max(30, Math.min(120, newSpeed))
+
+  doseRateHistory[MAX_DATA_POINTS - 1] = parseFloat(newDoseRate.toFixed(1))
+  speedHistory[MAX_DATA_POINTS - 1] = parseFloat(newSpeed.toFixed(1))
+  currentDoseRate.value = doseRateHistory[MAX_DATA_POINTS - 1]
+  currentSpeed.value = speedHistory[MAX_DATA_POINTS - 1]
+
+  // Anomaly detection: speed dropped significantly while dose rate stayed stable
+  const speedDrop = speedHistory[MAX_DATA_POINTS - 3] - speedHistory[MAX_DATA_POINTS - 1]
+  const doseRateChange = Math.abs(doseRateHistory[MAX_DATA_POINTS - 3] - doseRateHistory[MAX_DATA_POINTS - 1])
+
+  if (speedDrop > 15 && doseRateChange < 5) {
+    anomalyActive.value = true
+    anomalySpeed.value = true
+    anomalyDoseRate.value = false
+  } else if (speedHistory[MAX_DATA_POINTS - 1] > 75 && doseRateChange < 8) {
+    // Recovery condition: speed back to normal
+    anomalyActive.value = false
+    anomalySpeed.value = false
+    anomalyDoseRate.value = false
+  }
+
+  // Update chart
+  if (doseSpeedChart) {
+    doseSpeedChart.data.datasets[0].data = [...doseRateHistory]
+    doseSpeedChart.data.datasets[1].data = [...speedHistory]
+    doseSpeedChart.update('none')
+  }
+}
 
 /* ─── KPI 卡片 ─── */
 const kpiCards = reactive([
@@ -1284,6 +1359,103 @@ function initCharts() {
       cutout: '55%',
     },
   }))
+
+  // 剂量率-速度匹配曲线
+  initDoseSpeedChart()
+}
+
+function initDoseSpeedChart() {
+  if (!doseSpeedChartRef.value) return
+
+  const labels = Array.from({length: MAX_DATA_POINTS}, (_, i) => {
+    const seconds = (MAX_DATA_POINTS - 1 - i) * 2
+    return `-${seconds}s`
+  })
+
+  doseSpeedChart = new Chart(doseSpeedChartRef.value, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: '束流/源强',
+          data: [...doseRateHistory],
+          borderColor: '#00e5ff',
+          backgroundColor: 'rgba(0, 229, 255, 0.05)',
+          borderWidth: 1.5,
+          fill: false,
+          tension: 0.3,
+          pointRadius: 0,
+          pointHoverRadius: 3,
+        },
+        {
+          label: '传送速度',
+          data: [...speedHistory],
+          borderColor: '#7fff00',
+          backgroundColor: 'rgba(127, 255, 0, 0.05)',
+          borderWidth: 1.5,
+          fill: false,
+          tension: 0.3,
+          pointRadius: 0,
+          pointHoverRadius: 3,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          align: 'end',
+          labels: {
+            font: { size: 9 },
+            boxWidth: 10,
+            color: '#3a6a8a',
+            usePointStyle: true,
+            pointStyle: 'line',
+          }
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          backgroundColor: 'rgba(0, 5, 18, 0.9)',
+          titleColor: '#00e5ff',
+          bodyColor: '#e4f4ff',
+          borderColor: 'rgba(0, 229, 255, 0.2)',
+          borderWidth: 1,
+        }
+      },
+      scales: {
+        x: {
+          display: false,
+          grid: { display: false }
+        },
+        y: {
+          min: 40,
+          max: 130,
+          ticks: {
+            font: { size: 8 },
+            color: '#2a5870',
+            stepSize: 20,
+            callback: (v) => v + '%'
+          },
+          grid: {
+            color: 'rgba(0, 220, 255, 0.04)',
+          }
+        }
+      },
+      interaction: {
+        mode: 'nearest',
+        axis: 'x',
+        intersect: false
+      }
+    }
+  })
+
+  chartInstances.push(doseSpeedChart)
 }
 
 /* ─── 生命周期 ─── */
@@ -1297,9 +1469,9 @@ onMounted(() => {
     // computed 自动重算，无需手动触发
   }, 60000)
 
-  // 实时剂量微动模拟
+  // 实时剂量率-速度匹配数据更新
   doseTimer = setInterval(() => {
-    realtimeDose.value = parseFloat((24.6 + Math.random() * 1.2).toFixed(1))
+    updateDoseSpeedData()
   }, 2000)
 
   // 星空背景
@@ -2540,16 +2712,28 @@ onUnmounted(() => {
   max-height: none;
 }
 
-/* ─── 剂量展示 + 进度整合区 ─── */
+/* ─── 剂量率-速度匹配曲线 + 工艺异常预警 ─── */
 .cv2-dose-bar {
   flex-shrink: 0;
-  padding: 6px 10px 6px;
-  background: linear-gradient(135deg, rgba(0, 10, 28, 0.7) 0%, rgba(0, 16, 38, 0.65) 100%);
+  padding: 8px 12px;
+  background: linear-gradient(135deg, rgba(0, 10, 28, 0.85) 0%, rgba(0, 16, 38, 0.8) 100%);
   border: 1px solid rgba(0, 229, 255, 0.14);
   border-radius: 6px;
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(4px);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.cv2-dose-bar.anomaly-warning {
+  border-color: rgba(255, 51, 102, 0.6);
+  box-shadow: 0 0 20px rgba(255, 51, 102, 0.15), inset 0 0 30px rgba(255, 51, 102, 0.05);
+  animation: anomalyFlash 1s ease-in-out infinite;
+}
+
+@keyframes anomalyFlash {
+  0%, 100% { border-color: rgba(255, 51, 102, 0.6); box-shadow: 0 0 20px rgba(255, 51, 102, 0.15); }
+  50% { border-color: rgba(255, 51, 102, 1); box-shadow: 0 0 30px rgba(255, 51, 102, 0.35); }
 }
 
 .cv2-dose-bar::before {
@@ -2563,155 +2747,151 @@ onUnmounted(() => {
 
 .cv2-dose-inline {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: 12px;
+  position: relative;
+  z-index: 1;
 }
 
-/* 左侧：剂量数值 */
-.cv2-dose-block {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 72px;
-  padding-right: 12px;
-  border-right: 1px solid rgba(0, 229, 255, 0.12);
-}
-
-.cv2-dose-num-wrap {
-  display: flex;
-  align-items: baseline;
-  gap: 3px;
-}
-
-.cv2-dose-num {
-  font-size: 28px;
-  font-weight: 800;
-  color: #7fff00;
-  line-height: 1;
-  text-shadow: 0 0 16px rgba(127, 255, 0, 0.45), 0 0 32px rgba(127, 255, 0, 0.15);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -1px;
-}
-
-.cv2-dose-num-unit {
-  font-size: 12px;
-  color: rgba(127, 255, 0, 0.65);
-  font-weight: 600;
-}
-
-/* 右侧：进度条区域 */
-.cv2-dose-range-block {
-  flex: 1;
+/* 左侧：指标面板 */
+.cv2-dose-metrics {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 4px;
-  min-width: 0;
+  min-width: 110px;
+  padding-right: 10px;
+  border-right: 1px solid rgba(0, 229, 255, 0.1);
 }
 
-.cv2-dose-range-top {
+.cv2-metric-row {
   display: flex;
-  justify-content: flex-end;
-  align-items: baseline;
-}
-
-.cv2-dose-range-val {
-  font-size: 11px;
-  font-weight: 600;
-  color: #7fff00;
-  font-variant-numeric: tabular-nums;
-}
-
-.cv2-dose-range-track {
-  height: 5px;
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 3px;
-  overflow: hidden;
-  position: relative;
-}
-
-.cv2-dose-range-fill {
-  height: 100%;
-  border-radius: 3px;
-  background: linear-gradient(90deg, #007755, #00e5ff, #7fff00);
-  box-shadow: 0 0 8px rgba(0, 229, 255, 0.35);
-  position: relative;
-  transition: width 0.8s ease;
-}
-
-.cv2-dose-range-spark {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 5px #fff, 0 0 10px rgba(127, 255, 0, 0.6);
-  animation: cv2sparkblink 1.5s ease-in-out infinite;
-}
-
-/* 剂量范围样本条 */
-.cv2-dose-sample-bar {
-  height: 18px;
-  position: relative;
-  margin-top: 2px;
-}
-
-.cv2-dose-sample-fill {
-  height: 6px;
-  margin-top: 2px;
-  border-radius: 3px;
-  background: linear-gradient(90deg, #003377, #00aaff, #00e5ff, #7fff00);
-  box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
-  position: relative;
-  min-width: 2px;
-  transition: width 0.8s ease;
-}
-
-.cv2-dose-sample-glow {
-  position: absolute;
-  right: 0;
-  top: -3px;
-  width: 16px;
-  height: 12px;
-  background: radial-gradient(ellipse, rgba(127, 255, 0, 0.4) 0%, transparent 70%);
-  border-radius: 50%;
-}
-
-.cv2-dose-sample-dot {
-  position: absolute;
-  top: 5px;
-  transform: translateX(-50%);
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 8px rgba(127, 255, 0, 0.7), 0 0 16px rgba(0, 229, 255, 0.3);
-  transition: left 0.8s ease;
-  z-index: 2;
-}
-
-.cv2-dose-sample-ticks {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
+  align-items: center;
   justify-content: space-between;
-  font-size: 9px;
-  color: rgba(0, 229, 255, 0.3);
-  font-variant-numeric: tabular-nums;
+  gap: 8px;
 }
 
-@keyframes cv2sparkblink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
+.cv2-metric-label {
+  font-size: 10px;
+  color: var(--text-3);
+}
+
+.cv2-metric-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #00e5ff;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.3s;
+}
+
+.cv2-metric-val.anomaly {
+  color: #ff3355;
+  animation: textPulse 1s ease-in-out infinite;
+}
+
+.cv2-metric-status {
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-align: center;
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+.status-good {
+  color: #00ffaa;
+  background: rgba(0, 255, 170, 0.1);
+  border: 1px solid rgba(0, 255, 170, 0.25);
+}
+
+.status-ok {
+  color: #00e5ff;
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+}
+
+.status-warn {
+  color: #ffaa33;
+  background: rgba(255, 170, 51, 0.1);
+  border: 1px solid rgba(255, 170, 51, 0.25);
+}
+
+.status-anomaly {
+  color: #ff3355;
+  background: rgba(255, 51, 102, 0.12);
+  border: 1px solid rgba(255, 51, 102, 0.4);
+  animation: textPulse 1s ease-in-out infinite;
+}
+
+@keyframes textPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* 中间：图表区域 */
+.cv2-dose-chart-wrap {
+  flex: 1;
+  min-width: 0;
+  height: 70px;
+  position: relative;
+}
+
+.cv2-dose-chart-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* 右侧：预警指示器 */
+.cv2-anomaly-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 90px;
+  padding-left: 10px;
+  border-left: 1px solid rgba(0, 229, 255, 0.1);
+  gap: 2px;
+}
+
+.cv2-anomaly-indicator.ok {
+  opacity: 0.6;
+}
+
+.cv2-anomaly-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.cv2-anomaly-indicator:not(.ok) .cv2-anomaly-icon {
+  animation: iconShake 0.5s ease-in-out infinite;
+  color: #ff3355;
+}
+
+.cv2-anomaly-indicator.ok .cv2-anomaly-icon {
+  color: #00ffaa;
+}
+
+.cv2-anomaly-text {
+  font-size: 10px;
+  font-weight: 700;
+  color: #ff3355;
+  text-align: center;
+}
+
+.cv2-anomaly-indicator.ok .cv2-anomaly-text {
+  color: #00ffaa;
+}
+
+.cv2-anomaly-sub {
+  font-size: 9px;
+  color: var(--text-3);
+  text-align: center;
+}
+
+@keyframes iconShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
 }
 
 </style>
