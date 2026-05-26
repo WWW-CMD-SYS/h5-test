@@ -46,209 +46,311 @@
           </div>
         </div>
 
-        <!-- 中间：自动化输送线 -->
-        <div class="tech-border conveyor-panel">
-          <i class="corner-bl"></i><i class="corner-br"></i>
-          <div class="conveyor-panel-header">
-            <span class="conveyor-panel-title">⟐ 自动化输送线 · 实时流程</span>
-            <span class="conveyor-panel-sub">Co-60 #1 · 批次 B2605-441 · 25 kGy</span>
-          </div>
-          <div class="conveyor-panel-body">
-            <div class="conveyor-panel-svg-wrap">
-              <svg class="conveyor-svg" viewBox="0 0 600 180" preserveAspectRatio="xMidYMid meet">
-                <defs>
-                  <!-- 箭头标记 -->
-                  <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                    <path d="M0,0 L6,3 L0,6 Z" fill="#00dcff66"/>
-                  </marker>
-                  <!-- 强发光滤镜 -->
-                  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="3" result="blur1"/>
-                    <feGaussianBlur stdDeviation="6" result="blur2"/>
-                    <feMerge>
-                      <feMergeNode in="blur2"/>
-                      <feMergeNode in="blur1"/>
-                      <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                  </filter>
-                  <!-- 脉冲发光 -->
-                  <filter id="pulseGlow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="4" result="blur"/>
-                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                  </filter>
-                  <!-- 流动渐变 -->
-                  <linearGradient id="flowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#00dcff00"/>
-                    <stop offset="50%" stop-color="#00dcff"/>
-                    <stop offset="100%" stop-color="#00dcff00"/>
-                  </linearGradient>
-                  <!-- 扫描线渐变 -->
-                  <linearGradient id="scanGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#00dcff00"/>
-                    <stop offset="50%" stop-color="#00dcff"/>
-                    <stop offset="100%" stop-color="#00dcff00"/>
-                  </linearGradient>
-                  <!-- 轨道发光 -->
-                  <linearGradient id="trackGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#00dcff08"/>
-                    <stop offset="20%" stop-color="#00dcff20"/>
-                    <stop offset="50%" stop-color="#00dcff40"/>
-                    <stop offset="80%" stop-color="#00dcff20"/>
-                    <stop offset="100%" stop-color="#00dcff08"/>
-                  </linearGradient>
-                </defs>
-
-                <!-- ═══ 主轨道（滚轴输送带样式）═══ -->
-                <!-- 轨道底板 — 贯穿全部五个区域：进货缓存(14~102) → 入射检(108~196) → 辐照区(204~396) → 出射检(404~492) → 成品仓(498~586) -->
-                <rect x="14" y="84" width="572" height="12" rx="6" fill="rgba(0,220,255,0.06)" stroke="rgba(0,220,255,0.15)" stroke-width="1"/>
-                <!-- 滚轴（一系列小圆，15px 间距，覆盖 14~586） -->
-                <g opacity="0.4">
-                  <circle cx="22" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="37" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="52" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="67" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="82" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="97" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="112" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="127" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="142" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="157" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="172" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="187" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="202" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="217" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="232" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="247" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="262" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="277" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="292" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="307" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="322" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="337" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="352" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="367" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="382" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="397" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="412" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="427" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="442" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="457" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="472" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="487" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="502" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="517" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="532" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="547" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="562" cy="90" r="3" fill="#00dcff30"/>
-                  <circle cx="577" cy="90" r="3" fill="#00dcff30"/>
-                </g>
-                <!-- 轨道中心流动线 — 贯穿首尾 -->
-                <line x1="16" y1="90" x2="584" y2="90" stroke="#00dcff30" stroke-width="1.5" stroke-dasharray="6 3" opacity="0.6">
-                  <animate attributeName="stroke-dashoffset" from="0" to="-18" dur="0.8s" repeatCount="indefinite"/>
-                </line>
-
-
-                <!-- ═══ 区域背景（带呼吸边框）═══ -->
-                <!-- 进货缓存 -->
-                <rect x="14" y="50" width="88" height="82" rx="8" fill="rgba(62,207,255,0.04)" stroke="rgba(62,207,255,0.15)" stroke-width="1"/>
-                <rect x="14" y="50" width="88" height="82" rx="8" fill="none" stroke="#3ecfff" stroke-width="1.5" stroke-dasharray="6 3" opacity="0.3">
-                  <animate attributeName="opacity" values="0.3;0.8;0.3" dur="3s" repeatCount="indefinite"/>
-                </rect>
-                <text x="58" y="42" text-anchor="middle" font-size="9" fill="#5aafcc" font-weight="500">进货缓存</text>
-
-                <!-- 入射检 -->
-                <rect x="108" y="50" width="88" height="82" rx="8" fill="rgba(54,232,160,0.04)" stroke="rgba(54,232,160,0.12)" stroke-width="1"/>
-                <rect x="108" y="50" width="88" height="82" rx="8" fill="none" stroke="#36e8a0" stroke-width="1" stroke-dasharray="4 2" opacity="0.25">
-                  <animate attributeName="opacity" values="0.25;0.6;0.25" dur="2.5s" repeatCount="indefinite"/>
-                </rect>
-                <text x="152" y="42" text-anchor="middle" font-size="9" fill="#4aaa8a" font-weight="500">入射检</text>
-
-                <!-- ═══ 辐照区（核心高亮区域）═══ -->
-                <rect x="204" y="34" width="192" height="114" rx="10" fill="rgba(0,220,255,0.04)" stroke="#00dcff" stroke-width="2" filter="url(#glow)"/>
-                <rect x="204" y="34" width="192" height="114" rx="10" fill="none" stroke="#00dcff" stroke-width="1" stroke-dasharray="8 4" opacity="0.5">
-                  <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="2s" repeatCount="indefinite"/>
-                </rect>
-                <!-- 扫描线 -->
-                <line x1="204" y1="34" x2="396" y2="34" stroke="#00dcff" stroke-width="1.5" filter="url(#glow)" opacity="0.6">
-                  <animate attributeName="y1" values="34;148;34" dur="3s" repeatCount="indefinite"/>
-                  <animate attributeName="y2" values="34;148;34" dur="3s" repeatCount="indefinite"/>
-                </line>
-                <!-- 脉冲波纹（辐照核心） -->
-                <circle cx="300" cy="91" r="20" fill="none" stroke="#00dcff" stroke-width="1" opacity="0">
-                  <animate attributeName="r" values="20;60" dur="2s" repeatCount="indefinite"/>
-                  <animate attributeName="opacity" values="0.6;0" dur="2s" repeatCount="indefinite"/>
-                </circle>
-                <circle cx="300" cy="91" r="20" fill="none" stroke="#00dcff" stroke-width="1" opacity="0">
-                  <animate attributeName="r" values="20;60" dur="2s" begin="1s" repeatCount="indefinite"/>
-                  <animate attributeName="opacity" values="0.6;0" dur="2s" begin="1s" repeatCount="indefinite"/>
-                </circle>
-                <text x="300" y="24" text-anchor="middle" font-size="10" fill="#00dcff" font-weight="600" filter="url(#glow)">▶ 辐照处理中</text>
-
-                <!-- 出射检 -->
-                <rect x="404" y="50" width="88" height="82" rx="8" fill="rgba(54,232,160,0.04)" stroke="rgba(54,232,160,0.12)" stroke-width="1"/>
-                <rect x="404" y="50" width="88" height="82" rx="8" fill="none" stroke="#36e8a0" stroke-width="1" stroke-dasharray="4 2" opacity="0.25">
-                  <animate attributeName="opacity" values="0.25;0.6;0.25" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
-                </rect>
-                <text x="448" y="42" text-anchor="middle" font-size="9" fill="#4aaa8a" font-weight="500">出射检</text>
-
-                <!-- 成品仓 -->
-                <rect x="498" y="50" width="88" height="82" rx="8" fill="rgba(196,155,255,0.04)" stroke="rgba(196,155,255,0.12)" stroke-width="1"/>
-                <rect x="498" y="50" width="88" height="82" rx="8" fill="none" stroke="#c49bff" stroke-width="1" stroke-dasharray="6 3" opacity="0.3">
-                  <animate attributeName="opacity" values="0.3;0.7;0.3" dur="3s" begin="1.5s" repeatCount="indefinite"/>
-                </rect>
-                <text x="542" y="42" text-anchor="middle" font-size="9" fill="#8a6fcc" font-weight="500">成品仓</text>
-
-                <!-- 货位 -->
-                <g ref="cargoGroupRef"></g>
-
-                <!-- 流动货物（在轨道上移动） -->
-                <g ref="movingCargoRef"></g>
-
-                <!-- ═══ 区域标签（带状态色）═══ -->
-                <text x="58"  y="98" text-anchor="middle" font-size="10" fill="#5aafcc" font-weight="500">缓存区</text>
-                <text x="152" y="98" text-anchor="middle" font-size="10" fill="#4aaa8a" font-weight="500">检测中</text>
-                <text x="300" y="48" text-anchor="middle" font-size="13" font-weight="600" fill="#00dcff" filter="url(#glow)">辐照中</text>
-                <text x="300" y="64" text-anchor="middle" font-size="10">
-                  <tspan fill="#00dcffaa">剂量: </tspan>
-                  <tspan fill="#7CFC00" font-weight="800">25</tspan>
-                  <tspan fill="#00dcffaa"> kGy</tspan>
-                </text>
-                <text x="448" y="98" text-anchor="middle" font-size="10" fill="#4aaa8a" font-weight="500">检测中</text>
-                <text x="542" y="98" text-anchor="middle" font-size="10" fill="#8a7fcc" font-weight="500">入库中</text>
-
-                <!-- ═══ 动态箭头（流动虚线）═══ -->
-                <line x1="102" y1="90" x2="106" y2="90" stroke="#00dcff" stroke-width="2" marker-end="url(#arr)" filter="url(#glow)">
-                  <animate attributeName="opacity" values="0.4;1;0.4" dur="1.5s" repeatCount="indefinite"/>
-                </line>
-                <line x1="196" y1="90" x2="200" y2="90" stroke="#00dcff" stroke-width="2" marker-end="url(#arr)" filter="url(#glow)">
-                  <animate attributeName="opacity" values="0.4;1;0.4" dur="1.5s" begin="0.5s" repeatCount="indefinite"/>
-                </line>
-                <line x1="400" y1="90" x2="404" y2="90" stroke="#00dcff" stroke-width="2" marker-end="url(#arr)" filter="url(#glow)">
-                  <animate attributeName="opacity" values="0.4;1;0.4" dur="1.5s" begin="0.3s" repeatCount="indefinite"/>
-                </line>
-                <line x1="494" y1="90" x2="498" y2="90" stroke="#00dcff" stroke-width="2" marker-end="url(#arr)" filter="url(#glow)">
-                  <animate attributeName="opacity" values="0.4;1;0.4" dur="1.5s" begin="0.8s" repeatCount="indefinite"/>
-                </line>
-
-                <!-- ═══ 货位计数 ═══ -->
-                <text x="58"  y="124" text-anchor="middle" font-size="9" fill="#3a8aaa">{{ zoneCounts[0] }}</text>
-                <text x="152" y="124" text-anchor="middle" font-size="9" fill="#3a8a7a">{{ zoneCounts[1] }}</text>
-                <text x="448" y="124" text-anchor="middle" font-size="9" fill="#3a8a7a">{{ zoneCounts[2] }}</text>
-                <text x="542" y="124" text-anchor="middle" font-size="9" fill="#7a6fbc">{{ zoneCounts[3] }}</text>
-              </svg>
+        <!-- 中间：自动化输送线 v2 -->
+        <div class="conveyor-v2">
+          <span class="cv2-corner cv2-tl"></span>
+          <span class="cv2-corner cv2-tr"></span>
+          <span class="cv2-corner cv2-bl"></span>
+          <span class="cv2-corner cv2-br"></span>
+          <!-- 顶部标题 -->
+          <div class="cv2-header">
+            <div class="cv2-header-left">
+              <span class="cv2-live-dot"></span>
+              <span class="cv2-title">自动化输送线</span>
+              <span class="cv2-sep">·</span>
+              <span class="cv2-subtitle">实时流程</span>
             </div>
-            <div class="conveyor-panel-progress">
-              <div class="progress-item">
-                <div class="progress-label"><span>已辐照</span><span>312/400</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:78%;background:var(--cyan)"></div></div>
+            <div class="cv2-header-right">
+              <span class="cv2-tag cv2-tag-cyan"><span class="cv2-tag-dot"></span>Co-60 #1</span>
+              <span class="cv2-tag cv2-tag-dim">批次 B2605-441</span>
+              <span class="cv2-tag cv2-tag-green">25 kGy</span>
+            </div>
+          </div>
+          <!-- SVG 流程 -->
+          <div class="cv2-svg-wrap">
+            <svg class="cv2-svg" viewBox="0 0 620 148" preserveAspectRatio="xMidYMid meet">
+              <defs>
+                <marker id="cv2arr" markerWidth="7" markerHeight="7" refX="5.5" refY="3.5" orient="auto">
+                  <path d="M0,0.5 L6,3.5 L0,6.5 Z" fill="#00e5ff"/>
+                </marker>
+                <filter id="cv2glow" x="-60%" y="-60%" width="220%" height="220%">
+                  <feGaussianBlur stdDeviation="4" result="b1"/>
+                  <feGaussianBlur stdDeviation="9" result="b2"/>
+                  <feMerge><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <filter id="cv2soft" x="-30%" y="-30%" width="160%" height="160%">
+                  <feGaussianBlur stdDeviation="2" result="b"/>
+                  <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <radialGradient id="cv2irrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.2"/>
+                  <stop offset="55%" stop-color="#0066bb" stop-opacity="0.07"/>
+                  <stop offset="100%" stop-color="#002244" stop-opacity="0.02"/>
+                </radialGradient>
+                <linearGradient id="cv2scanbeam" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#00e5ff" stop-opacity="0"/>
+                  <stop offset="40%" stop-color="#00e5ff" stop-opacity="0.55"/>
+                  <stop offset="50%" stop-color="#ffffff" stop-opacity="0.75"/>
+                  <stop offset="60%" stop-color="#00e5ff" stop-opacity="0.55"/>
+                  <stop offset="100%" stop-color="#00e5ff" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="cv2rail" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.08"/>
+                  <stop offset="25%" stop-color="#00e5ff" stop-opacity="0.55"/>
+                  <stop offset="50%" stop-color="#00e5ff" stop-opacity="0.9"/>
+                  <stop offset="75%" stop-color="#00e5ff" stop-opacity="0.55"/>
+                  <stop offset="100%" stop-color="#00e5ff" stop-opacity="0.08"/>
+                </linearGradient>
+                <clipPath id="cv2clip"><rect x="204" y="24" width="212" height="120" rx="10"/></clipPath>
+              </defs>
+
+              <!-- 背景点阵 -->
+              <g opacity="0.055">
+                <line x1="0" y1="37" x2="620" y2="37" stroke="#00e5ff" stroke-width="0.6"/>
+                <line x1="0" y1="74" x2="620" y2="74" stroke="#00e5ff" stroke-width="0.6"/>
+                <line x1="0" y1="111" x2="620" y2="111" stroke="#00e5ff" stroke-width="0.6"/>
+                <line x1="103" y1="0" x2="103" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
+                <line x1="204" y1="0" x2="204" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
+                <line x1="310" y1="0" x2="310" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
+                <line x1="416" y1="0" x2="416" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
+                <line x1="517" y1="0" x2="517" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
+              </g>
+
+              <!-- ══ 主传送轨道 ══ -->
+              <rect x="8" y="82" width="604" height="16" rx="8" fill="rgba(0,0,0,0.5)"/>
+              <rect x="8" y="80" width="604" height="16" rx="8" fill="rgba(0,18,38,0.85)" stroke="rgba(0,229,255,0.28)" stroke-width="1.2"/>
+              <rect x="8" y="80" width="604" height="4" rx="3" fill="url(#cv2rail)" opacity="0.55"/>
+              <rect x="8" y="92" width="604" height="4" rx="3" fill="rgba(0,229,255,0.04)"/>
+              <!-- 精细滚轴 -->
+              <g fill="rgba(0,229,255,0.4)">
+                <rect x="18" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="34" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="50" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="66" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="82" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="113" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="129" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="145" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="161" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="177" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="193" y="81" width="2.5" height="14" rx="1.2"/>
+              </g>
+              <g fill="rgba(0,229,255,0.55)">
+                <rect x="218" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="234" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="250" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="266" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="282" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="298" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="314" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="330" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="346" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="362" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="378" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="394" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="410" y="81" width="2.5" height="14" rx="1.2"/>
+              </g>
+              <g fill="rgba(0,229,255,0.4)">
+                <rect x="430" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="446" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="462" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="478" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="494" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="525" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="541" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="557" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="573" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="589" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="605" y="81" width="2.5" height="14" rx="1.2"/>
+              </g>
+              <!-- 流动虚线 -->
+              <line x1="8" y1="88" x2="612" y2="88" stroke="#00e5ff" stroke-width="1.2" stroke-dasharray="9 6" opacity="0.38">
+                <animate attributeName="stroke-dashoffset" from="0" to="-30" dur="0.65s" repeatCount="indefinite"/>
+              </line>
+
+              <!-- ══ 进货缓存区 ══ -->
+              <rect x="10" y="42" width="93" height="94" rx="8" fill="rgba(0,180,255,0.04)" stroke="rgba(26,240,255,0.22)" stroke-width="1"/>
+              <line x1="10" y1="50" x2="103" y2="50" stroke="rgba(26,240,255,0.4)" stroke-width="0.8"/>
+              <rect x="10" y="42" width="93" height="94" rx="8" fill="none" stroke="#1af0ff" stroke-width="1.3" stroke-dasharray="5 4" opacity="0.18">
+                <animate attributeName="opacity" values="0.18;0.52;0.18" dur="3.1s" repeatCount="indefinite"/>
+              </rect>
+              <rect x="18" y="28" width="70" height="16" rx="3" fill="rgba(0,8,24,0.9)" stroke="rgba(26,240,255,0.45)" stroke-width="0.8"/>
+              <text x="53" y="40" text-anchor="middle" font-size="8.5" fill="#1af0ff" font-weight="700" letter-spacing="1.2">进货缓存</text>
+              <text x="56" y="122" text-anchor="middle" font-size="9" fill="rgba(26,240,255,0.7)" font-weight="500">缓存区</text>
+              <text x="56" y="133" text-anchor="middle" font-size="8" fill="rgba(26,240,255,0.45)">{{ zoneCounts[0] }}</text>
+
+              <!-- ══ 入射检区 ══ -->
+              <rect x="108" y="42" width="90" height="94" rx="8" fill="rgba(0,255,160,0.04)" stroke="rgba(0,255,160,0.18)" stroke-width="1"/>
+              <line x1="108" y1="50" x2="198" y2="50" stroke="rgba(0,255,160,0.32)" stroke-width="0.8"/>
+              <rect x="108" y="42" width="90" height="94" rx="8" fill="none" stroke="#00ffa0" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.16">
+                <animate attributeName="opacity" values="0.16;0.48;0.16" dur="2.7s" repeatCount="indefinite"/>
+              </rect>
+              <rect x="119" y="28" width="60" height="16" rx="3" fill="rgba(0,8,20,0.9)" stroke="rgba(0,255,160,0.4)" stroke-width="0.8"/>
+              <text x="149" y="40" text-anchor="middle" font-size="8.5" fill="#00ffa0" font-weight="700" letter-spacing="1.2">入射检</text>
+              <text x="153" y="122" text-anchor="middle" font-size="9" fill="rgba(0,255,160,0.7)" font-weight="500">检测中</text>
+              <text x="153" y="133" text-anchor="middle" font-size="8" fill="rgba(0,255,160,0.45)">{{ zoneCounts[1] }}</text>
+
+              <!-- ══ 辐照核心区 ══ -->
+              <!-- 背景光晕层 -->
+              <rect x="200" y="20" width="220" height="126" rx="12" fill="rgba(0,229,255,0.04)" filter="url(#cv2glow)"/>
+              <!-- 主容器 -->
+              <rect x="204" y="24" width="212" height="118" rx="10" fill="url(#cv2irrad)" stroke="#00e5ff" stroke-width="2.5" filter="url(#cv2soft)"/>
+              <!-- 内边框 -->
+              <rect x="209" y="29" width="202" height="108" rx="7" fill="none" stroke="rgba(0,229,255,0.28)" stroke-width="0.8"/>
+              <!-- 流动边框 -->
+              <rect x="204" y="24" width="212" height="118" rx="10" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-dasharray="14 7" opacity="0.55">
+                <animate attributeName="stroke-dashoffset" from="0" to="-42" dur="1.4s" repeatCount="indefinite"/>
+              </rect>
+              <!-- 扫描光束（加宽加亮） -->
+              <rect x="209" y="24" width="202" height="6" fill="url(#cv2scanbeam)" opacity="0.8" clip-path="url(#cv2clip)">
+                <animate attributeName="y" values="24;142;24" dur="2.2s" repeatCount="indefinite"/>
+              </rect>
+
+              <!-- 扩散波纹层 1（核心脉冲） -->
+              <circle cx="310" cy="83" r="10" fill="none" stroke="#00e5ff" stroke-width="2.5" opacity="0">
+                <animate attributeName="r" values="10;58" dur="2s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.9;0" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <!-- 扩散波纹层 2 -->
+              <circle cx="310" cy="83" r="10" fill="none" stroke="#7fff00" stroke-width="1.8" opacity="0">
+                <animate attributeName="r" values="10;54" dur="2.2s" begin="0.7s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.6;0" dur="2.2s" begin="0.7s" repeatCount="indefinite"/>
+              </circle>
+              <!-- 扩散波纹层 3 -->
+              <circle cx="310" cy="83" r="10" fill="none" stroke="#00e5ff" stroke-width="1.2" opacity="0">
+                <animate attributeName="r" values="10;48" dur="1.8s" begin="1.4s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.5;0" dur="1.8s" begin="1.4s" repeatCount="indefinite"/>
+              </circle>
+              <!-- 扩散波纹层 4（大外环） -->
+              <circle cx="310" cy="83" r="10" fill="none" stroke="rgba(127,255,0,0.5)" stroke-width="1" opacity="0">
+                <animate attributeName="r" values="10;65" dur="2.8s" begin="0.3s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.35;0" dur="2.8s" begin="0.3s" repeatCount="indefinite"/>
+              </circle>
+
+              <!-- 辐射粒子喷射效果 -->
+              <g opacity="0.6">
+                <circle r="1.5" fill="#7fff00">
+                  <animateMotion path="M310,83 L310,83" dur="2s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="1;0" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="310" cy="83" r="0" fill="#7fff00" opacity="0">
+                  <animate attributeName="cx" values="310;260;310" dur="1.8s" repeatCount="indefinite"/>
+                  <animate attributeName="cy" values="83;50;83" dur="1.8s" repeatCount="indefinite"/>
+                  <animate attributeName="r" values="0;2.5;0" dur="1.8s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.8;0;0" dur="1.8s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="310" cy="83" r="0" fill="#00e5ff" opacity="0">
+                  <animate attributeName="cx" values="310;360;310" dur="2.1s" begin="0.6s" repeatCount="indefinite"/>
+                  <animate attributeName="cy" values="83;110;83" dur="2.1s" begin="0.6s" repeatCount="indefinite"/>
+                  <animate attributeName="r" values="0;2;0" dur="2.1s" begin="0.6s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.7;0;0" dur="2.1s" begin="0.6s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="310" cy="83" r="0" fill="#7fff00" opacity="0">
+                  <animate attributeName="cx" values="310;245;310" dur="2.4s" begin="1.2s" repeatCount="indefinite"/>
+                  <animate attributeName="cy" values="83;95;83" dur="2.4s" begin="1.2s" repeatCount="indefinite"/>
+                  <animate attributeName="r" values="0;2.2;0" dur="2.4s" begin="1.2s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.6;0;0" dur="2.4s" begin="1.2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="310" cy="83" r="0" fill="#fff" opacity="0">
+                  <animate attributeName="cx" values="310;375;310" dur="1.6s" begin="0.3s" repeatCount="indefinite"/>
+                  <animate attributeName="cy" values="83;60;83" dur="1.6s" begin="0.3s" repeatCount="indefinite"/>
+                  <animate attributeName="r" values="0;1.8;0" dur="1.6s" begin="0.3s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.9;0;0" dur="1.6s" begin="0.3s" repeatCount="indefinite"/>
+                </circle>
+              </g>
+
+              <!-- 中心辐射光环 -->
+              <circle cx="310" cy="83" r="14" fill="none" stroke="#00e5ff" stroke-width="1" opacity="0.7">
+                <animate attributeName="r" values="14;18;14" dur="1.2s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.7;0.3;0.7" dur="1.2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="310" cy="83" r="6" fill="rgba(127,255,0,0.3)" stroke="none">
+                <animate attributeName="r" values="6;12;6" dur="0.8s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.5;0.15;0.5" dur="0.8s" repeatCount="indefinite"/>
+              </circle>
+
+              <!-- 顶部运行标签 -->
+              <rect x="245" y="25" width="130" height="17" rx="4" fill="rgba(0,229,255,0.16)" stroke="rgba(0,229,255,0.7)" stroke-width="0.8"/>
+              <circle cx="256" cy="33.5" r="3.2" fill="#00ffaa">
+                <animate attributeName="opacity" values="1;0.2;1" dur="0.7s" repeatCount="indefinite"/>
+              </circle>
+              <text x="295" y="37.5" text-anchor="middle" font-size="9" fill="#00e5ff" font-weight="700" letter-spacing="1.5" filter="url(#cv2soft)">▶ 辐照处理中</text>
+              <!-- 中心文字 -->
+              <text x="310" y="62" text-anchor="middle" font-size="14" font-weight="800" fill="rgba(0,229,255,0.95)" letter-spacing="1" filter="url(#cv2soft)">辐照中</text>
+              <text x="310" y="79" text-anchor="middle" font-size="10">
+                <tspan fill="rgba(0,229,255,0.6)">剂量 </tspan>
+                <tspan fill="#7fff00" font-weight="900" font-size="16">25</tspan>
+                <tspan fill="rgba(0,229,255,0.6)" font-size="9"> kGy</tspan>
+              </text>
+
+              <!-- ══ 出射检区 ══ -->
+              <rect x="416" y="42" width="90" height="94" rx="8" fill="rgba(0,255,160,0.04)" stroke="rgba(0,255,160,0.18)" stroke-width="1"/>
+              <line x1="416" y1="50" x2="506" y2="50" stroke="rgba(0,255,160,0.32)" stroke-width="0.8"/>
+              <rect x="416" y="42" width="90" height="94" rx="8" fill="none" stroke="#00ffa0" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.16">
+                <animate attributeName="opacity" values="0.16;0.48;0.16" dur="2.7s" begin="0.9s" repeatCount="indefinite"/>
+              </rect>
+              <rect x="427" y="28" width="60" height="16" rx="3" fill="rgba(0,8,20,0.9)" stroke="rgba(0,255,160,0.4)" stroke-width="0.8"/>
+              <text x="457" y="40" text-anchor="middle" font-size="8.5" fill="#00ffa0" font-weight="700" letter-spacing="1.2">出射检</text>
+              <text x="461" y="122" text-anchor="middle" font-size="9" fill="rgba(0,255,160,0.7)" font-weight="500">检测中</text>
+              <text x="461" y="133" text-anchor="middle" font-size="8" fill="rgba(0,255,160,0.45)">{{ zoneCounts[2] }}</text>
+
+              <!-- ══ 成品仓区 ══ -->
+              <rect x="513" y="42" width="99" height="94" rx="8" fill="rgba(160,100,255,0.04)" stroke="rgba(180,120,255,0.2)" stroke-width="1"/>
+              <line x1="513" y1="50" x2="612" y2="50" stroke="rgba(180,120,255,0.3)" stroke-width="0.8"/>
+              <rect x="513" y="42" width="99" height="94" rx="8" fill="none" stroke="#cc99ff" stroke-width="1.3" stroke-dasharray="6 4" opacity="0.18">
+                <animate attributeName="opacity" values="0.18;0.55;0.18" dur="3.4s" begin="1.8s" repeatCount="indefinite"/>
+              </rect>
+              <rect x="524" y="28" width="60" height="16" rx="3" fill="rgba(8,5,28,0.9)" stroke="rgba(180,120,255,0.42)" stroke-width="0.8"/>
+              <text x="554" y="40" text-anchor="middle" font-size="8.5" fill="#cc99ff" font-weight="700" letter-spacing="1.2">成品仓</text>
+              <text x="562" y="122" text-anchor="middle" font-size="9" fill="rgba(180,120,255,0.7)" font-weight="500">入库中</text>
+              <text x="562" y="133" text-anchor="middle" font-size="8" fill="rgba(180,120,255,0.45)">{{ zoneCounts[3] }}</text>
+
+              <!-- 货位 & 流动货物 -->
+              <g ref="cargoGroupRef"></g>
+              <g ref="movingCargoRef"></g>
+
+              <!-- 区间箭头 -->
+              <line x1="103" y1="88" x2="107" y2="88" stroke="#00e5ff" stroke-width="2.2" marker-end="url(#cv2arr)" filter="url(#cv2soft)">
+                <animate attributeName="opacity" values="0.3;1;0.3" dur="1.3s" repeatCount="indefinite"/>
+              </line>
+              <line x1="198" y1="88" x2="202" y2="88" stroke="#00e5ff" stroke-width="2.2" marker-end="url(#cv2arr)" filter="url(#cv2soft)">
+                <animate attributeName="opacity" values="0.3;1;0.3" dur="1.3s" begin="0.43s" repeatCount="indefinite"/>
+              </line>
+              <line x1="416" y1="88" x2="420" y2="88" stroke="#00e5ff" stroke-width="2.2" marker-end="url(#cv2arr)" filter="url(#cv2soft)">
+                <animate attributeName="opacity" values="0.3;1;0.3" dur="1.3s" begin="0.26s" repeatCount="indefinite"/>
+              </line>
+              <line x1="506" y1="88" x2="510" y2="88" stroke="#00e5ff" stroke-width="2.2" marker-end="url(#cv2arr)" filter="url(#cv2soft)">
+                <animate attributeName="opacity" values="0.3;1;0.3" dur="1.3s" begin="0.7s" repeatCount="indefinite"/>
+              </line>
+            </svg>
+          </div>
+          <!-- 底部进度 -->
+          <div class="cv2-progress-row">
+            <div class="cv2-prog-item">
+              <div class="cv2-prog-labels">
+                <span class="cv2-prog-name">已辐照</span>
+                <span class="cv2-prog-val cv2-cyan">312 <em>/ 400</em></span>
               </div>
-              <div class="progress-item">
-                <div class="progress-label"><span>在线时长</span><span>6.4/8h</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:80%;background:var(--green)"></div></div>
+              <div class="cv2-prog-track">
+                <div class="cv2-prog-fill cv2-fill-cyan" style="width:78%"><span class="cv2-spark"></span></div>
               </div>
-              <div class="progress-item">
-                <div class="progress-label"><span>今日目标</span><span>4287/5000</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width:86%;background:var(--green)"></div></div>
+            </div>
+            <div class="cv2-prog-item">
+              <div class="cv2-prog-labels">
+                <span class="cv2-prog-name">在线时长</span>
+                <span class="cv2-prog-val cv2-green">6.4 <em>/ 8h</em></span>
+              </div>
+              <div class="cv2-prog-track">
+                <div class="cv2-prog-fill cv2-fill-green" style="width:80%"><span class="cv2-spark"></span></div>
+              </div>
+            </div>
+            <div class="cv2-prog-item">
+              <div class="cv2-prog-labels">
+                <span class="cv2-prog-name">今日目标</span>
+                <span class="cv2-prog-val cv2-green">4287 <em>/ 5000</em></span>
+              </div>
+              <div class="cv2-prog-track">
+                <div class="cv2-prog-fill cv2-fill-green" style="width:86%"><span class="cv2-spark"></span></div>
               </div>
             </div>
           </div>
@@ -274,6 +376,48 @@
             </template>
             <div v-else style="padding:20px;text-align:center;color:var(--text-3);font-size:11px">
               暂无未确认设备异常报警 · 系统正常
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dose Hero：实时辐照剂量突出展示（位于输送线下方） -->
+      <div class="dose-hero">
+        <div class="dose-hero-bg"></div>
+        <div class="dose-hero-inner">
+          <div class="dose-hero-left">
+            <div class="dose-hero-label">实时辐照剂量</div>
+            <div class="dose-hero-value-wrap">
+              <span class="dose-hero-value">{{ realtimeDose }}</span>
+              <span class="dose-hero-unit">kGy</span>
+              <span class="dose-hero-status"><span class="dose-hero-dot"></span>运行中</span>
+            </div>
+          </div>
+          <div class="dose-hero-mid">
+            <div class="dose-hero-range-bar">
+              <div class="dhr-track">
+                <div class="dhr-fill" :style="{ width: dosePercent + '%' }">
+                  <div class="dhr-glow"></div>
+                </div>
+                <div class="dhr-dot" :style="{ left: dosePercent + '%' }"></div>
+              </div>
+              <div class="dhr-ticks">
+                <span>23.75</span><span style="color:#7fff00;font-weight:600">25.00</span><span>26.25</span>
+              </div>
+            </div>
+          </div>
+          <div class="dose-hero-right">
+            <div class="dhs-item">
+              <span class="dhs-label">剂量率</span>
+              <span class="dhs-val">3.2 <em>kGy/h</em></span>
+            </div>
+            <div class="dhs-item">
+              <span class="dhs-label">累计</span>
+              <span class="dhs-val">1,247 <em>kGy</em></span>
+            </div>
+            <div class="dhs-item">
+              <span class="dhs-label">进度</span>
+              <span class="dhs-val green">312 <em>/ 400</em></span>
             </div>
           </div>
         </div>
@@ -457,6 +601,13 @@ const doseDispEvents = reactive([
   { id: 5, batch: 'B2605-421', result: 'reject', resultLabel: '不合格', desc: '剂量严重超标 27.2kGy，包装变形，已报废' },
 ])
 
+/* ─── 剂量英雄条数据 ─── */
+const realtimeDose = ref(25.0)
+const dosePercent = computed(() => {
+  const low = 23.75, high = 26.25
+  return Math.min(100, Math.max(0, ((realtimeDose.value - low) / (high - low)) * 100))
+})
+
 /* ─── KPI 卡片 ─── */
 const kpiCards = reactive([
   { key: 'prod', cls: 'c1', label: '今日产量', icon: '📦', value: '4,287', unit: '件', trend: '↑ 8.3% 较昨日', trendColor: 'green' },
@@ -504,17 +655,18 @@ const complianceDisplay = computed(() =>
 )
 
 let complianceTimer = null
+let doseTimer = null
 
 /* ─── 输送线动画 ─── */
 const cargoGroupRef = ref(null)
 const zoneCounts = ref(['', '', '', ''])
 
 const zones = [
-  { x: 18, y: 66, w: 80, count: 8, color: '#3ecfff', cntIdx: 0 },   // 浅天蓝 — 进货
-  { x: 112, y: 66, w: 80, count: 3, color: '#36e8a0', cntIdx: 1 },  // 翡翠绿 — 入射检
-  { x: 208, y: 60, w: 184, count: 6, color: '#00dcff', cntIdx: null, active: true }, // 亮青 — 辐照区
-  { x: 408, y: 66, w: 80, count: 2, color: '#36e8a0', cntIdx: 2 },  // 翡翠绿 — 出射检
-  { x: 502, y: 66, w: 80, count: 11, color: '#c49bff', cntIdx: 3 }, // 薰衣紫 — 成品仓
+  { x: 10, y: 55, w: 93, count: 8, color: '#1af0ff', cntIdx: 0 },    // 进货缓存
+  { x: 108, y: 55, w: 90, count: 3, color: '#00ffa0', cntIdx: 1 },   // 入射检
+  { x: 204, y: 47, w: 212, count: 6, color: '#00e5ff', cntIdx: null, active: true }, // 辐照区
+  { x: 416, y: 55, w: 90, count: 2, color: '#00ffa0', cntIdx: 2 },   // 出射检
+  { x: 513, y: 55, w: 99, count: 11, color: '#cc99ff', cntIdx: 3 },  // 成品仓
 ]
 
 function drawCargo() {
@@ -531,7 +683,7 @@ function drawCargo() {
       const bw = z.active ? 24 : 20, bh = 18, gap = 5
       const gw = cols * (bw + gap) - gap
       const bx = z.x + (z.w - gw) / 2 + col * (bw + gap)
-      const by = 72 + row * (bh + 4)
+      const by = 58 + row * (bh + 4)
 
       const group = document.createElementNS('http://www.w3.org/2000/svg', 'g')
       const zoneColors = ['#3ecfff', '#36e8a0', '#36e8a0', '#c49bff']
@@ -669,11 +821,11 @@ let moveAnimId = null
 
 // 轨道区域定义（x坐标范围 + 统一色彩体系）— 与轨道底板 x=14, width=572 对齐
 const trackZones = [
-  { name: '进货缓存', x1: 14, x2: 102, color: '#3ecfff' },   // 浅天蓝
-  { name: '入射检', x1: 108, x2: 196, color: '#36e8a0' },     // 翡翠绿
-  { name: '辐照区', x1: 204, x2: 396, color: '#00dcff' },     // 亮青
-  { name: '出射检', x1: 404, x2: 492, color: '#36e8a0' },     // 翡翠绿
-  { name: '成品仓', x1: 498, x2: 586, color: '#c49bff' },     // 薰衣紫
+  { name: '进货缓存', x1: 10, x2: 103, color: '#1af0ff' },
+  { name: '入射检', x1: 108, x2: 198, color: '#00ffa0' },
+  { name: '辐照区', x1: 204, x2: 416, color: '#00e5ff' },
+  { name: '出射检', x1: 416, x2: 506, color: '#00ffa0' },
+  { name: '成品仓', x1: 513, x2: 612, color: '#cc99ff' },
 ]
 
 function createMovingCargo() {
@@ -765,8 +917,8 @@ function createMovingCargo() {
   movingItems.push({
     id,
     el: group,
-    x: 16,  // 从轨道左边界(14) + 2px 偏移开始
-    y: 90,
+    x: 10,
+    y: 88,
     speed: 0.8 + Math.random() * 0.6,
     color,
   })
@@ -788,7 +940,7 @@ function updateMovingCargo() {
 
     // 根据位置计算Y轴轻微波动（模拟轨道震动）
     const wave = Math.sin(item.x * 0.05) * 1.5
-    item.y = 90 + wave
+    item.y = 88 + wave
 
     // 更新DOM位置
     item.el.setAttribute('transform', `translate(${item.x}, ${item.y})`)
@@ -818,7 +970,7 @@ function updateMovingCargo() {
     }
 
     // 到达终点（轨道右边界 586 + 货物半宽），移除
-    if (item.x > 596) {
+    if (item.x > 622) {
       g.removeChild(item.el)
       movingItems.splice(i, 1)
     }
@@ -972,6 +1124,11 @@ onMounted(() => {
     // computed 自动重算，无需手动触发
   }, 60000)
 
+  // 实时剂量微动模拟
+  doseTimer = setInterval(() => {
+    realtimeDose.value = parseFloat((24.6 + Math.random() * 1.2).toFixed(1))
+  }, 2000)
+
   // 星空背景
   resizeStars()
   drawStars()
@@ -1001,6 +1158,7 @@ onUnmounted(() => {
   // 清除定时器
   if (clockTimer) clearInterval(clockTimer)
   if (complianceTimer) clearInterval(complianceTimer)
+  if (doseTimer) clearInterval(doseTimer)
   if (cargoTimer) clearInterval(cargoTimer)
 
   // 取消流动货物动画
@@ -1021,23 +1179,25 @@ onUnmounted(() => {
 
 .irradiation-dashboard {
   --bg-main: #020617;
-  --bg-panel: rgba(8, 20, 50, 0.7);
-  --bg-card: rgba(10, 30, 70, 0.6);
-  --border: rgba(0, 220, 255, 0.25);
-  --border-hi: rgba(0, 220, 255, 0.6);
-  --text-1: #e0f7ff;
-  --text-2: #6ab0d0;
-  --text-3: #3a6a8a;
-  --cyan: #00dcff;
-  --green: #00ffaa;
-  --orange: #ffaa33;
-  --red: #ff3366;
-  --purple: #aa66ff;
+  --bg-panel: rgba(4,16,42,0.75);
+  --bg-card: rgba(8,24,54,0.65);
+  --border: rgba(0,229,255,0.18);
+  --border-hi: rgba(0,229,255,0.5);
+  --text-1: #e4f4ff;
+  --text-2: #5ca8c8;
+  --text-3: #2a5870;
+  --cyan: #00e5ff;
+  --green: #7fff00;
+  --orange: #ff9933;
+  --red: #ff3355;
+  --purple: #9966ff;
   --yellow: #ffdd44;
   --font: 'PingFang SC','Microsoft YaHei',system-ui,sans-serif;
+  --glass: rgba(4,16,42,0.65);
+  --glass-border: rgba(0,229,255,0.12);
 
   min-height: 100vh;
-  background: var(--bg-main);
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, #0a1a35 0%, #020617 60%, #010514 100%);
   color: var(--text-1);
   font-family: var(--font);
   font-size: 13px;
@@ -1072,14 +1232,16 @@ onUnmounted(() => {
 /* ─── 科技边框装饰 ─── */
 .tech-border {
   position: relative;
-  border: 1px solid var(--border);
-  background: var(--bg-panel);
+  border: 1px solid var(--glass-border);
+  background: var(--glass);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 .tech-border::before, .tech-border::after,
 .tech-border :deep(.corner-bl), .tech-border :deep(.corner-br) {
   content: '';
   position: absolute;
-  width: 8px; height: 8px;
+  width: 10px; height: 10px;
   border-color: var(--cyan);
   border-style: solid;
   pointer-events: none;
@@ -1089,6 +1251,168 @@ onUnmounted(() => {
 .tech-border :deep(.corner-bl) { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
 .tech-border :deep(.corner-br) { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
 
+/* ─── 剂量英雄条 ─── */
+.dose-hero {
+  position: relative;
+  z-index: 8;
+  margin: 0 0 10px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(0,229,255,0.3);
+  background: linear-gradient(135deg, rgba(0,15,40,0.95) 0%, rgba(0,25,55,0.9) 50%, rgba(0,10,30,0.95) 100%);
+  box-shadow: 0 0 30px rgba(0,229,255,0.08), inset 0 1px 0 rgba(0,229,255,0.1);
+  flex-shrink: 0;
+}
+.dose-hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 50% 80% at 30% 50%, rgba(0,229,255,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 30% 60% at 70% 50%, rgba(127,255,0,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+.dose-hero-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 200px 1fr 280px;
+  align-items: center;
+  padding: 10px 20px;
+  gap: 20px;
+}
+.dose-hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.dose-hero-label {
+  font-size: 10px;
+  color: rgba(0,229,255,0.6);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.dose-hero-value-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.dose-hero-value {
+  font-size: 48px;
+  font-weight: 700;
+  color: #7fff00;
+  line-height: 1;
+  text-shadow: 0 0 20px rgba(127,255,0,0.4), 0 0 40px rgba(127,255,0,0.15);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -1px;
+}
+.dose-hero-unit {
+  font-size: 16px;
+  color: rgba(127,255,0,0.7);
+  font-weight: 500;
+}
+.dose-hero-status {
+  font-size: 11px;
+  color: rgba(0,229,255,0.8);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+}
+.dose-hero-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #00ffaa;
+  box-shadow: 0 0 8px #00ffaa;
+  animation: dosePulse 1s ease-in-out infinite;
+}
+@keyframes dosePulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px #00ffaa, 0 0 16px rgba(0,255,170,0.5); }
+  50% { opacity: 0.4; box-shadow: 0 0 3px #00ffaa, 0 0 6px rgba(0,255,170,0.2); }
+}
+.dose-hero-mid {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+.dose-hero-range-bar {
+  width: 100%;
+}
+.dhr-track {
+  height: 8px;
+  background: rgba(0,229,255,0.08);
+  border-radius: 4px;
+  position: relative;
+  overflow: visible;
+  border: 1px solid rgba(0,229,255,0.15);
+}
+.dhr-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #0044aa, #00e5ff, #7fff00);
+  box-shadow: 0 0 12px rgba(0,229,255,0.4);
+  position: relative;
+  transition: width 0.8s ease;
+  min-width: 2px;
+}
+.dhr-glow {
+  position: absolute;
+  right: 0; top: -4px;
+  width: 20px; height: 16px;
+  background: radial-gradient(ellipse, rgba(127,255,0,0.5) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.dhr-dot {
+  position: absolute;
+  top: 50%; transform: translate(-50%, -50%);
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(127,255,0,0.8), 0 0 20px rgba(0,229,255,0.4), 0 0 4px #7fff00;
+  transition: left 0.8s ease;
+  z-index: 2;
+}
+.dhr-ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 10px;
+  color: rgba(0,229,255,0.4);
+  font-variant-numeric: tabular-nums;
+}
+.dose-hero-right {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+}
+.dhs-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(0,229,255,0.04);
+  border: 1px solid rgba(0,229,255,0.1);
+}
+.dhs-label {
+  font-size: 9px;
+  color: rgba(0,229,255,0.45);
+  letter-spacing: 0.5px;
+}
+.dhs-val {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e0f7ff;
+  font-variant-numeric: tabular-nums;
+}
+.dhs-val em {
+  font-style: normal;
+  font-size: 9px;
+  font-weight: 400;
+  color: rgba(0,229,255,0.4);
+  margin-left: 2px;
+}
+.dhs-val.green { color: #7fff00; }
+
 /* ─── 顶部发光标题栏 ─── */
 .hd {
   position: relative;
@@ -1096,18 +1420,20 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 20px;
-  background: linear-gradient(180deg, rgba(0,30,60,0.95) 0%, rgba(0,15,35,0.9) 100%);
-  border-bottom: 1px solid var(--border);
+  padding: 8px 24px;
+  background: linear-gradient(180deg, rgba(0,20,50,0.98) 0%, rgba(0,10,30,0.9) 100%);
+  border-bottom: 1px solid rgba(0,229,255,0.2);
   flex-shrink: 0;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 .hd::after {
   content: '';
   position: absolute;
-  bottom: -1px; left: 20%; right: 20%;
+  bottom: -1px; left: 15%; right: 15%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-  box-shadow: 0 0 10px var(--cyan);
+  background: linear-gradient(90deg, transparent, rgba(0,229,255,0.8), #00e5ff, rgba(0,229,255,0.8), transparent);
+  box-shadow: 0 0 15px rgba(0,229,255,0.6), 0 0 30px rgba(0,229,255,0.2);
 }
 .hd-center {
   position: absolute;
@@ -1115,11 +1441,11 @@ onUnmounted(() => {
   text-align: center;
 }
 .hd-title {
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: 4px;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 5px;
   color: var(--cyan);
-  text-shadow: 0 0 20px rgba(0,220,255,0.5);
+  text-shadow: 0 0 25px rgba(0,229,255,0.5), 0 0 50px rgba(0,229,255,0.15);
 }
 .hd-subtitle {
   font-size: 10px;
@@ -1143,12 +1469,12 @@ onUnmounted(() => {
   display: flex; align-items: center; gap: 5px;
 }
 .dot {
-  width: 6px; height: 6px; border-radius: 50%;
+  width: 7px; height: 7px; border-radius: 50%;
   background: var(--green);
-  box-shadow: 0 0 6px var(--green);
+  box-shadow: 0 0 8px var(--green), 0 0 16px rgba(127,255,0,0.4);
   animation: blink 2s infinite;
 }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
 
 /* ─── 主布局 ─── */
 .main {
@@ -1163,23 +1489,29 @@ onUnmounted(() => {
 
 /* ─── KPI 横排行 ─── */
 .kpi-row {
-  margin-top: 11rem;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
+  gap: 10px;
   min-height: 0;
 }
 .kpi-card {
-  padding: 10px 14px;
+  padding: 12px 16px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  gap: 4px;
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
   position: relative;
   overflow: hidden;
   min-height: 0;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.kpi-card:hover {
+  border-color: rgba(0,229,255,0.3);
+  box-shadow: 0 0 20px rgba(0,229,255,0.06);
 }
 .kpi-card::after {
   content: '';
@@ -1232,8 +1564,8 @@ onUnmounted(() => {
 .top-row {
   display: grid;
   grid-template-columns: 1fr 1.8fr 1fr;
-  gap: 8px;
-  height: 220px;
+  gap: 10px;
+  height: 300px;
   min-height: 0;
 }
 
@@ -1298,6 +1630,11 @@ onUnmounted(() => {
   padding: 12px 14px;
   display: flex;
   flex-direction: column;
+  background: var(--glass);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
 }
 .alert-panel-header {
   display: flex;
@@ -1399,39 +1736,42 @@ onUnmounted(() => {
 .chart-row {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 8px;
+  gap: 10px;
   min-height: 0;
   height: 160px;
 }
 .chart-row-card {
-  padding: 8px 10px;
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  padding: 10px 12px;
+  background: var(--glass);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   min-height: 0;
 }
 .chart-row-title {
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--text-2);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   flex-shrink: 0;
 }
 .chart-row-title::before,
 .chart-row-title::after {
   content: '';
-  width: 20px;
+  width: 24px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,220,255,0.3));
+  background: linear-gradient(90deg, transparent, rgba(0,229,255,0.35));
 }
 .chart-row-title::after {
-  background: linear-gradient(90deg, rgba(0,220,255,0.3), transparent);
+  background: linear-gradient(90deg, rgba(0,229,255,0.35), transparent);
 }
 .chart-row-wrap {
   position: relative;
@@ -1442,10 +1782,13 @@ onUnmounted(() => {
 /* ─── 合规倒计时底部栏 ─── */
 .compliance-footer {
   flex-shrink: 0;
-  padding: 8px 14px;
+  padding: 10px 16px;
   min-height: 0;
-  border-color: rgba(255,51,102,0.15) !important;
-  background: linear-gradient(180deg, rgba(255,51,102,0.03) 0%, rgba(0,10,25,0.6) 100%) !important;
+  border-color: rgba(255,51,85,0.15) !important;
+  background: linear-gradient(180deg, rgba(255,51,85,0.04) 0%, rgba(0,10,25,0.7) 100%) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 8px;
 }
 .compliance-footer::before,
 .compliance-footer::after {
@@ -1541,22 +1884,28 @@ onUnmounted(() => {
 .dose-disp-row {
   display: grid;
   grid-template-columns: 1fr 1fr 1.4fr;
-  gap: 8px;
+  gap: 10px;
   min-height: 0;
   height: 160px;
 }
 .dose-disp-stats,
 .dose-disp-chart,
 .dose-disp-events {
-  padding: 8px 10px;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
   min-height: 0;
+  background: var(--glass);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
 }
 .dose-disp-title {
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--text-2);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -1688,9 +2037,11 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 20px;
-  background: rgba(0,10,25,0.9);
-  border-top: 1px solid var(--border);
+  padding: 8px 24px;
+  background: rgba(0,8,22,0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(0,229,255,0.15);
   font-size: 10px;
   color: var(--text-3);
   flex-shrink: 0;
@@ -1711,4 +2062,233 @@ onUnmounted(() => {
   from { fill: rgba(0,220,255,0.15); }
   to { fill: rgba(0,220,255,0.4); }
 }
+
+/* ═══════════════════════════════════════════
+   输送线 v2 — 科技感重设计
+═══════════════════════════════════════════ */
+.conveyor-v2 {
+  position: relative;
+  padding: 12px 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  background: linear-gradient(145deg, rgba(0,6,20,0.95) 0%, rgba(0,14,35,0.92) 100%);
+  border: 1px solid rgba(0,229,255,0.22);
+  border-radius: 8px;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+}
+/* 微光背景 */
+.conveyor-v2::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,229,255,0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 30% 40% at 15% 50%, rgba(26,240,255,0.03) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 40% at 85% 50%, rgba(180,100,255,0.03) 0%, transparent 60%);
+  pointer-events: none;
+  border-radius: 8px;
+}
+/* 顶部横线 */
+.conveyor-v2::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,229,255,0.6), rgba(0,229,255,0.8), rgba(0,229,255,0.6), transparent);
+  border-radius: 1px;
+}
+
+/* 四角装饰 */
+.cv2-corner {
+  position: absolute;
+  width: 10px; height: 10px;
+  pointer-events: none;
+  z-index: 2;
+}
+.cv2-tl { top: 0; left: 0; border-top: 2px solid #00e5ff; border-left: 2px solid #00e5ff; border-radius: 8px 0 0 0; }
+.cv2-tr { top: 0; right: 0; border-top: 2px solid #00e5ff; border-right: 2px solid #00e5ff; border-radius: 0 8px 0 0; }
+.cv2-bl { bottom: 0; left: 0; border-bottom: 2px solid rgba(0,229,255,0.55); border-left: 2px solid rgba(0,229,255,0.55); border-radius: 0 0 0 8px; }
+.cv2-br { bottom: 0; right: 0; border-bottom: 2px solid rgba(0,229,255,0.55); border-right: 2px solid rgba(0,229,255,0.55); border-radius: 0 0 8px 0; }
+
+/* 标题栏 */
+.cv2-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0,229,255,0.12);
+  flex-shrink: 0;
+}
+.cv2-header-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.cv2-live-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #00ffaa;
+  box-shadow: 0 0 6px #00ffaa, 0 0 12px rgba(0,255,170,0.5);
+  animation: cv2pulse 1s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes cv2pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px #00ffaa, 0 0 12px rgba(0,255,170,0.5); }
+  50% { opacity: 0.5; box-shadow: 0 0 3px #00ffaa, 0 0 6px rgba(0,255,170,0.3); }
+}
+.cv2-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e8f8ff;
+  letter-spacing: 0.5px;
+}
+.cv2-sep { color: rgba(0,229,255,0.4); font-size: 12px; }
+.cv2-subtitle {
+  font-size: 11px;
+  color: rgba(0,229,255,0.65);
+  letter-spacing: 0.3px;
+}
+.cv2-header-right {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.cv2-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  letter-spacing: 0.3px;
+}
+.cv2-tag-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: cv2pulse 1s ease-in-out infinite;
+}
+.cv2-tag-cyan {
+  color: #00e5ff;
+  border-color: rgba(0,229,255,0.4);
+  background: rgba(0,229,255,0.08);
+}
+.cv2-tag-dim {
+  color: rgba(0,229,255,0.5);
+  border-color: rgba(0,229,255,0.15);
+  background: rgba(0,229,255,0.04);
+}
+.cv2-tag-green {
+  color: #7fff00;
+  border-color: rgba(127,255,0,0.4);
+  background: rgba(127,255,0,0.08);
+  font-weight: 700;
+}
+
+/* SVG 容器 */
+.cv2-svg-wrap {
+  flex: 1;
+  min-height: 0;
+  background: rgba(0,0,0,0.22);
+  border: 1px solid rgba(0,229,255,0.1);
+  border-radius: 6px;
+  padding: 4px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.cv2-svg-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0,229,255,0.025) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cv2-svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+
+/* 进度条区域 */
+.cv2-progress-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  flex-shrink: 0;
+}
+.cv2-prog-item {
+  padding: 4px 8px 5px;
+  background: rgba(0,0,0,0.25);
+  border-radius: 4px;
+  border: 1px solid rgba(0,229,255,0.07);
+}
+.cv2-prog-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+.cv2-prog-name {
+  font-size: 10px;
+  color: rgba(0,229,255,0.55);
+  letter-spacing: 0.3px;
+}
+.cv2-prog-val {
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.cv2-prog-val em {
+  font-style: normal;
+  font-size: 9px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.3);
+  margin-left: 1px;
+}
+.cv2-cyan { color: #00e5ff; }
+.cv2-green { color: #7fff00; }
+.cv2-prog-track {
+  height: 4px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+.cv2-prog-fill {
+  height: 100%;
+  border-radius: 2px;
+  position: relative;
+  transition: width 0.8s ease;
+}
+.cv2-fill-cyan {
+  background: linear-gradient(90deg, #0066aa, #00e5ff);
+  box-shadow: 0 0 6px rgba(0,229,255,0.5);
+}
+.cv2-fill-green {
+  background: linear-gradient(90deg, #336600, #7fff00);
+  box-shadow: 0 0 6px rgba(127,255,0,0.4);
+}
+/* 进度条末端光点 */
+.cv2-spark {
+  position: absolute;
+  right: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 4px #fff, 0 0 8px currentColor;
+  animation: cv2sparkblink 1.5s ease-in-out infinite;
+}
+@keyframes cv2sparkblink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
 </style>
