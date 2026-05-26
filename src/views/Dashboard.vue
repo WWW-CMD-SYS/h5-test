@@ -346,7 +346,6 @@
             </div>
           </div>
         </div>
-
         <!-- 右侧：设备异常报警 -->
         <div class="tech-border alert-panel">
           <i class="corner-bl"></i><i class="corner-br"></i>
@@ -1905,7 +1904,7 @@ onUnmounted(() => {
 .cv2-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  position: relative;
   padding: 2px 0 5px;
   border-bottom: 1px solid rgba(0,229,255,0.1);
   flex-shrink: 0;
@@ -1914,6 +1913,14 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 7px;
+}
+.cv2-header-right {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .cv2-live-dot {
   width: 6px; height: 6px;
@@ -1940,20 +1947,14 @@ onUnmounted(() => {
   color: rgba(0,229,255,0.55);
   letter-spacing: 0.5px;
 }
-.cv2-header-right {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
 .cv2-tag {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   padding: 2px 7px;
   border-radius: 3px;
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 500;
-  border: 1px solid transparent;
   letter-spacing: 0.3px;
 }
 .cv2-tag-dot {
@@ -1963,6 +1964,7 @@ onUnmounted(() => {
   animation: cv2pulse 1s ease-in-out infinite;
 }
 .cv2-tag-cyan {
+  font-size: 12px;
   color: #00e5ff;
   border-color: rgba(0,229,255,0.4);
   background: rgba(0,229,255,0.08);
