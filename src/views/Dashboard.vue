@@ -61,8 +61,8 @@
               <span class="cv2-subtitle">实时流程</span>
             </div>
             <div class="cv2-header-right">
-              <span class="cv2-tag cv2-tag-cyan"><span class="cv2-tag-dot"></span>Co-60 #1</span>
-              <span class="cv2-tag cv2-tag-dim">批次 B2605-441</span>
+              <span class="cv2-tag cv2-tag-cyan"><span class="cv2-tag-dot"></span>当前物料批次</span>
+              <span class="cv2-tag cv2-tag-dim">B2605-441</span>
             </div>
           </div>
           <!-- SVG 流程 -->
@@ -276,7 +276,7 @@
               <text x="295" y="37.5" text-anchor="middle" font-size="9" fill="#00e5ff" font-weight="700" letter-spacing="1.5" filter="url(#cv2soft)">▶ 辐照处理中</text>
               <!-- 中心文字 -->
               <text x="310" y="62" text-anchor="middle" font-size="14" font-weight="800" fill="rgba(0,229,255,0.95)" letter-spacing="1" filter="url(#cv2soft)">辐照中</text>
-              <text x="310" y="79" text-anchor="middle" font-size="10">
+              <text x="310" y="125" text-anchor="middle" font-size="10">
                 <tspan fill="rgba(0,229,255,0.6)">剂量 </tspan>
                 <tspan fill="#7fff00" font-weight="900" font-size="16">25</tspan>
                 <tspan fill="rgba(0,229,255,0.6)" font-size="9"> kGy</tspan>
@@ -1968,7 +1968,7 @@ onUnmounted(() => {
   background: rgba(0,229,255,0.08);
 }
 .cv2-tag-dim {
-  color: rgba(0,229,255,0.5);
+  color: #FFD700;
   border-color: rgba(0,229,255,0.15);
   background: rgba(0,229,255,0.04);
 }
