@@ -395,7 +395,7 @@
             </svg>
           </div>
           <!-- 底部：剂量率-速度匹配曲线 + 工艺异常预警 -->
-          <div class="cv2-dose-bar" :class="{ 'anomaly-warning': anomalyActive }">
+          <div class="cv2-dose-bar" :class="{ 'anomaly-warning': anomalyActive, 'under-dose': anomalyActive && anomalyInfo?.cls === 'under' }">
             <div class="cv2-dose-inline">
               <!-- 左侧：实时数值面板 -->
               <div class="cv2-dose-metrics">
@@ -414,10 +414,10 @@
                 <canvas ref="doseSpeedChartRef"></canvas>
               </div>
               <!-- 右侧：预警指示器 -->
-              <div class="cv2-anomaly-indicator" v-if="anomalyActive">
-                <div class="cv2-anomaly-icon">⚠</div>
-                <div class="cv2-anomaly-text">过度照射风险</div>
-                <div class="cv2-anomaly-sub">速度下降 · 剂量未变</div>
+              <div class="cv2-anomaly-indicator" :class="anomalyInfo?.cls || 'ok'" v-if="anomalyActive && anomalyInfo">
+                <div class="cv2-anomaly-icon">{{ anomalyInfo.cls === 'over' ? '☢' : '⚠' }}</div>
+                <div class="cv2-anomaly-text" :class="anomalyInfo.cls">{{ anomalyInfo.risk }}</div>
+                <div class="cv2-anomaly-sub">{{ anomalyInfo.desc }}</div>
               </div>
               <div class="cv2-anomaly-indicator ok" v-else>
                 <div class="cv2-anomaly-icon">✓</div>
@@ -714,9 +714,20 @@ const doseRateHistory = reactive(Array(MAX_DATA_POINTS).fill(100))
 const speedHistory = reactive(Array(MAX_DATA_POINTS).fill(100))
 const currentDoseRate = ref(100)
 const currentSpeed = ref(100)
-const anomalyActive = ref(false)
+const anomalyType = ref(null) // null | 'speed-down' | 'speed-up' | 'dose-down' | 'dose-up'
 const anomalyDoseRate = ref(false)
 const anomalySpeed = ref(false)
+const anomalyActive = computed(() => anomalyType.value !== null)
+
+const anomalyInfo = computed(() => {
+  const map = {
+    'speed-down': { risk: '过辐照风险', desc: '速度下降 · 剂量稳定', cls: 'over' },
+    'speed-up': { risk: '欠辐照风险', desc: '速度上升 · 剂量稳定', cls: 'under' },
+    'dose-down': { risk: '欠辐照风险', desc: '速度稳定 · 剂量下降', cls: 'under' },
+    'dose-up': { risk: '过辐照风险', desc: '速度稳定 · 剂量上升', cls: 'over' },
+  }
+  return anomalyType.value ? map[anomalyType.value] : null
+})
 
 const matchStatus = computed(() => {
   if (anomalyActive.value) {
@@ -739,11 +750,27 @@ function updateDoseSpeedData() {
   let newDoseRate = 100 + (Math.random() - 0.5) * 4
   let newSpeed = 100 + (Math.random() - 0.5) * 3
 
-  // Occasionally simulate anomaly: speed drops while dose rate stays high
-  const anomalyChance = 0.02 // 2% chance per tick
+  // Occasionally simulate anomaly
+  const anomalyChance = 0.018 // ~1.8% chance per tick
   if (Math.random() < anomalyChance) {
-    newSpeed = 55 + Math.random() * 15 // Speed drops to 55-70%
-    newDoseRate = 98 + Math.random() * 4 // Dose rate stays normal/high
+    const scenario = Math.random()
+    if (scenario < 0.25) {
+      // 速度下降，剂量稳定 → 过辐照
+      newSpeed = 55 + Math.random() * 15
+      newDoseRate = 98 + Math.random() * 4
+    } else if (scenario < 0.5) {
+      // 速度上升，剂量稳定 → 欠辐照
+      newSpeed = 115 + Math.random() * 5
+      newDoseRate = 98 + Math.random() * 4
+    } else if (scenario < 0.75) {
+      // 剂量下降，速度稳定 → 欠辐照
+      newDoseRate = 55 + Math.random() * 15
+      newSpeed = 98 + Math.random() * 4
+    } else {
+      // 剂量上升，速度稳定 → 过辐照
+      newDoseRate = 115 + Math.random() * 8
+      newSpeed = 98 + Math.random() * 4
+    }
   }
 
   // Clamp values
@@ -755,17 +782,37 @@ function updateDoseSpeedData() {
   currentDoseRate.value = doseRateHistory[MAX_DATA_POINTS - 1]
   currentSpeed.value = speedHistory[MAX_DATA_POINTS - 1]
 
-  // Anomaly detection: speed dropped significantly while dose rate stayed stable
-  const speedDrop = speedHistory[MAX_DATA_POINTS - 3] - speedHistory[MAX_DATA_POINTS - 1]
-  const doseRateChange = Math.abs(doseRateHistory[MAX_DATA_POINTS - 3] - doseRateHistory[MAX_DATA_POINTS - 1])
+  // Anomaly detection: four scenarios
+  const prevIdx = MAX_DATA_POINTS - 3
+  const speedDelta = speedHistory[MAX_DATA_POINTS - 1] - speedHistory[prevIdx]
+  const doseRateDelta = doseRateHistory[MAX_DATA_POINTS - 1] - doseRateHistory[prevIdx]
+  const speedAbsDelta = Math.abs(speedDelta)
+  const doseRateAbsDelta = Math.abs(doseRateDelta)
 
-  if (speedDrop > 10) {
-    anomalyActive.value = true
+  if (speedDelta < -10 && doseRateAbsDelta < 8) {
+    // 速度下降 · 剂量稳定 → 过辐照风险
+    anomalyType.value = 'speed-down'
     anomalySpeed.value = true
     anomalyDoseRate.value = false
-  } else if (speedHistory[MAX_DATA_POINTS - 1] > 75 && doseRateChange < 8) {
-    // Recovery condition: speed back to normal
-    anomalyActive.value = false
+  } else if (speedDelta > 10 && doseRateAbsDelta < 8) {
+    // 速度上升 · 剂量稳定 → 欠辐照风险
+    anomalyType.value = 'speed-up'
+    anomalySpeed.value = true
+    anomalyDoseRate.value = false
+  } else if (doseRateDelta < -10 && speedAbsDelta < 8) {
+    // 剂量下降 · 速度稳定 → 欠辐照风险
+    anomalyType.value = 'dose-down'
+    anomalyDoseRate.value = true
+    anomalySpeed.value = false
+  } else if (doseRateDelta > 10 && speedAbsDelta < 8) {
+    // 剂量上升 · 速度稳定 → 过辐照风险
+    anomalyType.value = 'dose-up'
+    anomalyDoseRate.value = true
+    anomalySpeed.value = false
+  } else if (speedHistory[MAX_DATA_POINTS - 1] > 75 && speedHistory[MAX_DATA_POINTS - 1] < 115
+      && doseRateHistory[MAX_DATA_POINTS - 1] > 85 && doseRateHistory[MAX_DATA_POINTS - 1] < 115) {
+    // Recovery condition: both values back to normal range
+    anomalyType.value = null
     anomalySpeed.value = false
     anomalyDoseRate.value = false
   }
@@ -2850,12 +2897,28 @@ onUnmounted(() => {
   animation: anomalyFlash 1s ease-in-out infinite;
 }
 
+.cv2-dose-bar.anomaly-warning.under-dose {
+  box-shadow:
+    inset 0 0 40px rgba(255, 170, 51, 0.06),
+    0 0 20px rgba(255, 170, 51, 0.1);
+  animation: anomalyFlashUnder 1s ease-in-out infinite;
+}
+
 @keyframes anomalyFlash {
   0%, 100% {
     box-shadow: inset 0 0 40px rgba(255, 51, 102, 0.06), 0 0 20px rgba(255, 51, 102, 0.1);
   }
   50% {
     box-shadow: inset 0 0 60px rgba(255, 51, 102, 0.12), 0 0 35px rgba(255, 51, 102, 0.2);
+  }
+}
+
+@keyframes anomalyFlashUnder {
+  0%, 100% {
+    box-shadow: inset 0 0 40px rgba(255, 170, 51, 0.06), 0 0 20px rgba(255, 170, 51, 0.1);
+  }
+  50% {
+    box-shadow: inset 0 0 60px rgba(255, 170, 51, 0.12), 0 0 35px rgba(255, 170, 51, 0.2);
   }
 }
 
@@ -3054,15 +3117,38 @@ onUnmounted(() => {
   background: linear-gradient(180deg, transparent, rgba(0, 255, 170, 0.25) 50%, transparent);
 }
 
+/* 过辐照风险 — 红色系 */
+.cv2-anomaly-indicator.over {
+  background: rgba(255, 51, 85, 0.03);
+}
+
+.cv2-anomaly-indicator.over::before {
+  background: linear-gradient(180deg, transparent, rgba(255, 51, 85, 0.35) 50%, transparent);
+}
+
+/* 欠辐照风险 — 橙色系 */
+.cv2-anomaly-indicator.under {
+  background: rgba(255, 170, 51, 0.03);
+}
+
+.cv2-anomaly-indicator.under::before {
+  background: linear-gradient(180deg, transparent, rgba(255, 170, 51, 0.35) 50%, transparent);
+}
+
 .cv2-anomaly-icon {
   font-size: 22px;
   line-height: 1;
   filter: drop-shadow(0 0 4px currentColor);
 }
 
-.cv2-anomaly-indicator:not(.ok) .cv2-anomaly-icon {
+.cv2-anomaly-indicator.over .cv2-anomaly-icon {
   animation: iconShake 0.5s ease-in-out infinite;
   color: #ff3355;
+}
+
+.cv2-anomaly-indicator.under .cv2-anomaly-icon {
+  animation: iconShake 0.6s ease-in-out infinite;
+  color: #ff9933;
 }
 
 .cv2-anomaly-indicator.ok .cv2-anomaly-icon {
@@ -3072,10 +3158,18 @@ onUnmounted(() => {
 .cv2-anomaly-text {
   font-size: 10px;
   font-weight: 800;
-  color: #ff3355;
   text-align: center;
   letter-spacing: 0.5px;
+}
+
+.cv2-anomaly-text.over {
+  color: #ff3355;
   text-shadow: 0 0 6px rgba(255, 51, 85, 0.5);
+}
+
+.cv2-anomaly-text.under {
+  color: #ff9933;
+  text-shadow: 0 0 6px rgba(255, 153, 51, 0.5);
 }
 
 .cv2-anomaly-indicator.ok .cv2-anomaly-text {
