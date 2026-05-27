@@ -751,7 +751,7 @@ function updateDoseSpeedData() {
   let newSpeed = 100 + (Math.random() - 0.5) * 3
 
   // Occasionally simulate anomaly
-  const anomalyChance = 0.018 // ~1.8% chance per tick
+  const anomalyChance = 0.12 // ~12% chance per tick → 平均 8-10 秒触发一次
   if (Math.random() < anomalyChance) {
     const scenario = Math.random()
     if (scenario < 0.25) {
@@ -1509,7 +1509,7 @@ function initDoseSpeedChart() {
 onMounted(() => {
   // 时钟
   tick()
-  clockTimer = setInterval(tick, 1000)
+  clockTimer = setInterval(tick, 800)
 
   // 合规倒计时刷新（每分钟）
   complianceTimer = setInterval(() => {
@@ -1519,7 +1519,7 @@ onMounted(() => {
   // 实时剂量率-速度匹配数据更新
   doseTimer = setInterval(() => {
     updateDoseSpeedData()
-  }, 2000)
+  }, 500)
 
   // 星空背景
   resizeStars()
