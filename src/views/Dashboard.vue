@@ -140,7 +140,7 @@
                   <stop offset="100%" stop-color="#00e5ff" stop-opacity="0.08"/>
                 </linearGradient>
                 <clipPath id="cv2clip">
-                  <rect x="204" y="24" width="212" height="120" rx="10"/>
+                  <rect x="204" y="24" width="206" height="120" rx="10"/>
                 </clipPath>
               </defs>
 
@@ -150,10 +150,10 @@
                 <line x1="0" y1="74" x2="620" y2="74" stroke="#00e5ff" stroke-width="0.6"/>
                 <line x1="0" y1="111" x2="620" y2="111" stroke="#00e5ff" stroke-width="0.6"/>
                 <line x1="103" y1="0" x2="103" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
-                <line x1="204" y1="0" x2="204" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
-                <line x1="310" y1="0" x2="310" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
-                <line x1="416" y1="0" x2="416" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
-                <line x1="517" y1="0" x2="517" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
+              <line x1="204" y1="0" x2="204" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
+              <line x1="307" y1="0" x2="307" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
+              <line x1="410" y1="0" x2="410" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
+              <line x1="517" y1="0" x2="517" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
               </g>
 
               <!-- ══ 主传送轨道 ══ -->
@@ -189,14 +189,14 @@
                 <rect x="362" y="81" width="2.5" height="14" rx="1.2"/>
                 <rect x="378" y="81" width="2.5" height="14" rx="1.2"/>
                 <rect x="394" y="81" width="2.5" height="14" rx="1.2"/>
-                <rect x="410" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="404" y="81" width="2.5" height="14" rx="1.2"/>
               </g>
               <g fill="rgba(0,229,255,0.4)">
-                <rect x="430" y="81" width="2.5" height="14" rx="1.2"/>
-                <rect x="446" y="81" width="2.5" height="14" rx="1.2"/>
-                <rect x="462" y="81" width="2.5" height="14" rx="1.2"/>
-                <rect x="478" y="81" width="2.5" height="14" rx="1.2"/>
-                <rect x="494" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="424" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="440" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="456" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="472" y="81" width="2.5" height="14" rx="1.2"/>
+                <rect x="488" y="81" width="2.5" height="14" rx="1.2"/>
                 <rect x="525" y="81" width="2.5" height="14" rx="1.2"/>
                 <rect x="541" y="81" width="2.5" height="14" rx="1.2"/>
                 <rect x="557" y="81" width="2.5" height="14" rx="1.2"/>
@@ -254,41 +254,41 @@
 
               <!-- ══ 辐照核心区 ══ -->
               <!-- 背景光晕层 -->
-              <rect x="200" y="20" width="220" height="126" rx="12" fill="rgba(0,229,255,0.04)" filter="url(#cv2glow)"/>
+              <rect x="200" y="20" width="214" height="126" rx="12" fill="rgba(0,229,255,0.04)" filter="url(#cv2glow)"/>
               <!-- 主容器 -->
-              <rect x="204" y="24" width="212" height="118" rx="10" fill="url(#cv2irrad)" stroke="#00e5ff"
+              <rect x="204" y="24" width="206" height="118" rx="10" fill="url(#cv2irrad)" stroke="#00e5ff"
                     stroke-width="2.5" filter="url(#cv2soft)"/>
               <!-- 内边框 -->
-              <rect x="209" y="29" width="202" height="108" rx="7" fill="none" stroke="rgba(0,229,255,0.28)"
+              <rect x="209" y="29" width="196" height="108" rx="7" fill="none" stroke="rgba(0,229,255,0.28)"
                     stroke-width="0.8"/>
               <!-- 流动边框 -->
-              <rect x="204" y="24" width="212" height="118" rx="10" fill="none" stroke="#00e5ff" stroke-width="1.5"
+              <rect x="204" y="24" width="206" height="118" rx="10" fill="none" stroke="#00e5ff" stroke-width="1.5"
                     stroke-dasharray="14 7" opacity="0.55">
                 <animate attributeName="stroke-dashoffset" from="0" to="-42" dur="1.4s" repeatCount="indefinite"/>
               </rect>
               <!-- 扫描光束（加宽加亮） -->
-              <rect x="209" y="24" width="202" height="6" fill="url(#cv2scanbeam)" opacity="0.8"
+              <rect x="209" y="24" width="196" height="6" fill="url(#cv2scanbeam)" opacity="0.8"
                     clip-path="url(#cv2clip)">
                 <animate attributeName="y" values="24;142;24" dur="2.2s" repeatCount="indefinite"/>
               </rect>
 
               <!-- 扩散波纹层 1（核心脉冲） -->
-              <circle cx="310" cy="83" r="10" fill="none" stroke="#00e5ff" stroke-width="2.5" opacity="0">
+              <circle cx="307" cy="83" r="10" fill="none" stroke="#00e5ff" stroke-width="2.5" opacity="0">
                 <animate attributeName="r" values="10;58" dur="2s" repeatCount="indefinite"/>
                 <animate attributeName="opacity" values="0.9;0" dur="2s" repeatCount="indefinite"/>
               </circle>
               <!-- 扩散波纹层 2 -->
-              <circle cx="310" cy="83" r="10" fill="none" stroke="#7fff00" stroke-width="1.8" opacity="0">
+              <circle cx="307" cy="83" r="10" fill="none" stroke="#7fff00" stroke-width="1.8" opacity="0">
                 <animate attributeName="r" values="10;54" dur="2.2s" begin="0.7s" repeatCount="indefinite"/>
                 <animate attributeName="opacity" values="0.6;0" dur="2.2s" begin="0.7s" repeatCount="indefinite"/>
               </circle>
               <!-- 扩散波纹层 3 -->
-              <circle cx="310" cy="83" r="10" fill="none" stroke="#00e5ff" stroke-width="1.2" opacity="0">
+              <circle cx="307" cy="83" r="10" fill="none" stroke="#00e5ff" stroke-width="1.2" opacity="0">
                 <animate attributeName="r" values="10;48" dur="1.8s" begin="1.4s" repeatCount="indefinite"/>
                 <animate attributeName="opacity" values="0.5;0" dur="1.8s" begin="1.4s" repeatCount="indefinite"/>
               </circle>
               <!-- 扩散波纹层 4（大外环） -->
-              <circle cx="310" cy="83" r="10" fill="none" stroke="rgba(127,255,0,0.5)" stroke-width="1" opacity="0">
+              <circle cx="307" cy="83" r="10" fill="none" stroke="rgba(127,255,0,0.5)" stroke-width="1" opacity="0">
                 <animate attributeName="r" values="10;65" dur="2.8s" begin="0.3s" repeatCount="indefinite"/>
                 <animate attributeName="opacity" values="0.35;0" dur="2.8s" begin="0.3s" repeatCount="indefinite"/>
               </circle>
@@ -296,29 +296,29 @@
               <!-- 辐射粒子喷射效果 -->
               <g opacity="0.6">
                 <circle r="1.5" fill="#7fff00">
-                  <animateMotion path="M310,83 L310,83" dur="2s" repeatCount="indefinite"/>
+                  <animateMotion path="M307,83 L307,83" dur="2s" repeatCount="indefinite"/>
                   <animate attributeName="opacity" values="1;0" dur="2s" repeatCount="indefinite"/>
                 </circle>
-                <circle cx="310" cy="83" r="0" fill="#7fff00" opacity="0">
-                  <animate attributeName="cx" values="310;260;310" dur="1.8s" repeatCount="indefinite"/>
+                <circle cx="307" cy="83" r="0" fill="#7fff00" opacity="0">
+                  <animate attributeName="cx" values="307;257;307" dur="1.8s" repeatCount="indefinite"/>
                   <animate attributeName="cy" values="83;50;83" dur="1.8s" repeatCount="indefinite"/>
                   <animate attributeName="r" values="0;2.5;0" dur="1.8s" repeatCount="indefinite"/>
                   <animate attributeName="opacity" values="0.8;0;0" dur="1.8s" repeatCount="indefinite"/>
                 </circle>
-                <circle cx="310" cy="83" r="0" fill="#00e5ff" opacity="0">
-                  <animate attributeName="cx" values="310;360;310" dur="2.1s" begin="0.6s" repeatCount="indefinite"/>
+                <circle cx="307" cy="83" r="0" fill="#00e5ff" opacity="0">
+                  <animate attributeName="cx" values="307;357;307" dur="2.1s" begin="0.6s" repeatCount="indefinite"/>
                   <animate attributeName="cy" values="83;110;83" dur="2.1s" begin="0.6s" repeatCount="indefinite"/>
                   <animate attributeName="r" values="0;2;0" dur="2.1s" begin="0.6s" repeatCount="indefinite"/>
                   <animate attributeName="opacity" values="0.7;0;0" dur="2.1s" begin="0.6s" repeatCount="indefinite"/>
                 </circle>
-                <circle cx="310" cy="83" r="0" fill="#7fff00" opacity="0">
-                  <animate attributeName="cx" values="310;245;310" dur="2.4s" begin="1.2s" repeatCount="indefinite"/>
+                <circle cx="307" cy="83" r="0" fill="#7fff00" opacity="0">
+                  <animate attributeName="cx" values="307;242;307" dur="2.4s" begin="1.2s" repeatCount="indefinite"/>
                   <animate attributeName="cy" values="83;95;83" dur="2.4s" begin="1.2s" repeatCount="indefinite"/>
                   <animate attributeName="r" values="0;2.2;0" dur="2.4s" begin="1.2s" repeatCount="indefinite"/>
                   <animate attributeName="opacity" values="0.6;0;0" dur="2.4s" begin="1.2s" repeatCount="indefinite"/>
                 </circle>
-                <circle cx="310" cy="83" r="0" fill="#fff" opacity="0">
-                  <animate attributeName="cx" values="310;375;310" dur="1.6s" begin="0.3s" repeatCount="indefinite"/>
+                <circle cx="307" cy="83" r="0" fill="#fff" opacity="0">
+                  <animate attributeName="cx" values="307;372;307" dur="1.6s" begin="0.3s" repeatCount="indefinite"/>
                   <animate attributeName="cy" values="83;60;83" dur="1.6s" begin="0.3s" repeatCount="indefinite"/>
                   <animate attributeName="r" values="0;1.8;0" dur="1.6s" begin="0.3s" repeatCount="indefinite"/>
                   <animate attributeName="opacity" values="0.9;0;0" dur="1.6s" begin="0.3s" repeatCount="indefinite"/>
@@ -326,26 +326,26 @@
               </g>
 
               <!-- 中心辐射光环 -->
-              <circle cx="310" cy="83" r="14" fill="none" stroke="#00e5ff" stroke-width="1" opacity="0.7">
+              <circle cx="307" cy="83" r="14" fill="none" stroke="#00e5ff" stroke-width="1" opacity="0.7">
                 <animate attributeName="r" values="14;18;14" dur="1.2s" repeatCount="indefinite"/>
                 <animate attributeName="opacity" values="0.7;0.3;0.7" dur="1.2s" repeatCount="indefinite"/>
               </circle>
-              <circle cx="310" cy="83" r="6" fill="rgba(127,255,0,0.3)" stroke="none">
+              <circle cx="307" cy="83" r="6" fill="rgba(127,255,0,0.3)" stroke="none">
                 <animate attributeName="r" values="6;12;6" dur="0.8s" repeatCount="indefinite"/>
                 <animate attributeName="opacity" values="0.5;0.15;0.5" dur="0.8s" repeatCount="indefinite"/>
               </circle>
 
               <!-- 顶部运行标签 -->
-              <rect x="245" y="25" width="130" height="17" rx="4" fill="rgba(0,229,255,0.16)"
+              <rect x="242" y="25" width="130" height="17" rx="4" fill="rgba(0,229,255,0.16)"
                     stroke="rgba(0,229,255,0.7)" stroke-width="0.8"/>
-              <circle cx="256" cy="33.5" r="3.2" fill="#00ffaa">
+              <circle cx="253" cy="33.5" r="3.2" fill="#00ffaa">
                 <animate attributeName="opacity" values="1;0.2;1" dur="0.7s" repeatCount="indefinite"/>
               </circle>
-              <text x="295" y="37.5" text-anchor="middle" font-size="9" fill="#00e5ff" font-weight="700"
+              <text x="292" y="37.5" text-anchor="middle" font-size="9" fill="#00e5ff" font-weight="700"
                     letter-spacing="1.5" filter="url(#cv2soft)">▶ 辐照处理中
               </text>
               <!-- 中心文字 -->
-              <text x="310" y="62" text-anchor="middle" font-size="14" font-weight="800" fill="rgba(0,229,255,0.95)"
+              <text x="307" y="62" text-anchor="middle" font-size="14" font-weight="800" fill="rgba(0,229,255,0.95)"
                     letter-spacing="1" filter="url(#cv2soft)">辐照中
               </text>
               <!-- ══ 出射检区 ══ -->
@@ -405,7 +405,7 @@
                     filter="url(#cv2soft)">
                 <animate attributeName="opacity" values="0.3;1;0.3" dur="1.3s" begin="0.43s" repeatCount="indefinite"/>
               </line>
-              <line x1="416" y1="88" x2="420" y2="88" stroke="#00e5ff" stroke-width="2.2" marker-end="url(#cv2arr)"
+              <line x1="410" y1="88" x2="414" y2="88" stroke="#00e5ff" stroke-width="2.2" marker-end="url(#cv2arr)"
                     filter="url(#cv2soft)">
                 <animate attributeName="opacity" values="0.3;1;0.3" dur="1.3s" begin="0.26s" repeatCount="indefinite"/>
               </line>
