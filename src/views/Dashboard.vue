@@ -2571,7 +2571,7 @@ onUnmounted(() => {
       rgba(0, 10, 28, 0.96) 50%,
       rgba(0, 6, 20, 0.98) 100%);
   border: 1px solid rgba(0, 229, 255, 0.18);
-  border-radius: 12px;
+  border-radius: 0;
   overflow: hidden;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -2606,7 +2606,7 @@ onUnmounted(() => {
       rgba(0, 229, 255, 0.012) 23px
     );
   pointer-events: none;
-  border-radius: 12px;
+  border-radius: 0;
   z-index: 0;
 }
 
@@ -2643,7 +2643,7 @@ onUnmounted(() => {
   left: 2px;
   border-top: 2px solid rgba(0, 229, 255, 1);
   border-left: 2px solid rgba(0, 229, 255, 1);
-  border-radius: 12px 0 0 0;
+  border-radius: 0;
   box-shadow: -2px -2px 8px rgba(0, 229, 255, 0.3), -1px -1px 3px rgba(0, 229, 255, 0.5);
 }
 
@@ -2652,7 +2652,7 @@ onUnmounted(() => {
   right: 2px;
   border-top: 2px solid rgba(0, 229, 255, 1);
   border-right: 2px solid rgba(0, 229, 255, 1);
-  border-radius: 0 12px 0 0;
+  border-radius: 0;
   box-shadow: 2px -2px 8px rgba(0, 229, 255, 0.3), 1px -1px 3px rgba(0, 229, 255, 0.5);
 }
 
@@ -2661,7 +2661,7 @@ onUnmounted(() => {
   left: 2px;
   border-bottom: 2px solid rgba(0, 229, 255, 0.6);
   border-left: 2px solid rgba(0, 229, 255, 0.6);
-  border-radius: 0 0 0 12px;
+  border-radius: 0;
   box-shadow: -1px 2px 6px rgba(0, 229, 255, 0.15);
 }
 
@@ -2670,7 +2670,7 @@ onUnmounted(() => {
   right: 2px;
   border-bottom: 2px solid rgba(0, 229, 255, 0.6);
   border-right: 2px solid rgba(0, 229, 255, 0.6);
-  border-radius: 0 0 12px 0;
+  border-radius: 0;
   box-shadow: 1px 2px 6px rgba(0, 229, 255, 0.15);
 }
 
@@ -2885,7 +2885,7 @@ onUnmounted(() => {
     rgba(0, 12, 32, 0.85) 100%);
   border: none;
   border-top: 1px solid rgba(0, 229, 255, 0.12);
-  border-radius: 0 0 12px 12px;
+  border-radius: 0;
   position: relative;
   overflow: hidden;
   transition: box-shadow 0.4s ease;
@@ -3115,12 +3115,12 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex: 0 0 100px;  /* 固定宽度 */
-  width: 100px;
-  height: 86px;     /* 固定高度 */
+  flex: 0 0 110px;  /* 固定宽度 */
+  width: 110px;
+  height: 92px;     /* 固定高度 */
   padding: 8px 6px;
   border-left: 1px solid rgba(0, 229, 255, 0.12);
-  gap: 4px;
+  gap: 5px;
   border-radius: 0;
   background: rgba(0, 229, 255, 0.025);
   position: relative;
@@ -3145,28 +3145,40 @@ onUnmounted(() => {
   background: linear-gradient(180deg, transparent, rgba(0, 255, 170, 0.25) 50%, transparent);
 }
 
-/* 过辐照风险 — 红色系 */
+/* 过辐照风险 — 红色系 + 背景闪烁 */
 .cv2-anomaly-indicator.over {
-  background: rgba(255, 51, 85, 0.03);
+  background: rgba(255, 51, 85, 0.08);
+  animation: flashBgRed 1s ease-in-out infinite;
+}
+
+@keyframes flashBgRed {
+  0%, 100% { background: rgba(255, 51, 85, 0.06); }
+  50% { background: rgba(255, 51, 85, 0.18); }
 }
 
 .cv2-anomaly-indicator.over::before {
-  background: linear-gradient(180deg, transparent, rgba(255, 51, 85, 0.35) 50%, transparent);
+  background: linear-gradient(180deg, transparent, rgba(255, 51, 85, 0.5) 50%, transparent);
 }
 
-/* 欠辐照风险 — 橙色系 */
+/* 欠辐照风险 — 橙色系 + 背景闪烁 */
 .cv2-anomaly-indicator.under {
-  background: rgba(255, 170, 51, 0.03);
+  background: rgba(255, 170, 51, 0.08);
+  animation: flashBgOrange 1.1s ease-in-out infinite;
+}
+
+@keyframes flashBgOrange {
+  0%, 100% { background: rgba(255, 170, 51, 0.06); }
+  50% { background: rgba(255, 170, 51, 0.18); }
 }
 
 .cv2-anomaly-indicator.under::before {
-  background: linear-gradient(180deg, transparent, rgba(255, 170, 51, 0.35) 50%, transparent);
+  background: linear-gradient(180deg, transparent, rgba(255, 170, 51, 0.5) 50%, transparent);
 }
 
 .cv2-anomaly-icon {
-  font-size: 22px;
+  font-size: 28px;
   line-height: 1;
-  filter: drop-shadow(0 0 4px currentColor);
+  filter: drop-shadow(0 0 6px currentColor);
 }
 
 .cv2-anomaly-indicator.over .cv2-anomaly-icon {
@@ -3184,7 +3196,7 @@ onUnmounted(() => {
 }
 
 .cv2-anomaly-text {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   text-align: center;
   letter-spacing: 0.5px;
@@ -3206,8 +3218,8 @@ onUnmounted(() => {
 }
 
 .cv2-anomaly-sub {
-  font-size: 9px;
-  color: rgba(160, 210, 220, 0.5);
+  font-size: 10px;
+  color: rgba(160, 210, 220, 0.6);
   text-align: center;
   letter-spacing: 0.3px;
 }
