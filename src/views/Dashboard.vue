@@ -2867,6 +2867,7 @@ onUnmounted(() => {
 /* ─── 剂量率-速度匹配曲线 + 工艺异常预警 — 升级版 ─── */
 .cv2-dose-bar {
   flex-shrink: 0;
+  height: 106px;   /* 固定高度 = 86px 内容 + 10px×2 padding */
   padding: 10px 14px;
   background: linear-gradient(180deg,
     rgba(0, 8, 24, 0.9) 0%,
@@ -2934,20 +2935,23 @@ onUnmounted(() => {
 
 .cv2-dose-inline {
   display: flex;
-  align-items: stretch;
-  gap: 14px;
+  align-items: center;
+  gap: 0;
   position: relative;
   z-index: 1;
+  height: 86px; /* 固定整体高度，防止跳动 */
 }
 
-/* 左侧：指标面板 — 强化数字显示 */
+/* 左侧：指标面板 — 固定宽高，强化数字显示 */
 .cv2-dose-metrics {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 5px;
-  min-width: 118px;
-  padding-right: 12px;
+  flex: 0 0 136px;  /* 固定宽度，不伸缩 */
+  width: 136px;
+  height: 100%;
+  padding: 0 12px 0 0;
   border-right: 1px solid rgba(0, 229, 255, 0.12);
   position: relative;
 }
@@ -2957,37 +2961,42 @@ onUnmounted(() => {
   content: '';
   position: absolute;
   right: -1px;
-  top: 15%;
-  bottom: 15%;
+  top: 12%;
+  bottom: 12%;
   width: 1px;
-  background: linear-gradient(180deg, transparent, rgba(0, 229, 255, 0.4) 50%, transparent);
+  background: linear-gradient(180deg, transparent, rgba(0, 229, 255, 0.45) 50%, transparent);
 }
 
 .cv2-metric-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  padding: 3px 6px;
+  gap: 6px;
+  padding: 4px 8px;
   border-radius: 4px;
   background: rgba(0, 229, 255, 0.03);
-  border: 1px solid rgba(0, 229, 255, 0.06);
+  border: 1px solid rgba(0, 229, 255, 0.07);
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .cv2-metric-label {
   font-size: 9.5px;
-  color: rgba(160, 210, 230, 0.6);
+  color: rgba(160, 210, 230, 0.55);
   letter-spacing: 0.5px;
+  flex-shrink: 0;
 }
 
 .cv2-metric-val {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
   color: #00e5ff;
   font-variant-numeric: tabular-nums;
   transition: color 0.3s;
   text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
   letter-spacing: 0.5px;
+  min-width: 52px;  /* 固定数值宽度，防止数字跳动 */
+  text-align: right;
 }
 
 .cv2-metric-val.anomaly {
@@ -2998,12 +3007,13 @@ onUnmounted(() => {
 
 .cv2-metric-status {
   font-size: 9px;
-  padding: 2px 8px;
+  padding: 3px 0;
   border-radius: 3px;
   text-align: center;
-  margin-top: 2px;
+  margin-top: 1px;
   font-weight: 700;
   letter-spacing: 0.5px;
+  flex-shrink: 0;
 }
 
 .status-good {
@@ -3040,14 +3050,20 @@ onUnmounted(() => {
   50% { opacity: 0.45; }
 }
 
-/* 中间：图表区域 */
+/* 中间：图表区域 — 固定高度，加边框装饰 */
 .cv2-dose-chart-wrap {
   flex: 1;
   min-width: 0;
-  height: 74px;
+  height: 86px;   /* 与外层容器等高 */
   position: relative;
   border-radius: 4px;
   overflow: hidden;
+  margin: 0 10px;
+  background: rgba(0, 2, 10, 0.4);
+  border: 1px solid rgba(0, 229, 255, 0.1);
+  box-shadow:
+    inset 0 0 20px rgba(0, 229, 255, 0.03),
+    0 0 0 1px rgba(0, 229, 255, 0.04);
 }
 
 /* 图表区域背景 */
@@ -3082,19 +3098,20 @@ onUnmounted(() => {
   z-index: 1;
 }
 
-/* 右侧：预警指示器 — 重新设计为状态卡片 */
+/* 右侧：预警指示器 — 固定宽高状态卡片 */
 .cv2-anomaly-indicator {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 96px;
-  padding: 6px 10px;
-  margin-left: 2px;
+  flex: 0 0 100px;  /* 固定宽度 */
+  width: 100px;
+  height: 86px;     /* 固定高度 */
+  padding: 8px 6px;
   border-left: 1px solid rgba(0, 229, 255, 0.12);
-  gap: 3px;
-  border-radius: 0 6px 6px 0;
-  background: rgba(0, 229, 255, 0.02);
+  gap: 4px;
+  border-radius: 0;
+  background: rgba(0, 229, 255, 0.025);
   position: relative;
   overflow: hidden;
 }
