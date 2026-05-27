@@ -759,7 +759,6 @@ const matchStatus = computed(() => {
   if (variance < 8) return { text: '匹配正常', cls: 'status-ok' }
   return { text: '匹配偏差', cls: 'status-warn' }
 })
-//更新剂量，速度数据
 function updateDoseSpeedData() {
   // Shift history
   for (let i = 0; i < MAX_DATA_POINTS - 1; i++) {
