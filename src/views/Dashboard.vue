@@ -759,7 +759,7 @@ function updateDoseSpeedData() {
   const speedDrop = speedHistory[MAX_DATA_POINTS - 3] - speedHistory[MAX_DATA_POINTS - 1]
   const doseRateChange = Math.abs(doseRateHistory[MAX_DATA_POINTS - 3] - doseRateHistory[MAX_DATA_POINTS - 1])
 
-  if (speedDrop > 15 && doseRateChange < 5) {
+  if (speedDrop > 10) {
     anomalyActive.value = true
     anomalySpeed.value = true
     anomalyDoseRate.value = false
@@ -2499,164 +2499,227 @@ onUnmounted(() => {
 }
 
 /* ═══════════════════════════════════════════
-   输送线 v2 — 科技感重设计
+   输送线 v2 — 极致科技感重设计 v3
 ═══════════════════════════════════════════ */
 .conveyor-v2 {
   position: relative;
-  padding: 10px 12px 8px;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  background: linear-gradient(155deg, rgba(0, 5, 18, 0.97) 0%, rgba(0, 12, 32, 0.94) 40%, rgba(0, 8, 22, 0.96) 100%);
-  border: 1px solid rgba(0, 229, 255, 0.25);
-  border-radius: 10px;
+  gap: 0;
+  background:
+    linear-gradient(180deg,
+      rgba(0, 4, 16, 0.98) 0%,
+      rgba(0, 10, 28, 0.96) 50%,
+      rgba(0, 6, 20, 0.98) 100%);
+  border: 1px solid rgba(0, 229, 255, 0.18);
+  border-radius: 12px;
   overflow: hidden;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  box-shadow: 0 0 24px rgba(0, 229, 255, 0.06), 0 2px 8px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    0 0 0 1px rgba(0, 229, 255, 0.06) inset,
+    0 0 40px rgba(0, 229, 255, 0.08),
+    0 0 80px rgba(0, 100, 200, 0.06),
+    0 4px 24px rgba(0, 0, 0, 0.6);
 }
 
-/* 微光背景 */
+/* 全局网格纹理背景 */
 .conveyor-v2::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 55% 45% at 48% 55%, rgba(0, 229, 255, 0.05) 0%, transparent 65%),
-  radial-gradient(ellipse 25% 35% at 15% 45%, rgba(26, 240, 255, 0.04) 0%, transparent 55%),
-  radial-gradient(ellipse 20% 30% at 85% 50%, rgba(180, 100, 255, 0.03) 0%, transparent 50%);
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 40%, rgba(0, 229, 255, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 40% at 8% 50%, rgba(0, 229, 255, 0.04) 0%, transparent 55%),
+    radial-gradient(ellipse 25% 35% at 92% 50%, rgba(160, 80, 255, 0.03) 0%, transparent 50%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 22px,
+      rgba(0, 229, 255, 0.018) 22px,
+      rgba(0, 229, 255, 0.018) 23px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 22px,
+      rgba(0, 229, 255, 0.012) 22px,
+      rgba(0, 229, 255, 0.012) 23px
+    );
   pointer-events: none;
-  border-radius: 10px;
+  border-radius: 12px;
+  z-index: 0;
 }
 
-/* 顶部横线 */
+/* 顶部光晕扫描线 */
 .conveyor-v2::after {
   content: '';
   position: absolute;
   top: 0;
-  left: 10%;
-  right: 10%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.6), rgba(0, 229, 255, 0.8), rgba(0, 229, 255, 0.6), transparent);
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(0, 229, 255, 0.0) 5%,
+    rgba(0, 229, 255, 0.9) 30%,
+    rgba(120, 240, 255, 1) 50%,
+    rgba(0, 229, 255, 0.9) 70%,
+    rgba(0, 229, 255, 0.0) 95%,
+    transparent 100%);
   border-radius: 1px;
 }
 
-/* 四角装饰 */
+/* 四角装饰 — 加长 L 型角标 */
 .cv2-corner {
   position: absolute;
-  width: 12px;
-  height: 12px;
+  width: 18px;
+  height: 18px;
   pointer-events: none;
-  z-index: 2;
+  z-index: 10;
 }
 
 .cv2-tl {
-  top: 1px;
-  left: 1px;
-  border-top: 2px solid rgba(0, 229, 255, 0.8);
-  border-left: 2px solid rgba(0, 229, 255, 0.8);
-  border-radius: 10px 0 0 0;
-  box-shadow: -1px -1px 4px rgba(0, 229, 255, 0.15);
+  top: 2px;
+  left: 2px;
+  border-top: 2px solid rgba(0, 229, 255, 1);
+  border-left: 2px solid rgba(0, 229, 255, 1);
+  border-radius: 12px 0 0 0;
+  box-shadow: -2px -2px 8px rgba(0, 229, 255, 0.3), -1px -1px 3px rgba(0, 229, 255, 0.5);
 }
 
 .cv2-tr {
-  top: 1px;
-  right: 1px;
-  border-top: 2px solid rgba(0, 229, 255, 0.8);
-  border-right: 2px solid rgba(0, 229, 255, 0.8);
-  border-radius: 0 10px 0 0;
-  box-shadow: 1px -1px 4px rgba(0, 229, 255, 0.15);
+  top: 2px;
+  right: 2px;
+  border-top: 2px solid rgba(0, 229, 255, 1);
+  border-right: 2px solid rgba(0, 229, 255, 1);
+  border-radius: 0 12px 0 0;
+  box-shadow: 2px -2px 8px rgba(0, 229, 255, 0.3), 1px -1px 3px rgba(0, 229, 255, 0.5);
 }
 
 .cv2-bl {
-  bottom: 1px;
-  left: 1px;
-  border-bottom: 2px solid rgba(0, 229, 255, 0.5);
-  border-left: 2px solid rgba(0, 229, 255, 0.5);
-  border-radius: 0 0 0 10px;
+  bottom: 2px;
+  left: 2px;
+  border-bottom: 2px solid rgba(0, 229, 255, 0.6);
+  border-left: 2px solid rgba(0, 229, 255, 0.6);
+  border-radius: 0 0 0 12px;
+  box-shadow: -1px 2px 6px rgba(0, 229, 255, 0.15);
 }
 
 .cv2-br {
-  bottom: 1px;
-  right: 1px;
-  border-bottom: 2px solid rgba(0, 229, 255, 0.5);
-  border-right: 2px solid rgba(0, 229, 255, 0.5);
-  border-radius: 0 0 10px 0;
+  bottom: 2px;
+  right: 2px;
+  border-bottom: 2px solid rgba(0, 229, 255, 0.6);
+  border-right: 2px solid rgba(0, 229, 255, 0.6);
+  border-radius: 0 0 12px 0;
+  box-shadow: 1px 2px 6px rgba(0, 229, 255, 0.15);
 }
 
-/* 标题栏 */
+/* 标题栏 — 独立深色条带，含底部分割线光晕 */
 .cv2-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   position: relative;
-  padding: 2px 0 5px;
-  border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+  z-index: 2;
+  padding: 7px 14px 7px 14px;
+  background: linear-gradient(180deg,
+    rgba(0, 16, 42, 0.92) 0%,
+    rgba(0, 12, 32, 0.85) 100%);
+  border-bottom: 1px solid rgba(0, 229, 255, 0.18);
   flex-shrink: 0;
+}
+
+/* 标题栏底部细线光晕 */
+.cv2-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(0, 229, 255, 0.5) 30%,
+    rgba(0, 229, 255, 0.7) 50%,
+    rgba(0, 229, 255, 0.5) 70%,
+    transparent);
+  filter: blur(0.5px);
 }
 
 .cv2-header-left {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
 }
 
 .cv2-header-right {
   display: flex;
   align-items: center;
-  gap: 5px;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  gap: 6px;
 }
 
 .cv2-live-dot {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: #00ffaa;
-  box-shadow: 0 0 5px #00ffaa, 0 0 10px rgba(0, 255, 170, 0.4);
-  animation: cv2pulse 1.2s ease-in-out infinite;
+  box-shadow:
+    0 0 0 2px rgba(0, 255, 170, 0.2),
+    0 0 8px #00ffaa,
+    0 0 18px rgba(0, 255, 170, 0.5);
+  animation: cv2pulse 1.4s ease-in-out infinite;
   flex-shrink: 0;
 }
 
 @keyframes cv2pulse {
   0%, 100% {
     opacity: 1;
-    box-shadow: 0 0 5px #00ffaa, 0 0 10px rgba(0, 255, 170, 0.5);
+    box-shadow: 0 0 0 2px rgba(0, 255, 170, 0.2), 0 0 8px #00ffaa, 0 0 18px rgba(0, 255, 170, 0.5);
+    transform: scale(1);
   }
   50% {
-    opacity: 0.45;
-    box-shadow: 0 0 2px #00ffaa, 0 0 5px rgba(0, 255, 170, 0.2);
+    opacity: 0.55;
+    box-shadow: 0 0 0 4px rgba(0, 255, 170, 0.08), 0 0 4px #00ffaa, 0 0 8px rgba(0, 255, 170, 0.2);
+    transform: scale(0.85);
   }
 }
 
 .cv2-title {
   font-size: 13px;
-  font-weight: 700;
-  color: #ecf9ff;
-  letter-spacing: 1px;
-  text-shadow: 0 0 12px rgba(0, 229, 255, 0.3);
+  font-weight: 800;
+  color: #e8f8ff;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 10px rgba(0, 229, 255, 0.5),
+    0 0 25px rgba(0, 229, 255, 0.2);
 }
 
 .cv2-sep {
-  color: rgba(0, 229, 255, 0.35);
-  font-size: 11px;
+  color: rgba(0, 229, 255, 0.25);
+  font-size: 10px;
 }
 
 .cv2-subtitle {
   font-size: 10px;
-  color: rgba(0, 229, 255, 0.55);
-  letter-spacing: 0.5px;
+  color: rgba(0, 229, 255, 0.6);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 500;
 }
 
 .cv2-tag {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 2px 7px;
-  border-radius: 3px;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.3px;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border: 1px solid transparent;
 }
 
 .cv2-tag-dot {
@@ -2664,202 +2727,337 @@ onUnmounted(() => {
   height: 5px;
   border-radius: 50%;
   background: currentColor;
-  animation: cv2pulse 1s ease-in-out infinite;
+  animation: cv2pulse 1.2s ease-in-out infinite;
+  flex-shrink: 0;
 }
 
 .cv2-tag-cyan {
-  font-size: 12px;
   color: #00e5ff;
-  border-color: rgba(0, 229, 255, 0.4);
-  background: rgba(0, 229, 255, 0.08);
+  border-color: rgba(0, 229, 255, 0.35);
+  background: rgba(0, 229, 255, 0.07);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.06) inset;
 }
 
 .cv2-tag-dim {
-  color: #FFD700;
-  border-color: rgba(0, 229, 255, 0.15);
-  background: rgba(0, 229, 255, 0.04);
+  color: #ffd700;
+  border-color: rgba(255, 215, 0, 0.3);
+  background: rgba(255, 215, 0, 0.06);
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
-/* SVG 容器 */
+/* SVG 容器 — 沉浸式暗舱 */
 .cv2-svg-wrap {
   flex: 1;
   min-height: 0;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(0, 229, 255, 0.12);
-  border-radius: 6px;
-  padding: 6px 8px;
+  background:
+    radial-gradient(ellipse 60% 70% at 50% 55%, rgba(0, 229, 255, 0.04) 0%, transparent 60%),
+    rgba(0, 2, 10, 0.55);
+  border: none;
+  border-top: 1px solid rgba(0, 229, 255, 0.08);
+  border-bottom: 1px solid rgba(0, 229, 255, 0.08);
+  border-radius: 0;
+  padding: 8px 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
-  box-shadow: inset 0 0 30px rgba(0, 229, 255, 0.03);
+  box-shadow:
+    inset 0 0 60px rgba(0, 229, 255, 0.04),
+    inset 0 1px 0 rgba(0, 229, 255, 0.06);
 }
 
+/* 细腻扫描线叠加 */
 .cv2-svg-wrap::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0, 229, 255, 0.03) 0%, transparent 65%),
-  repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 229, 255, 0.015) 2px, rgba(0, 229, 255, 0.015) 3px);
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0, 229, 255, 0.012) 3px,
+      rgba(0, 229, 255, 0.012) 4px
+    );
   pointer-events: none;
-  border-radius: 6px;
+  z-index: 1;
+}
+
+/* 横向流动高亮光束 */
+.cv2-svg-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(0, 229, 255, 0.022) 40%,
+    rgba(0, 229, 255, 0.04) 50%,
+    rgba(0, 229, 255, 0.022) 60%,
+    transparent);
+  animation: cv2beamSweep 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes cv2beamSweep {
+  0% { left: -60%; }
+  60%, 100% { left: 160%; }
 }
 
 .cv2-svg {
   width: 100%;
   height: 100%;
   max-height: none;
+  position: relative;
+  z-index: 3;
 }
 
-/* ─── 剂量率-速度匹配曲线 + 工艺异常预警 ─── */
+/* ─── 剂量率-速度匹配曲线 + 工艺异常预警 — 升级版 ─── */
 .cv2-dose-bar {
   flex-shrink: 0;
-  padding: 8px 12px;
-  background: linear-gradient(135deg, rgba(0, 10, 28, 0.85) 0%, rgba(0, 16, 38, 0.8) 100%);
-  border: 1px solid rgba(0, 229, 255, 0.14);
-  border-radius: 6px;
+  padding: 10px 14px;
+  background: linear-gradient(180deg,
+    rgba(0, 8, 24, 0.9) 0%,
+    rgba(0, 12, 32, 0.85) 100%);
+  border: none;
+  border-top: 1px solid rgba(0, 229, 255, 0.12);
+  border-radius: 0 0 12px 12px;
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(4px);
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition: box-shadow 0.4s ease;
+}
+
+/* 底部底边光晕线 */
+.cv2-dose-bar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.2), transparent);
 }
 
 .cv2-dose-bar.anomaly-warning {
-  border-color: rgba(255, 51, 102, 0.6);
-  box-shadow: 0 0 20px rgba(255, 51, 102, 0.15), inset 0 0 30px rgba(255, 51, 102, 0.05);
+  box-shadow:
+    inset 0 0 40px rgba(255, 51, 102, 0.06),
+    0 0 20px rgba(255, 51, 102, 0.1);
   animation: anomalyFlash 1s ease-in-out infinite;
 }
 
 @keyframes anomalyFlash {
-  0%, 100% { border-color: rgba(255, 51, 102, 0.6); box-shadow: 0 0 20px rgba(255, 51, 102, 0.15); }
-  50% { border-color: rgba(255, 51, 102, 1); box-shadow: 0 0 30px rgba(255, 51, 102, 0.35); }
+  0%, 100% {
+    box-shadow: inset 0 0 40px rgba(255, 51, 102, 0.06), 0 0 20px rgba(255, 51, 102, 0.1);
+  }
+  50% {
+    box-shadow: inset 0 0 60px rgba(255, 51, 102, 0.12), 0 0 35px rgba(255, 51, 102, 0.2);
+  }
 }
 
 .cv2-dose-bar::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 70% 50% at 25% 50%, rgba(0, 229, 255, 0.04) 0%, transparent 55%);
+  background:
+    radial-gradient(ellipse 50% 80% at 22% 50%, rgba(0, 229, 255, 0.04) 0%, transparent 55%),
+    radial-gradient(ellipse 30% 60% at 78% 50%, rgba(0, 100, 200, 0.03) 0%, transparent 45%);
   pointer-events: none;
-  border-radius: 6px;
 }
 
 .cv2-dose-inline {
   display: flex;
   align-items: stretch;
-  gap: 12px;
+  gap: 14px;
   position: relative;
   z-index: 1;
 }
 
-/* 左侧：指标面板 */
+/* 左侧：指标面板 — 强化数字显示 */
 .cv2-dose-metrics {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 4px;
-  min-width: 110px;
-  padding-right: 10px;
-  border-right: 1px solid rgba(0, 229, 255, 0.1);
+  gap: 5px;
+  min-width: 118px;
+  padding-right: 12px;
+  border-right: 1px solid rgba(0, 229, 255, 0.12);
+  position: relative;
+}
+
+/* 分隔线光效 */
+.cv2-dose-metrics::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: 15%;
+  bottom: 15%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(0, 229, 255, 0.4) 50%, transparent);
 }
 
 .cv2-metric-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 10px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: rgba(0, 229, 255, 0.03);
+  border: 1px solid rgba(0, 229, 255, 0.06);
 }
 
 .cv2-metric-label {
-  font-size: 10px;
-  color: var(--text-3);
+  font-size: 9.5px;
+  color: rgba(160, 210, 230, 0.6);
+  letter-spacing: 0.5px;
 }
 
 .cv2-metric-val {
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
   color: #00e5ff;
   font-variant-numeric: tabular-nums;
   transition: color 0.3s;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+  letter-spacing: 0.5px;
 }
 
 .cv2-metric-val.anomaly {
   color: #ff3355;
+  text-shadow: 0 0 8px rgba(255, 51, 85, 0.5);
   animation: textPulse 1s ease-in-out infinite;
 }
 
 .cv2-metric-status {
   font-size: 9px;
-  padding: 2px 6px;
+  padding: 2px 8px;
   border-radius: 3px;
   text-align: center;
   margin-top: 2px;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .status-good {
   color: #00ffaa;
-  background: rgba(0, 255, 170, 0.1);
-  border: 1px solid rgba(0, 255, 170, 0.25);
+  background: rgba(0, 255, 170, 0.08);
+  border: 1px solid rgba(0, 255, 170, 0.3);
+  text-shadow: 0 0 6px rgba(0, 255, 170, 0.4);
 }
 
 .status-ok {
   color: #00e5ff;
-  background: rgba(0, 229, 255, 0.08);
-  border: 1px solid rgba(0, 229, 255, 0.2);
+  background: rgba(0, 229, 255, 0.07);
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.3);
 }
 
 .status-warn {
   color: #ffaa33;
-  background: rgba(255, 170, 51, 0.1);
-  border: 1px solid rgba(255, 170, 51, 0.25);
+  background: rgba(255, 170, 51, 0.08);
+  border: 1px solid rgba(255, 170, 51, 0.3);
+  text-shadow: 0 0 6px rgba(255, 170, 51, 0.35);
 }
 
 .status-anomaly {
   color: #ff3355;
-  background: rgba(255, 51, 102, 0.12);
-  border: 1px solid rgba(255, 51, 102, 0.4);
+  background: rgba(255, 51, 102, 0.1);
+  border: 1px solid rgba(255, 51, 102, 0.45);
+  text-shadow: 0 0 6px rgba(255, 51, 102, 0.5);
   animation: textPulse 1s ease-in-out infinite;
 }
 
 @keyframes textPulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  50% { opacity: 0.45; }
 }
 
 /* 中间：图表区域 */
 .cv2-dose-chart-wrap {
   flex: 1;
   min-width: 0;
-  height: 70px;
+  height: 74px;
   position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* 图表区域背景 */
+.cv2-dose-chart-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 18px,
+      rgba(0, 229, 255, 0.04) 18px,
+      rgba(0, 229, 255, 0.04) 19px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 14px,
+      rgba(0, 229, 255, 0.04) 14px,
+      rgba(0, 229, 255, 0.04) 15px
+    );
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .cv2-dose-chart-wrap canvas {
   width: 100% !important;
   height: 100% !important;
+  position: relative;
+  z-index: 1;
 }
 
-/* 右侧：预警指示器 */
+/* 右侧：预警指示器 — 重新设计为状态卡片 */
 .cv2-anomaly-indicator {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 90px;
-  padding-left: 10px;
-  border-left: 1px solid rgba(0, 229, 255, 0.1);
-  gap: 2px;
+  min-width: 96px;
+  padding: 6px 10px;
+  margin-left: 2px;
+  border-left: 1px solid rgba(0, 229, 255, 0.12);
+  gap: 3px;
+  border-radius: 0 6px 6px 0;
+  background: rgba(0, 229, 255, 0.02);
+  position: relative;
+  overflow: hidden;
+}
+
+.cv2-anomaly-indicator::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(0, 229, 255, 0.35) 50%, transparent);
 }
 
 .cv2-anomaly-indicator.ok {
-  opacity: 0.6;
+  background: rgba(0, 255, 170, 0.02);
+}
+
+.cv2-anomaly-indicator.ok::before {
+  background: linear-gradient(180deg, transparent, rgba(0, 255, 170, 0.25) 50%, transparent);
 }
 
 .cv2-anomaly-icon {
-  font-size: 20px;
+  font-size: 22px;
   line-height: 1;
+  filter: drop-shadow(0 0 4px currentColor);
 }
 
 .cv2-anomaly-indicator:not(.ok) .cv2-anomaly-icon {
@@ -2873,25 +3071,31 @@ onUnmounted(() => {
 
 .cv2-anomaly-text {
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 800;
   color: #ff3355;
   text-align: center;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 6px rgba(255, 51, 85, 0.5);
 }
 
 .cv2-anomaly-indicator.ok .cv2-anomaly-text {
   color: #00ffaa;
+  text-shadow: 0 0 6px rgba(0, 255, 170, 0.4);
 }
 
 .cv2-anomaly-sub {
   font-size: 9px;
-  color: var(--text-3);
+  color: rgba(160, 210, 220, 0.5);
   text-align: center;
+  letter-spacing: 0.3px;
 }
 
 @keyframes iconShake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-2px); }
-  75% { transform: translateX(2px); }
+  0%, 100% { transform: translateX(0) scale(1); }
+  20% { transform: translateX(-2px) scale(1.05); }
+  40% { transform: translateX(2px) scale(0.95); }
+  60% { transform: translateX(-1px) scale(1.02); }
+  80% { transform: translateX(1px) scale(0.98); }
 }
 
 </style>
