@@ -738,7 +738,7 @@ const matchStatus = computed(() => {
   if (variance < 8) return { text: '匹配正常', cls: 'status-ok' }
   return { text: '匹配偏差', cls: 'status-warn' }
 })
-
+//更新剂量，速度数据
 function updateDoseSpeedData() {
   // Shift history
   for (let i = 0; i < MAX_DATA_POINTS - 1; i++) {
@@ -1415,7 +1415,7 @@ function initDoseSpeedChart() {
   if (!doseSpeedChartRef.value) return
 
   const labels = Array.from({length: MAX_DATA_POINTS}, (_, i) => {
-    const seconds = (MAX_DATA_POINTS - 1 - i) * 2
+    const seconds = ((MAX_DATA_POINTS - 1 - i) * 0.5).toFixed(1)
     return `-${seconds}s`
   })
 
@@ -1477,8 +1477,19 @@ function initDoseSpeedChart() {
       },
       scales: {
         x: {
-          display: false,
-          grid: { display: false }
+          display: true,
+          grid: { display: false },
+          ticks: {
+            font: { size: 8 },
+            color: '#2a5870',
+            maxRotation: 0,
+            callback: function(val, idx) {
+              // 显示刻度: -25s, -15s, -10s, 0s（去掉 -20s）
+              const seconds = (MAX_DATA_POINTS - 1 - idx) * 0.5
+              if (seconds === 25 || seconds === 15 || seconds === 10 || seconds === 0) return `-${seconds}s`
+              return ''
+            }
+          }
         },
         y: {
           min: 40,
