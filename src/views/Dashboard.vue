@@ -69,6 +69,35 @@
             </div>
           </div>
           <!-- SVG 流程 -->
+          <div class="cv2-params-bar">
+            <div class="cv2-param-item">
+              <span class="cv2-param-label">剂量</span>
+              <span class="cv2-param-value">25</span>
+              <span class="cv2-param-unit">kGy</span>
+            </div>
+            <div class="cv2-param-divider"></div>
+            <div class="cv2-param-item">
+              <span class="cv2-param-label">速度</span>
+              <span class="cv2-param-value">3.2</span>
+              <span class="cv2-param-unit">m/min</span>
+            </div>
+            <div class="cv2-param-divider"></div>
+            <div class="cv2-param-item">
+              <span class="cv2-param-label">高压</span>
+              <span class="cv2-param-value">10.0</span>
+              <span class="cv2-param-unit">MeV</span>
+            </div>
+            <div class="cv2-param-divider"></div>
+            <div class="cv2-param-item">
+              <span class="cv2-param-label">束流</span>
+              <span class="cv2-param-value">12.5</span>
+              <span class="cv2-param-unit">mA</span>
+            </div>
+            <div class="cv2-param-status-badge">
+              <span class="cv2-param-status-dot"></span>
+              运行中
+            </div>
+          </div>
           <div class="cv2-svg-wrap">
             <svg class="cv2-svg" viewBox="0 0 620 148" preserveAspectRatio="xMidYMid meet">
               <defs>
@@ -194,10 +223,10 @@
               <text x="53" y="40" text-anchor="middle" font-size="8.5" fill="#1af0ff" font-weight="700"
                     letter-spacing="1.2">进货缓存
               </text>
-              <text x="56" y="122" text-anchor="middle" font-size="9" fill="rgba(26,240,255,0.7)" font-weight="500">
+              <text x="56" y="121" text-anchor="middle" font-size="9.5" fill="rgba(26,240,255,0.85)" font-weight="600">
                 缓存区
               </text>
-              <text x="56" y="133" text-anchor="middle" font-size="8" fill="rgba(26,240,255,0.45)">{{
+              <text x="56" y="134" text-anchor="middle" font-size="9" fill="rgba(26,240,255,0.6)" font-weight="500">{{
                   zoneCounts[0]
                 }}
               </text>
@@ -215,10 +244,10 @@
               <text x="149" y="40" text-anchor="middle" font-size="8.5" fill="#00ffa0" font-weight="700"
                     letter-spacing="1.2">入射检
               </text>
-              <text x="153" y="122" text-anchor="middle" font-size="9" fill="rgba(0,255,160,0.7)" font-weight="500">
+              <text x="153" y="121" text-anchor="middle" font-size="9.5" fill="rgba(0,255,160,0.85)" font-weight="600">
                 检测中
               </text>
-              <text x="153" y="133" text-anchor="middle" font-size="8" fill="rgba(0,255,160,0.45)">{{
+              <text x="153" y="134" text-anchor="middle" font-size="9" fill="rgba(0,255,160,0.6)" font-weight="500">{{
                   zoneCounts[1]
                 }}
               </text>
@@ -312,14 +341,6 @@
               <circle cx="256" cy="33.5" r="3.2" fill="#00ffaa">
                 <animate attributeName="opacity" values="1;0.2;1" dur="0.7s" repeatCount="indefinite"/>
               </circle>
-              <text x="260" y="2" text-anchor="middle" font-size="20">
-                <tspan fill="rgba(0,229,255,0.6)">剂量</tspan>
-                <tspan fill="#7fff00" font-weight="900" font-size="16">25</tspan>
-                <tspan fill="rgba(0,229,255,0.6)" font-size="9"> kGy</tspan>
-                <tspan fill="rgba(0,229,255,0.6)">速度$\text{m/min}$</tspan>
-                <tspan fill="rgba(0,229,255,0.6)">高压（MeV）</tspan>
-                <tspan fill="rgba(0,229,255,0.6)">束流（mA）</tspan>
-              </text>
               <text x="295" y="37.5" text-anchor="middle" font-size="9" fill="#00e5ff" font-weight="700"
                     letter-spacing="1.5" filter="url(#cv2soft)">▶ 辐照处理中
               </text>
@@ -341,10 +362,10 @@
               <text x="457" y="40" text-anchor="middle" font-size="8.5" fill="#00ffa0" font-weight="700"
                     letter-spacing="1.2">出射检
               </text>
-              <text x="461" y="122" text-anchor="middle" font-size="9" fill="rgba(0,255,160,0.7)" font-weight="500">
+              <text x="461" y="121" text-anchor="middle" font-size="9.5" fill="rgba(0,255,160,0.85)" font-weight="600">
                 检测中
               </text>
-              <text x="461" y="133" text-anchor="middle" font-size="8" fill="rgba(0,255,160,0.45)">{{
+              <text x="461" y="134" text-anchor="middle" font-size="9" fill="rgba(0,255,160,0.6)" font-weight="500">{{
                   zoneCounts[2]
                 }}
               </text>
@@ -363,10 +384,10 @@
               <text x="554" y="40" text-anchor="middle" font-size="8.5" fill="#cc99ff" font-weight="700"
                     letter-spacing="1.2">成品仓
               </text>
-              <text x="562" y="122" text-anchor="middle" font-size="9" fill="rgba(180,120,255,0.7)" font-weight="500">
+              <text x="562" y="121" text-anchor="middle" font-size="9.5" fill="rgba(180,120,255,0.85)" font-weight="600">
                 入库中
               </text>
-              <text x="562" y="133" text-anchor="middle" font-size="8" fill="rgba(180,120,255,0.45)">{{
+              <text x="562" y="134" text-anchor="middle" font-size="9" fill="rgba(180,120,255,0.6)" font-weight="500">{{
                   zoneCounts[3]
                 }}
               </text>
@@ -2804,6 +2825,108 @@ onUnmounted(() => {
   letter-spacing: 1px;
 }
 
+/* ─── 参数状态条 ─── */
+.cv2-params-bar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 6px 14px;
+  background: linear-gradient(180deg,
+    rgba(0, 14, 36, 0.95) 0%,
+    rgba(0, 10, 26, 0.9) 100%);
+  border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+}
+
+/* 参数条左侧渐变光晕 */
+.cv2-params-bar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  background: linear-gradient(90deg, rgba(0, 229, 255, 0.06), transparent);
+  pointer-events: none;
+}
+
+.cv2-param-item {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 3px 16px 3px 0;
+  flex-shrink: 0;
+}
+
+.cv2-param-label {
+  font-size: 9.5px;
+  color: rgba(0, 229, 255, 0.5);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.cv2-param-value {
+  font-size: 18px;
+  font-weight: 900;
+  color: #7fff00;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.5px;
+  line-height: 1;
+  text-shadow:
+    0 0 10px rgba(127, 255, 0, 0.6),
+    0 0 22px rgba(127, 255, 0, 0.2);
+}
+
+.cv2-param-unit {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(0, 229, 255, 0.65);
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.cv2-param-divider {
+  width: 1px;
+  height: 22px;
+  background: linear-gradient(180deg,
+    transparent,
+    rgba(0, 229, 255, 0.3) 50%,
+    transparent);
+  margin: 0 16px 0 0;
+  flex-shrink: 0;
+}
+
+.cv2-param-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  padding: 3px 10px;
+  border-radius: 4px;
+  background: rgba(0, 255, 170, 0.07);
+  border: 1px solid rgba(0, 255, 170, 0.3);
+  font-size: 10px;
+  font-weight: 700;
+  color: #00ffaa;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px rgba(0, 255, 170, 0.4);
+  flex-shrink: 0;
+}
+
+.cv2-param-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00ffaa;
+  box-shadow: 0 0 6px #00ffaa, 0 0 12px rgba(0, 255, 170, 0.4);
+  animation: cv2pulse 1.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
 /* SVG 容器 — 沉浸式暗舱 */
 .cv2-svg-wrap {
   flex: 1;
@@ -2815,7 +2938,7 @@ onUnmounted(() => {
   border-top: 1px solid rgba(0, 229, 255, 0.08);
   border-bottom: 1px solid rgba(0, 229, 255, 0.08);
   border-radius: 0;
-  padding: 8px 10px;
+  padding: 4px 8px 2px;
   display: flex;
   align-items: center;
   justify-content: center;
