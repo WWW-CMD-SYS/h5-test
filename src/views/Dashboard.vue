@@ -1478,11 +1478,22 @@ function initDoseSpeedChart() {
           position: 'top',
           align: 'end',
           labels: {
-            font: { size: 9 },
+            font: { size: 10 },
             boxWidth: 10,
-            color: '#3a6a8a',
             usePointStyle: true,
             pointStyle: 'line',
+            generateLabels: (chart) => {
+              const ds = chart.data.datasets
+              return ds.map((d, i) => ({
+                text: d.label,
+                fillStyle: d.borderColor,
+                strokeStyle: d.borderColor,
+                hidden: chart.getDatasetMeta(i).hidden,
+                datasetIndex: i,
+                fontColor: d.borderColor,
+                pointStyle: 'line',
+              }))
+            },
           }
         },
         tooltip: {
@@ -3115,7 +3126,7 @@ onUnmounted(() => {
 
 .cv2-metric-label {
   font-size: 9.5px;
-  color: rgba(160, 210, 230, 0.55);
+  color: rgb(241 186 84 / 0.75);
   letter-spacing: 0.5px;
   flex-shrink: 0;
 }
