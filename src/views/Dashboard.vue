@@ -150,10 +150,10 @@
                 <line x1="0" y1="74" x2="620" y2="74" stroke="#00e5ff" stroke-width="0.6"/>
                 <line x1="0" y1="111" x2="620" y2="111" stroke="#00e5ff" stroke-width="0.6"/>
                 <line x1="103" y1="0" x2="103" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
-              <line x1="204" y1="0" x2="204" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
-              <line x1="307" y1="0" x2="307" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
-              <line x1="410" y1="0" x2="410" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
-              <line x1="517" y1="0" x2="517" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
+                <line x1="204" y1="0" x2="204" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
+                <line x1="307" y1="0" x2="307" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
+                <line x1="410" y1="0" x2="410" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
+                <line x1="517" y1="0" x2="517" y2="148" stroke="#00e5ff" stroke-width="0.6"/>
               </g>
 
               <!-- ══ 主传送轨道 ══ -->
@@ -1484,13 +1484,14 @@ function initDoseSpeedChart() {
             pointStyle: 'line',
             generateLabels: (chart) => {
               const ds = chart.data.datasets
+              const legendFontColors = ['#7dd8e8', '#b8e86a']
               return ds.map((d, i) => ({
                 text: d.label,
                 fillStyle: d.borderColor,
                 strokeStyle: d.borderColor,
                 hidden: chart.getDatasetMeta(i).hidden,
                 datasetIndex: i,
-                fontColor: d.borderColor,
+                fontColor: legendFontColors[i] ?? d.borderColor,
                 pointStyle: 'line',
               }))
             },
@@ -2597,7 +2598,7 @@ onUnmounted(() => {
   flex-direction: column;
   gap: 0;
   background:
-    linear-gradient(180deg,
+      linear-gradient(180deg,
       rgba(0, 4, 16, 0.98) 0%,
       rgba(0, 10, 28, 0.96) 50%,
       rgba(0, 6, 20, 0.98) 100%);
@@ -2607,10 +2608,10 @@ onUnmounted(() => {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow:
-    0 0 0 1px rgba(0, 229, 255, 0.06) inset,
-    0 0 40px rgba(0, 229, 255, 0.08),
-    0 0 80px rgba(0, 100, 200, 0.06),
-    0 4px 24px rgba(0, 0, 0, 0.6);
+      0 0 0 1px rgba(0, 229, 255, 0.06) inset,
+      0 0 40px rgba(0, 229, 255, 0.08),
+      0 0 80px rgba(0, 100, 200, 0.06),
+      0 4px 24px rgba(0, 0, 0, 0.6);
 }
 
 /* 全局网格纹理背景 */
@@ -2619,23 +2620,23 @@ onUnmounted(() => {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 70% 50% at 50% 40%, rgba(0, 229, 255, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 30% 40% at 8% 50%, rgba(0, 229, 255, 0.04) 0%, transparent 55%),
-    radial-gradient(ellipse 25% 35% at 92% 50%, rgba(160, 80, 255, 0.03) 0%, transparent 50%),
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 22px,
-      rgba(0, 229, 255, 0.018) 22px,
-      rgba(0, 229, 255, 0.018) 23px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 22px,
-      rgba(0, 229, 255, 0.012) 22px,
-      rgba(0, 229, 255, 0.012) 23px
-    );
+      radial-gradient(ellipse 70% 50% at 50% 40%, rgba(0, 229, 255, 0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 30% 40% at 8% 50%, rgba(0, 229, 255, 0.04) 0%, transparent 55%),
+      radial-gradient(ellipse 25% 35% at 92% 50%, rgba(160, 80, 255, 0.03) 0%, transparent 50%),
+      repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 22px,
+          rgba(0, 229, 255, 0.018) 22px,
+          rgba(0, 229, 255, 0.018) 23px
+      ),
+      repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 22px,
+          rgba(0, 229, 255, 0.012) 22px,
+          rgba(0, 229, 255, 0.012) 23px
+      );
   pointer-events: none;
   border-radius: 0;
   z-index: 0;
@@ -2650,13 +2651,13 @@ onUnmounted(() => {
   right: 0;
   height: 2px;
   background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(0, 229, 255, 0.0) 5%,
-    rgba(0, 229, 255, 0.9) 30%,
-    rgba(120, 240, 255, 1) 50%,
-    rgba(0, 229, 255, 0.9) 70%,
-    rgba(0, 229, 255, 0.0) 95%,
-    transparent 100%);
+  transparent 0%,
+  rgba(0, 229, 255, 0.0) 5%,
+  rgba(0, 229, 255, 0.9) 30%,
+  rgba(120, 240, 255, 1) 50%,
+  rgba(0, 229, 255, 0.9) 70%,
+  rgba(0, 229, 255, 0.0) 95%,
+  transparent 100%);
   border-radius: 1px;
 }
 
@@ -2714,8 +2715,8 @@ onUnmounted(() => {
   z-index: 2;
   padding: 7px 14px 7px 14px;
   background: linear-gradient(180deg,
-    rgba(0, 16, 42, 0.92) 0%,
-    rgba(0, 12, 32, 0.85) 100%);
+  rgba(0, 16, 42, 0.92) 0%,
+  rgba(0, 12, 32, 0.85) 100%);
   border-bottom: 1px solid rgba(0, 229, 255, 0.18);
   flex-shrink: 0;
 }
@@ -2729,11 +2730,11 @@ onUnmounted(() => {
   right: 15%;
   height: 1px;
   background: linear-gradient(90deg,
-    transparent,
-    rgba(0, 229, 255, 0.5) 30%,
-    rgba(0, 229, 255, 0.7) 50%,
-    rgba(0, 229, 255, 0.5) 70%,
-    transparent);
+  transparent,
+  rgba(0, 229, 255, 0.5) 30%,
+  rgba(0, 229, 255, 0.7) 50%,
+  rgba(0, 229, 255, 0.5) 70%,
+  transparent);
   filter: blur(0.5px);
 }
 
@@ -2755,9 +2756,9 @@ onUnmounted(() => {
   border-radius: 50%;
   background: #00ffaa;
   box-shadow:
-    0 0 0 2px rgba(0, 255, 170, 0.2),
-    0 0 8px #00ffaa,
-    0 0 18px rgba(0, 255, 170, 0.5);
+      0 0 0 2px rgba(0, 255, 170, 0.2),
+      0 0 8px #00ffaa,
+      0 0 18px rgba(0, 255, 170, 0.5);
   animation: cv2pulse 1.4s ease-in-out infinite;
   flex-shrink: 0;
 }
@@ -2782,8 +2783,8 @@ onUnmounted(() => {
   letter-spacing: 2px;
   text-transform: uppercase;
   text-shadow:
-    0 0 10px rgba(0, 229, 255, 0.5),
-    0 0 25px rgba(0, 229, 255, 0.2);
+      0 0 10px rgba(0, 229, 255, 0.5),
+      0 0 25px rgba(0, 229, 255, 0.2);
 }
 
 .cv2-sep {
@@ -2842,8 +2843,8 @@ onUnmounted(() => {
   gap: 0;
   padding: 6px 14px;
   background: linear-gradient(180deg,
-    rgba(0, 14, 36, 0.95) 0%,
-    rgba(0, 10, 26, 0.9) 100%);
+  rgba(0, 14, 36, 0.95) 0%,
+  rgba(0, 10, 26, 0.9) 100%);
   border-bottom: 1px solid rgba(0, 229, 255, 0.1);
   flex-shrink: 0;
   position: relative;
@@ -2887,8 +2888,8 @@ onUnmounted(() => {
   letter-spacing: -0.5px;
   line-height: 1;
   text-shadow:
-    0 0 10px rgba(127, 255, 0, 0.6),
-    0 0 22px rgba(127, 255, 0, 0.2);
+      0 0 10px rgba(127, 255, 0, 0.6),
+      0 0 22px rgba(127, 255, 0, 0.2);
 }
 
 .cv2-param-unit {
@@ -2903,9 +2904,9 @@ onUnmounted(() => {
   width: 1px;
   height: 22px;
   background: linear-gradient(180deg,
-    transparent,
-    rgba(0, 229, 255, 0.3) 50%,
-    transparent);
+  transparent,
+  rgba(0, 229, 255, 0.3) 50%,
+  transparent);
   margin: 0 16px 0 0;
   flex-shrink: 0;
 }
@@ -2942,8 +2943,8 @@ onUnmounted(() => {
   flex: 1;
   min-height: 0;
   background:
-    radial-gradient(ellipse 60% 70% at 50% 55%, rgba(0, 229, 255, 0.04) 0%, transparent 60%),
-    rgba(0, 2, 10, 0.55);
+      radial-gradient(ellipse 60% 70% at 50% 55%, rgba(0, 229, 255, 0.04) 0%, transparent 60%),
+      rgba(0, 2, 10, 0.55);
   border: none;
   border-top: 1px solid rgba(0, 229, 255, 0.08);
   border-bottom: 1px solid rgba(0, 229, 255, 0.08);
@@ -2955,8 +2956,8 @@ onUnmounted(() => {
   position: relative;
   overflow: hidden;
   box-shadow:
-    inset 0 0 60px rgba(0, 229, 255, 0.04),
-    inset 0 1px 0 rgba(0, 229, 255, 0.06);
+      inset 0 0 60px rgba(0, 229, 255, 0.04),
+      inset 0 1px 0 rgba(0, 229, 255, 0.06);
 }
 
 /* 细腻扫描线叠加 */
@@ -2965,13 +2966,13 @@ onUnmounted(() => {
   position: absolute;
   inset: 0;
   background:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 3px,
-      rgba(0, 229, 255, 0.012) 3px,
-      rgba(0, 229, 255, 0.012) 4px
-    );
+      repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 3px,
+          rgba(0, 229, 255, 0.012) 3px,
+          rgba(0, 229, 255, 0.012) 4px
+      );
   pointer-events: none;
   z-index: 1;
 }
@@ -2985,11 +2986,11 @@ onUnmounted(() => {
   width: 50%;
   height: 100%;
   background: linear-gradient(90deg,
-    transparent,
-    rgba(0, 229, 255, 0.022) 40%,
-    rgba(0, 229, 255, 0.04) 50%,
-    rgba(0, 229, 255, 0.022) 60%,
-    transparent);
+  transparent,
+  rgba(0, 229, 255, 0.022) 40%,
+  rgba(0, 229, 255, 0.04) 50%,
+  rgba(0, 229, 255, 0.022) 60%,
+  transparent);
   animation: cv2beamSweep 6s ease-in-out infinite;
   pointer-events: none;
   z-index: 2;
@@ -3014,8 +3015,8 @@ onUnmounted(() => {
   height: 106px;   /* 固定高度 = 86px 内容 + 10px×2 padding */
   padding: 10px 14px;
   background: linear-gradient(180deg,
-    rgba(0, 8, 24, 0.9) 0%,
-    rgba(0, 12, 32, 0.85) 100%);
+  rgba(0, 8, 24, 0.9) 0%,
+  rgba(0, 12, 32, 0.85) 100%);
   border: none;
   border-top: 1px solid rgba(0, 229, 255, 0.12);
   border-radius: 0;
@@ -3037,15 +3038,15 @@ onUnmounted(() => {
 
 .cv2-dose-bar.anomaly-warning {
   box-shadow:
-    inset 0 0 40px rgba(255, 51, 102, 0.06),
-    0 0 20px rgba(255, 51, 102, 0.1);
+      inset 0 0 40px rgba(255, 51, 102, 0.06),
+      0 0 20px rgba(255, 51, 102, 0.1);
   animation: anomalyFlash 1s ease-in-out infinite;
 }
 
 .cv2-dose-bar.anomaly-warning.under-dose {
   box-shadow:
-    inset 0 0 40px rgba(255, 170, 51, 0.06),
-    0 0 20px rgba(255, 170, 51, 0.1);
+      inset 0 0 40px rgba(255, 170, 51, 0.06),
+      0 0 20px rgba(255, 170, 51, 0.1);
   animation: anomalyFlashUnder 1s ease-in-out infinite;
 }
 
@@ -3072,8 +3073,8 @@ onUnmounted(() => {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 50% 80% at 22% 50%, rgba(0, 229, 255, 0.04) 0%, transparent 55%),
-    radial-gradient(ellipse 30% 60% at 78% 50%, rgba(0, 100, 200, 0.03) 0%, transparent 45%);
+      radial-gradient(ellipse 50% 80% at 22% 50%, rgba(0, 229, 255, 0.04) 0%, transparent 55%),
+      radial-gradient(ellipse 30% 60% at 78% 50%, rgba(0, 100, 200, 0.03) 0%, transparent 45%);
   pointer-events: none;
 }
 
@@ -3206,8 +3207,8 @@ onUnmounted(() => {
   background: rgba(0, 2, 10, 0.4);
   border: 1px solid rgba(0, 229, 255, 0.1);
   box-shadow:
-    inset 0 0 20px rgba(0, 229, 255, 0.03),
-    0 0 0 1px rgba(0, 229, 255, 0.04);
+      inset 0 0 20px rgba(0, 229, 255, 0.03),
+      0 0 0 1px rgba(0, 229, 255, 0.04);
 }
 
 /* 图表区域背景 */
@@ -3216,20 +3217,20 @@ onUnmounted(() => {
   position: absolute;
   inset: 0;
   background:
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 18px,
-      rgba(0, 229, 255, 0.04) 18px,
-      rgba(0, 229, 255, 0.04) 19px
-    ),
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 14px,
-      rgba(0, 229, 255, 0.04) 14px,
-      rgba(0, 229, 255, 0.04) 15px
-    );
+      repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 18px,
+          rgba(0, 229, 255, 0.04) 18px,
+          rgba(0, 229, 255, 0.04) 19px
+      ),
+      repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 14px,
+          rgba(0, 229, 255, 0.04) 14px,
+          rgba(0, 229, 255, 0.04) 15px
+      );
   border-radius: 4px;
   pointer-events: none;
   z-index: 0;
