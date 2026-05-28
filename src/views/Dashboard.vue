@@ -1484,14 +1484,13 @@ function initDoseSpeedChart() {
             pointStyle: 'line',
             generateLabels: (chart) => {
               const ds = chart.data.datasets
-              const legendFontColors = ['#7dd8e8', '#b8e86a']
               return ds.map((d, i) => ({
                 text: d.label,
                 fillStyle: d.borderColor,
                 strokeStyle: d.borderColor,
                 hidden: chart.getDatasetMeta(i).hidden,
                 datasetIndex: i,
-                fontColor: legendFontColors[i] ?? d.borderColor,
+                fontColor: d.borderColor,
                 pointStyle: 'line',
               }))
             },
@@ -3279,43 +3278,64 @@ onUnmounted(() => {
   background: linear-gradient(180deg, transparent, rgba(0, 255, 170, 0.25) 50%, transparent);
 }
 
-/* 过辐照风险 — 红色系 + 背景闪烁 */
+/* 过辐照风险 — 红色系：背景 + outline边框同步闪烁 */
 .cv2-anomaly-indicator.over {
   background: rgba(255, 51, 85, 0.08);
-  animation: flashBgRed 1s ease-in-out infinite;
+  outline: 1.5px solid rgba(255, 51, 85, 0.2);
+  outline-offset: -1px;
+  animation: flashBgRed 0.75s ease-in-out infinite;
 }
 
 @keyframes flashBgRed {
-  0%, 100% { background: rgba(255, 51, 85, 0.06); }
-  50% { background: rgba(255, 51, 85, 0.18); }
+  0%, 100% {
+    background: rgba(255, 51, 85, 0.05);
+    outline-color: rgba(255, 51, 85, 0.15);
+    box-shadow: inset 0 0 18px rgba(255, 51, 85, 0.08);
+  }
+  50% {
+    background: rgba(255, 51, 85, 0.26);
+    outline-color: rgba(255, 51, 85, 1);
+    box-shadow: inset 0 0 40px rgba(255, 51, 85, 0.35), 0 0 20px rgba(255, 51, 85, 0.4);
+  }
 }
 
 .cv2-anomaly-indicator.over::before {
-  background: linear-gradient(180deg, transparent, rgba(255, 51, 85, 0.5) 50%, transparent);
+  background: linear-gradient(180deg, transparent, rgba(255, 51, 85, 0.7) 50%, transparent);
 }
 
-/* 欠辐照风险 — 橙色系 + 背景闪烁 */
+/* 欠辐照风险 — 橙色系：背景 + outline边框同步闪烁 */
 .cv2-anomaly-indicator.under {
   background: rgba(255, 170, 51, 0.08);
-  animation: flashBgOrange 1.1s ease-in-out infinite;
+  outline: 1.5px solid rgba(255, 170, 51, 0.2);
+  outline-offset: -1px;
+  animation: flashBgOrange 0.75s ease-in-out infinite;
 }
 
 @keyframes flashBgOrange {
-  0%, 100% { background: rgba(255, 170, 51, 0.06); }
-  50% { background: rgba(255, 170, 51, 0.18); }
+  0%, 100% {
+    background: rgba(255, 170, 51, 0.05);
+    outline-color: rgba(255, 170, 51, 0.15);
+    box-shadow: inset 0 0 18px rgba(255, 170, 51, 0.08);
+  }
+  50% {
+    background: rgba(255, 170, 51, 0.26);
+    outline-color: rgba(255, 170, 51, 1);
+    box-shadow: inset 0 0 40px rgba(255, 170, 51, 0.35), 0 0 20px rgba(255, 170, 51, 0.4);
+  }
 }
 
 .cv2-anomaly-indicator.under::before {
-  background: linear-gradient(180deg, transparent, rgba(255, 170, 51, 0.5) 50%, transparent);
+  background: linear-gradient(180deg, transparent, rgba(255, 170, 51, 0.7) 50%, transparent);
 }
 
 .cv2-anomaly-icon {
-  font-size: 28px;
+  font-size: 38px;
   line-height: 1;
-  filter: drop-shadow(0 0 6px currentColor);
+  filter: drop-shadow(0 0 10px currentColor) drop-shadow(0 0 4px currentColor);
 }
 
 .cv2-anomaly-indicator.over .cv2-anomaly-icon {
+  font-size: 52px;
   animation: iconShake 0.5s ease-in-out infinite;
   color: #ff3355;
 }
@@ -3360,10 +3380,10 @@ onUnmounted(() => {
 
 @keyframes iconShake {
   0%, 100% { transform: translateX(0) scale(1); }
-  20% { transform: translateX(-2px) scale(1.05); }
-  40% { transform: translateX(2px) scale(0.95); }
-  60% { transform: translateX(-1px) scale(1.02); }
-  80% { transform: translateX(1px) scale(0.98); }
+  15% { transform: translateX(-4px) scale(1.1) rotate(-4deg); }
+  35% { transform: translateX(4px) scale(0.92) rotate(3deg); }
+  55% { transform: translateX(-3px) scale(1.06) rotate(-2deg); }
+  75% { transform: translateX(3px) scale(0.96) rotate(2deg); }
 }
 
 </style>
