@@ -50,11 +50,11 @@
           <!-- 节点列表，点击可聚焦地图到该节点 -->
           <div class="node-list">
             <div
-              v-for="(pos, idx) in positions"
-              :key="idx"
-              class="node-item"
-              :class="{ active: currentIndex === idx, visited: playbackVisited.has(idx) }"
-              @click="focusNode(idx)"
+                v-for="(pos, idx) in positions"
+                :key="idx"
+                class="node-item"
+                :class="{ active: currentIndex === idx, visited: playbackVisited.has(idx) }"
+                @click="focusNode(idx)"
             >
               <div class="node-dot" :class="pos.type">
                 <span v-if="pos.type === 'warehouse'">仓</span>
@@ -120,7 +120,7 @@ const currentIndex  = ref(-1)     // 当前回放到的节点索引（-1 表示�
 //         → 中转服务（腾讯云）→ GET /api/location → 高德地图渲染
 // ─────────────────────────────────────────────
 
-const realtimeServer   = ref('http://101.43.98.105:3001') // 坐标中转服务地址
+const realtimeServer   = ref('http://wxjsun.com:3001') // 坐标中转服务地址（域名指向腾讯云服务器）
 const realtimeDeviceId = ref('truck-001')                  // 设备 ID，对应小程序上报的 deviceId
 let   realtimeTimer    = null                              // 轮询定时器句柄
 
@@ -147,8 +147,8 @@ const positions = ref([
   },
 ])
 
-// 车辆当前位置（实时轮询更新，初始为空则不渲染车辆标记）
-const vehiclePos = ref({ lng: '', lat: '', heading: 0 })
+// 车辆当前位置（实时轮询更新，null 表示无有效坐标，不渲染车辆标记）
+const vehiclePos = ref(null)
 
 // ─────────────────────────────────────────────
 // 高德地图对象（非响应式，直接持有引用）
@@ -202,10 +202,10 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
   const dLat = (lat2 - lat1) * Math.PI / 180
   const dLon = (lon2 - lon1) * Math.PI / 180
   const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1 * Math.PI / 180) *
-    Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon / 2) ** 2
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1 * Math.PI / 180) *
+      Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) ** 2
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
@@ -235,7 +235,6 @@ onMounted(async () => {
 
     renderMarkers()  // 渲染节点大头针
     renderRoute()    // 渲染已完成/规划路线折线
-    renderVehicle()  // 若 vehiclePos 有初始值则渲染车辆标记
 
     setTimeout(fitBounds, 500) // 等地图瓦片加载稳定后再自适应视野
 
@@ -459,34 +458,6 @@ function clearPolylines() {
 // ─────────────────────────────────────────────
 
 /**
- * 初始化车辆 Marker。
- * 仅当 vehiclePos 已有有效坐标时执行；否则由实时轮询在首次收到坐标后调用
- * updateVehicleMarker 完成创建。
- */
-function renderVehicle() {
-  if (!vehiclePos.value.lng || !vehiclePos.value.lat) return
-
-  if (vehicleMarker) vehicleMarker.setMap(null)
-
-  vehicleMarker = new AMap.Marker({
-    position: [vehiclePos.value.lng, vehiclePos.value.lat],
-    content:  buildVehicleContent(vehiclePos.value.heading, 0),
-    offset:   new AMap.Pixel(-22, -112),
-    zIndex:   200
-  })
-
-  vehicleMarker.on('click', () => {
-    openVehicleInfoWindow(
-      vehiclePos.value.lng,
-      vehiclePos.value.lat,
-      { speed: null, heading: vehiclePos.value.heading }
-    )
-  })
-
-  map.add(vehicleMarker)
-}
-
-/**
  * 打开车辆信息弹窗（关闭当前已打开的弹窗后再新建）。
  * @param {number} lng/lat - 弹窗定位坐标
  * @param {object} info    - { speed, heading } 显示在弹窗中的运行信息
@@ -498,7 +469,6 @@ function openVehicleInfoWindow(lng, lat, { speed, heading }) {
       <strong>实时追踪车辆</strong><br/>
       <span style="color:#666;">设备：${realtimeDeviceId.value}</span><br/>
       <span style="color:#f39c12;">当前时速：${speed ?? '--'}km/h</span><br/>
-      <span style="color:#f39c12;">方向：${heading ?? '--'}°</span>
     </div>
   `
   vehicleInfoWindow = new AMap.InfoWindow({ content, offset: new AMap.Pixel(0, -45) })
@@ -548,7 +518,7 @@ function showInfoWindow(pos, idx) {
  * 前提：positions >= 2 个节点，且 vehicleMarker 已存在。
  */
 function startPlayback() {
-  if (isPlaying.value || positions.value.length < 2) return
+  if (isPlaying.value || positions.value.length < 2 || !vehicleMarker) return
   isPlaying.value       = true
   playbackVisited.value = new Set()
 
@@ -614,7 +584,7 @@ function resetPlayback() {
   playbackVisited.value = new Set()
   currentIndex.value    = -1
 
-  if (vehicleMarker && vehiclePos.value.lng) {
+  if (vehicleMarker && vehiclePos.value) {
     vehicleMarker.setPosition([vehiclePos.value.lng, vehiclePos.value.lat])
   }
 
@@ -635,12 +605,12 @@ function fitBounds() {
   const lngs   = positions.value.map(p => p.lng)
   const lats   = positions.value.map(p => p.lat)
   map.setBounds(
-    new AMap.Bounds(
-      [Math.min(...lngs), Math.min(...lats)],
-      [Math.max(...lngs), Math.max(...lats)]
-    ),
-    false,
-    [60, 60, 60, 60]
+      new AMap.Bounds(
+          [Math.min(...lngs), Math.min(...lats)],
+          [Math.max(...lngs), Math.max(...lats)]
+      ),
+      false,
+      [60, 60, 60, 60]
   )
 }
 
@@ -657,6 +627,14 @@ function focusNode(idx) {
 // 实时坐标轮询
 // ─────────────────────────────────────────────
 
+/** 移除车辆 Marker（无位置数据时调用） */
+function removeVehicleMarker() {
+  if (vehicleMarker) {
+    vehicleMarker.setMap(null)
+    vehicleMarker = null
+  }
+}
+
 /**
  * 启动实时坐标轮询（间隔 3 秒）。
  * 成功收到坐标后调用 updateVehicleMarker 更新地图上的车辆位置；
@@ -664,20 +642,25 @@ function focusNode(idx) {
  */
 function startRealtimePolling() {
   if (realtimeTimer) return
-  console.log('[Realtime] 开始轮询坐标...')
 
   function poll() {
     fetch(`${realtimeServer.value}/api/location?deviceId=${realtimeDeviceId.value}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.code === 0 && data.data) {
-          const { lng, lat, speed, heading } = data.data
-          vehiclePos.value = { lng, lat, heading: heading || 0 }
-          updateVehicleMarker({ lng, lat, speed, heading: heading || 0 })
-        }
-      })
-      .catch(() => { /* 服务器未启动时静默忽略 */ })
-      .finally(() => { realtimeTimer = setTimeout(poll, 3000) })
+        .then(res => res.json())
+        .then(data => {
+          if (data.code === 0 && data.data) {
+            const { lng, lat, speed, heading = 0 } = data.data
+            vehiclePos.value = { lng, lat, heading }
+            updateVehicleMarker({ lng, lat, speed, heading })
+          } else {
+            vehiclePos.value = null
+            removeVehicleMarker()
+          }
+        })
+        .catch(() => {
+          vehiclePos.value = null
+          removeVehicleMarker()
+        })
+        .finally(() => { realtimeTimer = setTimeout(poll, 3000) })
   }
 
   poll()
@@ -687,12 +670,13 @@ function startRealtimePolling() {
 function stopRealtimePolling() {
   clearTimeout(realtimeTimer)
   realtimeTimer = null
-  console.log('[Realtime] 已停止轮询')
 }
 
 /**
- * 根据最新坐标更新车辆 Marker。
- * - 首次调用（vehicleMarker 为 null）：创建 Marker 并绑定点击事件，将地图中心移到车辆位置。
+ * 更新或创建车辆 Marker。
+ * 轮询有新位置数据时调用，无数据时外部调用 removeVehicleMarker 移除。
+ *
+ * - 首次调用：创建 Marker，地图中心跟随。
  * - 后续调用：平滑移动 Marker（moveTo 动画 2 秒），更新图标内容；
  *   若车辆偏离当前地图中心超过 5km，则自动跟随平移。
  */
@@ -709,7 +693,6 @@ function updateVehicleMarker({ lng, lat, heading, speed }) {
     vehicleMarker.on('click', () => openVehicleInfoWindow(lng, lat, { speed, heading }))
     map.add(vehicleMarker)
     map.setCenter([lng, lat])
-    console.log('[Realtime] 车辆标记已创建 at:', lng, lat)
     return
   }
 
