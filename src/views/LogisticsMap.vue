@@ -675,10 +675,14 @@ function stopRealtimePolling() {
 /**
  * 更新或创建车辆 Marker。
  * 轮询有新位置数据时调用，无数据时外部调用 removeVehicleMarker 移除。
- *
  * - 首次调用：创建 Marker，地图中心跟随。
  * - 后续调用：平滑移动 Marker（moveTo 动画 2 秒），更新图标内容；
  *   若车辆偏离当前地图中心超过 5km，则自动跟随平移。
+ *
+ * lng	经度（longitude）
+ * lat	纬度（latitude）
+ * heading	车头朝向角，0=正北，顺时针旋转
+ * speed	当前时速（km/h），可为 null
  */
 function updateVehicleMarker({ lng, lat, heading, speed }) {
   if (!map) return
