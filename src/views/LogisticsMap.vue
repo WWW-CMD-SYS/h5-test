@@ -220,18 +220,32 @@ onMounted(async () => {
     AMap = await AMapLoader.load({
       key: '4a010dae89d18d6f94920fa8705bd913', // ⚠️ 替换为你的高德地图 Key
       version: '2.0',
-      plugins: ['AMap.Scale', 'AMap.ToolBar', 'AMap.MoveAnimation']
+      plugins: ['AMap.Scale', 'AMap.ToolBar', 'AMap.MoveAnimation', 'AMap.ControlBar']
     })
 
+    // 初始化高德地图实例。
     map = new AMap.Map(mapContainer.value, {
-      zoom: 5,
-      center: [116.397428, 39.90923],
-      mapStyle: 'amap://styles/light',
-      layers: [new AMap.TileLayer()]
+      rotateEnable: true,   // 允许用户旋转地图
+      pitchEnable: true,    // 允许用户倾斜视角（配合 3D 模式可看到建筑立体效果）
+      zoom: 5,              // 初始缩放级别（1-20，值越大越精细；5 可覆盖省级范围）
+      pitch: 50,            // 初始俯仰角 0-83°，50° 呈现明显的倾斜鸟瞰感
+      rotation: -15,        // 初始旋转角，负值表示逆时针微转，增强立体透视
+      viewMode: '3D',       // 3D 模式：建筑物有立体高度，标注以 billboard 方式始终面向镜头
+      zooms: [2, 20],       // 限制缩放范围 [最小级别, 最大级别]，防止过度缩放到无效层级
+      center: [116.397428, 39.90923]  // 初始中心点 [经度, 纬度]，默认定位到北京
     })
 
     map.addControl(new AMap.Scale())
-    map.addControl(new AMap.ToolBar())
+
+    // 3D 视角控件 — 右上角（旋转/倾斜环）
+    map.addControl(new AMap.ControlBar({
+      position: { right: '10px', top: '10px' }
+    }))
+
+    // 工具条 — 右下角，避免与 ControlBar 重叠
+    map.addControl(new AMap.ToolBar({
+      position: { right: '40px', top: '110px' }
+    }))
 
     renderMarkers()  // 渲染节点大头针
     renderRoute()    // 渲染已完成/规划路线折线
@@ -460,9 +474,9 @@ function clearPolylines() {
 /**
  * 打开车辆信息弹窗（关闭当前已打开的弹窗后再新建）。
  * @param {number} lng/lat - 弹窗定位坐标
- * @param {object} info    - { speed, heading } 显示在弹窗中的运行信息
+ * @param {object} info    - { speed } 显示在弹窗中的运行信息
  */
-function openVehicleInfoWindow(lng, lat, { speed, heading }) {
+function openVehicleInfoWindow(lng, lat, { speed }) {
   if (vehicleInfoWindow) vehicleInfoWindow.setMap(null)
   const content = `
     <div style="padding:8px 12px;min-width:160px;">
@@ -589,7 +603,6 @@ function resetPlayback() {
   }
 
   renderRoute()
-  completedPercent.value = 0
 }
 
 // ─────────────────────────────────────────────
@@ -612,6 +625,9 @@ function fitBounds() {
       false,
       [60, 60, 60, 60]
   )
+  // setBounds 会重置 pitch/rotation，需要恢复 3D 视角
+  map.setPitch(50)
+  map.setRotation(-15)
 }
 
 /**
@@ -620,7 +636,10 @@ function fitBounds() {
  */
 function focusNode(idx) {
   const pos = positions.value[idx]
-  map.setZoomAndCenter(15, [pos.lng, pos.lat])
+  map.setZoomAndCenter(17, [pos.lng, pos.lat])
+  // 保持 3D 倾斜视角，近距离查看建筑立体效果
+  map.setPitch(60)
+  map.setRotation(0)
 }
 
 // ─────────────────────────────────────────────
@@ -1052,7 +1071,6 @@ function buildVehicleContent(heading, speed) {
 .node-dot.warehouse  { background: #e74c3c; }
 .node-dot.checkpoint { background: #3498db; }
 .node-dot.delivery   { background: #27ae60; }
-.node-dot.vehicle    { background: #f39c12; }
 
 .node-info { flex: 1; min-width: 0; }
 .node-name {
