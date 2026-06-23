@@ -708,10 +708,10 @@ function updateVehicleMarker({ lng, lat, heading, speed }) {
 
   if (!vehicleMarker) {
     vehicleMarker = new AMap.Marker({
-      position: [lng, lat],
-      content:  buildVehicleContent(heading, speed),
-      offset:   new AMap.Pixel(-22, -112),
-      zIndex:   200
+      position: [lng, lat],                         // 标注点坐标 [经度, 纬度]
+      content:  buildVehicleContent(heading, speed),// 自定义 HTML 内容（车辆 SVG 图标 + 速度标签）
+      offset:   new AMap.Pixel(-22, -112),          // 像素偏移，使图标底部尖端对准坐标点
+      zIndex:   200                                 // 图层层级，越高越在上层（大于节点 marker 的 100+）
     })
     vehicleMarker.on('click', () => openVehicleInfoWindow(lng, lat, { speed, heading }))
     map.add(vehicleMarker)
