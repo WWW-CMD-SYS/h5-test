@@ -116,13 +116,13 @@ const currentIndex  = ref(-1)     // 当前回放到的节点索引（-1 表示�
 
 // ─────────────────────────────────────────────
 // 实时追踪配置
-// 数据流：小程序 wx.getLocation(gcj02) → POST /api/location
-//         → 中转服务（腾讯云）→ GET /api/location → 高德地图渲染
+// 数据流：小程序 wx.onLocationChange → POST /api/location
+//         → 中转服务（腾讯云）→ SSE 推送 → 高德地图渲染
 // ─────────────────────────────────────────────
 
 const realtimeServer   = ref('http://wxjsun.com:3001') // 坐标中转服务地址（域名指向腾讯云服务器）
 const realtimeDeviceId = ref('truck-001')                  // 设备 ID，对应小程序上报的 deviceId
-let   realtimeTimer    = null                              // 轮询定时器句柄
+let   eventSource      = null                              // SSE 连接实例（替代原来的 HTTP 轮询）
 
 // ─────────────────────────────────────────────
 // 物流节点数据
@@ -252,7 +252,7 @@ onMounted(async () => {
 
     setTimeout(fitBounds, 500) // 等地图瓦片加载稳定后再自适应视野
 
-    startRealtimePolling() // 启动实时坐标轮询（每 3 秒）
+    startSSEConnection() // 建立 SSE 长连接，接收实时坐标推送
 
     loading.value = false
   } catch (err) {
@@ -264,7 +264,7 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   // 组件卸载时清理所有异步资源，防止内存泄漏
   stopPlayback()
-  stopRealtimePolling()
+  disconnectSSE()
   if (map) {
     map.destroy()
     map = null
@@ -643,8 +643,61 @@ function focusNode(idx) {
 }
 
 // ─────────────────────────────────────────────
-// 实时坐标轮询
+// SSE 实时推送（替代 HTTP 轮询）
 // ─────────────────────────────────────────────
+
+/**
+ * 建立 SSE 长连接，接收服务端实时推送的车辆坐标。
+ *
+ * 数据流：
+ *   小程序 POST /api/location → 服务端存储 → SSE 推送 → H5 页面直接更新地图
+ *
+ * SSE 优势：
+ *   - 浏览器原生支持（EventSource），无需第三方库
+ *   - 自动重连：连接断开后 EventSource 会自动尝试重连
+ *   - 延迟极低：坐标上报后毫秒级推送到 H5，不再有 3 秒轮询间隔
+ *   - 节省资源：无请求时零开销，不需要空轮询
+ */
+function startSSEConnection() {
+  if (eventSource) return
+
+  const url = `${realtimeServer.value}/api/location/stream?deviceId=${realtimeDeviceId.value}`
+  console.log('[SSE] 正在连接:', url)
+
+  eventSource = new EventSource(url)
+
+  eventSource.onopen = () => {
+    console.log('[SSE] 连接已建立')
+  }
+
+  eventSource.onmessage = (e) => {
+    try {
+      const msg = JSON.parse(e.data)
+      if (msg.type === 'location' && msg.data) {
+        const { lng, lat, speed, heading = 0 } = msg.data
+        vehiclePos.value = { lng, lat, heading }
+        updateVehicleMarker({ lng, lat, speed, heading })
+      }
+    } catch (err) {
+      console.error('[SSE] 消息解析失败:', err)
+    }
+  }
+
+  eventSource.onerror = () => {
+    console.warn('[SSE] 连接异常，EventSource 将自动重连...')
+    // EventSource 内置自动重连机制，无需手动处理
+  }
+}
+
+/** 断开 SSE 连接，组件卸载时调用 */
+function disconnectSSE() {
+  if (eventSource) {
+    eventSource.close()
+    eventSource = null
+    console.log('[SSE] 连接已关闭')
+  }
+  removeVehicleMarker()
+}
 
 /** 移除车辆 Marker（无位置数据时调用） */
 function removeVehicleMarker() {
@@ -655,45 +708,8 @@ function removeVehicleMarker() {
 }
 
 /**
- * 启动实时坐标轮询（间隔 3 秒）。
- * 成功收到坐标后调用 updateVehicleMarker 更新地图上的车辆位置；
- * 请求失败时静默忽略（避免服务未启动时刷屏报错）。
- */
-function startRealtimePolling() {
-  if (realtimeTimer) return
-
-  function poll() {
-    fetch(`${realtimeServer.value}/api/location?deviceId=${realtimeDeviceId.value}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.code === 0 && data.data) {
-            const { lng, lat, speed, heading = 0 } = data.data
-            vehiclePos.value = { lng, lat, heading }
-            updateVehicleMarker({ lng, lat, speed, heading })
-          } else {
-            vehiclePos.value = null
-            removeVehicleMarker()
-          }
-        })
-        .catch(() => {
-          vehiclePos.value = null
-          removeVehicleMarker()
-        })
-        .finally(() => { realtimeTimer = setTimeout(poll, 3000) })
-  }
-
-  poll()
-}
-
-/** 停止实时坐标轮询，清除定时器 */
-function stopRealtimePolling() {
-  clearTimeout(realtimeTimer)
-  realtimeTimer = null
-}
-
-/**
  * 更新或创建车辆 Marker。
- * 轮询有新位置数据时调用，无数据时外部调用 removeVehicleMarker 移除。
+ * SSE 推送新位置数据时调用，无数据时外部调用 removeVehicleMarker 移除。
  * - 首次调用：创建 Marker，地图中心跟随。
  * - 后续调用：平滑移动 Marker（moveTo 动画 2 秒），更新图标内容；
  *   若车辆偏离当前地图中心超过 5km，则自动跟随平移。
