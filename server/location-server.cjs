@@ -65,6 +65,7 @@ function cleanExpired() {
     }
   }
 }
+/** 每分钟清理超过 MAX_AGE 未更新的过期坐标 */
 setInterval(cleanExpired, 60 * 1000)
 
 // ====================== 路由处理 ======================
@@ -102,7 +103,7 @@ const server = http.createServer(async (req, res) => {
         deviceId,
         updateTime: Date.now()
       }
-      // 以 deviceId 为 key 存入内存 Map，后续 GET 请求可通过 deviceId 查询最新坐标
+      // 以 deviceId 为 key 存入内存，供 GET 查询和 SSE 实时推送
       locationStore.set(deviceId, record)
 
       console.log(`[上报] device=${deviceId} lng=${lng} lat=${lat} speed=${speed} heading=${heading}`)

@@ -147,7 +147,7 @@ const positions = ref([
   },
 ])
 
-// 车辆当前位置（实时轮询更新，null 表示无有效坐标，不渲染车辆标记）
+// 车辆当前位置（SSE 实时推送更新，null 表示无有效坐标，不渲染车辆标记）
 const vehiclePos = ref(null)
 
 // ─────────────────────────────────────────────
@@ -192,10 +192,12 @@ function statusText(status) {
 }
 
 /**
- * Haversine 大圆距离公式
- * @param {number} lat1/lon1 - 起点纬经度（十进制度）
- * @param {number} lat2/lon2 - 终点纬经度（十进制度）
- * @returns {number} 距离，单位 km
+ * Haversine 大圆距离公式，计算两点间的地表距离。
+ * @param {number} lat1 起点纬度（十进制度）
+ * @param {number} lon1 起点经度（十进制度）
+ * @param {number} lat2 终点纬度（十进制度）
+ * @param {number} lon2 终点经度（十进制度）
+ * @returns {number} 两点间距离，单位 km
  */
 function haversineDistance(lat1, lon1, lat2, lon2) {
   const R    = 6371
@@ -218,7 +220,7 @@ onMounted(async () => {
     parseRouteQuery()  // 优先从 URL query 覆盖默认节点数据
 
     AMap = await AMapLoader.load({
-      key: '4a010dae89d18d6f94920fa8705bd913', // ⚠️ 替换为你的高德地图 Key
+      key: '4a010dae89d18d6f94920fa8705bd913',
       version: '2.0',
       plugins: ['AMap.Scale', 'AMap.ToolBar', 'AMap.MoveAnimation', 'AMap.ControlBar']
     })
@@ -349,8 +351,7 @@ function createMarkerContent(pos, idx) {
   const COLOR_MAP = {
     warehouse:  { fill: '#E74C3C', stroke: '#C0392B', label: '仓库' },
     checkpoint: { fill: '#3498DB', stroke: '#2471A3', label: '中转' },
-    delivery:   { fill: '#27AE60', stroke: '#1E8449', label: '配送' },
-    vehicle:    { fill: '#F39C12', stroke: '#D68910', label: '车辆' }
+    delivery:   { fill: '#27AE60', stroke: '#1E8449', label: '配送' }
   }
   const c = COLOR_MAP[pos.type] || COLOR_MAP.checkpoint
 
@@ -472,9 +473,10 @@ function clearPolylines() {
 // ─────────────────────────────────────────────
 
 /**
- * 打开车辆信息弹窗（关闭当前已打开的弹窗后再新建）。
- * @param {number} lng/lat - 弹窗定位坐标
- * @param {object} info    - { speed } 显示在弹窗中的运行信息
+ * 打开车辆信息弹窗（先关闭旧弹窗，再创建新弹窗）。
+ * @param {number} lng  弹窗定位经度
+ * @param {number} lat  弹窗定位纬度
+ * @param {{ speed: number|null }} info 行驶信息
  */
 function openVehicleInfoWindow(lng, lat, { speed }) {
   if (vehicleInfoWindow) vehicleInfoWindow.setMap(null)
@@ -631,7 +633,7 @@ function fitBounds() {
 }
 
 /**
- * 聚焦到指定节点：将地图中心移动到该节点坐标，并放大到 zoom=15。
+ * 聚焦到指定节点：将地图中心移动到该节点坐标，并放大到 zoom=17。
  * 由侧边栏节点列表点击触发。
  */
 function focusNode(idx) {
@@ -708,16 +710,16 @@ function removeVehicleMarker() {
 }
 
 /**
- * 更新或创建车辆 Marker。
- * SSE 推送新位置数据时调用，无数据时外部调用 removeVehicleMarker 移除。
- * - 首次调用：创建 Marker，地图中心跟随。
- * - 后续调用：平滑移动 Marker（moveTo 动画 2 秒），更新图标内容；
+ * 更新或创建车辆 Marker（SSE 推送新坐标时由 startSSEConnection 回调驱动）。
+ *
+ * - 首次调用：创建 Marker 并居中地图。
+ * - 后续调用：平滑移动 Marker（moveTo 动画 2 秒），更新图标朝向和速度；
  *   若车辆偏离当前地图中心超过 5km，则自动跟随平移。
  *
- * lng	经度（longitude）
- * lat	纬度（latitude）
- * heading	车头朝向角，0=正北，顺时针旋转
- * speed	当前时速（km/h），可为 null
+ * @param {number} lng  经度
+ * @param {number} lat  纬度
+ * @param {number} heading 车头朝向角，0=正北，顺时针旋转
+ * @param {number|null} speed 当前时速（km/h），可为 null
  */
 function updateVehicleMarker({ lng, lat, heading, speed }) {
   if (!map) return
