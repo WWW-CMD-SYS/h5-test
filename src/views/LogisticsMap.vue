@@ -662,16 +662,19 @@ function focusNode(idx) {
  */
 function startSSEConnection() {
   if (eventSource) return
-
   const url = `${realtimeServer.value}/api/location/stream?deviceId=${realtimeDeviceId.value}`
   console.log('[SSE] 正在连接:', url)
-
   eventSource = new EventSource(url)
-
   eventSource.onopen = () => {
     console.log('[SSE] 连接已建立')
   }
-
+  /**
+   * 处理服务端推送的实时位置数据（SSE onmessage）
+   * 1. 解析服务端推送的 JSON 消息
+   * 2. 过滤 location 类型的消息，提取 lng/lat/speed/heading 字段
+   * 3. 更新本地车辆位置状态（vehiclePos），用于地图定位
+   * 4. 更新地图上的车辆标记（updateVehicleMarker），控制标记位置和朝向
+   */
   eventSource.onmessage = (e) => {
     try {
       const msg = JSON.parse(e.data)
@@ -684,7 +687,6 @@ function startSSEConnection() {
       console.error('[SSE] 消息解析失败:', err)
     }
   }
-
   eventSource.onerror = () => {
     console.warn('[SSE] 连接异常，EventSource 将自动重连...')
     // EventSource 内置自动重连机制，无需手动处理
