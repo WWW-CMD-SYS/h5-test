@@ -71,6 +71,12 @@
       </div>
     </div>
 
+    <!-- 测距工具按钮 -->
+    <button class="ranging-btn" :class="{ active: rangingActive }" @click="toggleRanging">
+      <span class="ranging-icon">📏</span>
+      {{ rangingActive ? '测距中...' : '默认样式测距' }}
+    </button>
+
     <!-- 地图加载遮罩 -->
     <div class="loading-overlay" v-if="loading">
       <div class="loading-spinner"></div>
@@ -367,8 +373,9 @@ function buildVehicleContent(heading, speed) {
 // 响应式状态
 // ════════════════════════════════════════════════════════════════
 
-const loading       = ref(true)
+const loading        = ref(true)
 const panelCollapsed = ref(false)
+const rangingActive   = ref(false)
 
 // ── 地图核心 ──
 
@@ -409,6 +416,9 @@ let eventSource      = null
 let vehicleMarker    = null
 let realtimeInfoWindow = null
 
+// 测距工具
+let rangingTool = null
+
 // ════════════════════════════════════════════════════════════════
 // 地图核心 — 初始化、控件、销毁
 // ════════════════════════════════════════════════════════════════
@@ -430,7 +440,7 @@ function initMap() {
   return AMapLoader.load({
     key: '4a010dae89d18d6f94920fa8705bd913',
     version: '2.0',
-    plugins: ['AMap.Scale', 'AMap.ToolBar', 'AMap.MoveAnimation', 'AMap.ControlBar']
+    plugins: ['AMap.Scale', 'AMap.ToolBar', 'AMap.MoveAnimation', 'AMap.ControlBar', 'AMap.RangingTool']
   })
       .then((amap) => {
         AMap = amap
@@ -451,6 +461,9 @@ function initMap() {
         map.addControl(new AMap.Scale())
         map.addControl(new AMap.ControlBar({ position: { right: '10px', top: '10px' } }))
         map.addControl(new AMap.ToolBar({ position: { right: '40px', top: '110px' } }))
+
+        // 初始化测距工具（默认关闭）
+        rangingTool = new AMap.RangingTool(map, { lineWidth: 3, lineColor: '#0066ff', dashArray: [8, 4] })
 
         loading.value = false
         return { map, AMap }
@@ -714,15 +727,37 @@ function stopSSEConnection() {
 /** 节点列表项点击事件处理：将地图视角聚焦到对应索引的节点。 */
 function handleFocusNode(idx) { focusNode(positions.value[idx]) }
 
+/** 测距工具开关：开启时在地图上连续点击测量多点间距离，双击右键结束；再次点击关闭并清除。 */
+function toggleRanging() {
+  if (!rangingTool) return
+  if (rangingActive.value) {
+    rangingTool.turnOff()
+    rangingTool.clear()
+    rangingActive.value = false
+  } else {
+    rangingTool.turnOn()
+    rangingActive.value = false
+    // 监听测距结束事件，自动切换按钮状态
+    rangingTool.on('end', () => {
+      rangingActive.value = false
+    })
+    rangingActive.value = true
+  }
+}
+
 // ════════════════════════════════════════════════════════════════
 // 清理
 // ════════════════════════════════════════════════════════════════
 
-/** 组件卸载前的统一清理：清除标记/折线/信息窗口，并关闭 SSE 连接。 */
+/** 组件卸载前的统一清理：清除标记/折线/信息窗口，关闭测距工具与 SSE 连接。 */
 function cleanupAll() {
   clearMarkers()
   clearPolylines()
   closeInfoWindow()
+  if (rangingTool) {
+    rangingTool.turnOff()
+    rangingTool.clear()
+  }
   stopSSEConnection()
 }
 
@@ -958,6 +993,39 @@ onUnmounted(() => {
   margin-top: 12px;
   color: #666;
   font-size: 14px;
+}
+
+/* ── 测距工具按钮 ── */
+.ranging-btn {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 100;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(26, 26, 46, 0.88);
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s;
+}
+.ranging-btn:hover {
+  background: rgba(26, 26, 46, 0.95);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+.ranging-btn.active {
+  background: #0066ff;
+  box-shadow: 0 2px 12px rgba(0, 102, 255, 0.45);
+}
+.ranging-icon {
+  font-size: 16px;
 }
 
 @keyframes spin {
