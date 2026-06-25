@@ -417,7 +417,7 @@ let vehicleMarker    = null
 let realtimeInfoWindow = null
 
 // 测距工具
-let rangingTool = null
+let rangingTool = null  // 测距工具实例
 
 // ════════════════════════════════════════════════════════════════
 // 地图核心 — 初始化、控件、销毁
@@ -727,20 +727,15 @@ function stopSSEConnection() {
 /** 节点列表项点击事件处理：将地图视角聚焦到对应索引的节点。 */
 function handleFocusNode(idx) { focusNode(positions.value[idx]) }
 
-/** 测距工具开关：开启时在地图上连续点击测量多点间距离，双击右键结束；再次点击关闭并清除。 */
+/** 测距工具开关：点击开启测距模式（按钮变蓝），再次点击关闭并清除所有测量标记。 */
 function toggleRanging() {
   if (!rangingTool) return
   if (rangingActive.value) {
-    rangingTool.turnOff()
-    rangingTool.clear()
+    /*关闭测距工具，删除测距过程产生的覆盖物*/
+    rangingTool.turnOff(true)
     rangingActive.value = false
   } else {
     rangingTool.turnOn()
-    rangingActive.value = false
-    // 监听测距结束事件，自动切换按钮状态
-    rangingTool.on('end', () => {
-      rangingActive.value = false
-    })
     rangingActive.value = true
   }
 }
@@ -755,8 +750,7 @@ function cleanupAll() {
   clearPolylines()
   closeInfoWindow()
   if (rangingTool) {
-    rangingTool.turnOff()
-    rangingTool.clear()
+    rangingTool.close(true)
   }
   stopSSEConnection()
 }
