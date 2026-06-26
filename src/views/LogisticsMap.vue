@@ -727,16 +727,17 @@ function stopSSEConnection() {
 /** 节点列表项点击事件处理：将地图视角聚焦到对应索引的节点。 */
 function handleFocusNode(idx) { focusNode(positions.value[idx]) }
 
-/** 测距工具开关：点击开启测距模式（按钮变蓝），再次点击关闭并清除所有测量标记。 */
+/**
+ * 测距工具开关——切换测距模式的启停状态。
+ */
 function toggleRanging() {
-  if (!rangingTool) return
+  if (!rangingTool) return    //守卫逻辑 — 地图未就绪时静默退出
   if (rangingActive.value) {
-    /*关闭测距工具，删除测距过程产生的覆盖物*/
-    rangingTool.turnOff(true)
+    rangingTool.turnOff(true) //调用 turnOff(true) 关闭测距并清除所有测量标记
     rangingActive.value = false
   } else {
-    rangingTool.turnOn()
-    rangingActive.value = true
+    rangingTool.turnOn() //调用 turnOn() 进入测距模式，用户可在地图上点击绘制测距线段
+    rangingActive.value = true //同时将rangingActive设为true，按钮切换为激活态样式
   }
 }
 
