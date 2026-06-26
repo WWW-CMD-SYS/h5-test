@@ -74,7 +74,7 @@
     <!-- 测距工具按钮 -->
     <button class="ranging-btn" :class="{ active: rangingActive }" @click="toggleRanging">
       <span class="ranging-icon">📏</span>
-      {{ rangingActive ? '测距中...' : '默认样式测距' }}
+      {{ rangingActive ? '测距中...' : '测距' }}
     </button>
 
     <!-- 地图加载遮罩 -->
@@ -998,8 +998,8 @@ onUnmounted(() => {
   padding: 8px 16px;
   border: none;
   border-radius: 8px;
-  background: rgba(26, 26, 46, 0.88);
-  color: white;
+  background: rgb(255 255 255);
+  color: #000;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -1011,8 +1011,7 @@ onUnmounted(() => {
   transition: all 0.2s;
 }
 .ranging-btn:hover {
-  background: rgba(26, 26, 46, 0.95);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  background: #ecf5f5cc;
 }
 .ranging-btn.active {
   background: #0066ff;
