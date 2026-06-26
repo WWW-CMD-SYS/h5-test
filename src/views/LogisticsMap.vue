@@ -1014,8 +1014,8 @@ onUnmounted(() => {
   background: #ecf5f5cc;
 }
 .ranging-btn.active {
-  background: #0066ff;
-  box-shadow: 0 2px 12px rgba(0, 102, 255, 0.45);
+  color: #ffffff;
+  background: rgb(0 102 255 / 58%);
 }
 .ranging-icon {
   font-size: 16px;
