@@ -89,37 +89,16 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import AMapLoader from '@amap/amap-jsapi-loader'
 
-// ════════════════════════════════════════════════════════════════
-// 全局变量
-// ════════════════════════════════════════════════════════════════
-
 let AMap = null
 let map   = null
 
-// ════════════════════════════════════════════════════════════════
-// 纯工具函数
-// ════════════════════════════════════════════════════════════════
-
-/**
- * 将节点状态码转换为中文展示文案，用于节点列表的状态标签。
- * @param {string} status - 节点状态：done | active | pending
- * @returns {string} 对应的中文文案，未知状态返回"未知"
- */
+/** 节点状态文案。 */
 function statusText(status) {
   const MAP = { done: '已完成', active: '进行中', pending: '待处理' }
   return MAP[status] || '未知'
 }
 
-/**
- * 使用 Haversine 公式计算地球上两点间的球面距离（单位：公里）。
- * 用于估算物流节点之间的"规划里程"，是直线距离的近似值，
- * 实际道路里程会比该值更长。
- * @param {number} lat1 - 起点纬度
- * @param {number} lon1 - 起点经度
- * @param {number} lat2 - 终点纬度
- * @param {number} lon2 - 终点经度
- * @returns {number} 两点间的球面距离（公里）
- */
+/** 计算两点直线距离，单位：公里。 */
 function haversineDistance(lat1, lon1, lat2, lon2) {
   const R    = 6371 // 地球平均半径（公里）
   const dLat = (lat2 - lat1) * Math.PI / 180
@@ -132,16 +111,26 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
-/**
- * 从当前页面 URL 的 query 参数中解析物流节点数据，并写入传入的 ref。
- * 支持两种入参格式（优先级从高到低）：
- *   1. ?data=encodeURIComponent(JSON字符串)  —— 完整节点对象数组（含 title/type/status 等字段）
- *   2. ?points=lng1,lat1;lng2,lat2;...        —— 仅含坐标的简化格式，
- *      会自动推断首节点为 warehouse（仓库）、末节点为 delivery（配送点）、
- *      中间节点为 checkpoint（中转站），状态默认首节点为 done，其余为 pending。
- * 若两个参数都不存在，则不修改 positionsRef，保留组件内的默认节点数据。
- * @param {import('vue').Ref<Array>} positionsRef - 节点数据的响应式引用
- */
+/** 经纬度是否合法。 */
+function isValidCoordinate(lng, lat) {
+  return Number.isFinite(lng) && Number.isFinite(lat) &&
+      lng >= -180 && lng <= 180 &&
+      lat >= -90 && lat <= 90
+}
+
+/** 补齐并规范化节点坐标。 */
+function normalizePosition(pos, idx = 0) {
+  return {
+    ...pos,
+    lng: Number(pos.lng),
+    lat: Number(pos.lat),
+    title: pos.title || `节点 ${idx + 1}`,
+    type: pos.type || 'checkpoint',
+    status: pos.status || 'pending'
+  }
+}
+
+/** 从 URL 读取节点数据：优先 data，其次 points。 */
 function parseRouteQuery(positionsRef) {
   const params  = new URLSearchParams(window.location.search)
   const dataStr = params.get('data')
@@ -149,7 +138,12 @@ function parseRouteQuery(positionsRef) {
   if (dataStr) {
     try {
       const parsed = JSON.parse(decodeURIComponent(dataStr))
-      if (Array.isArray(parsed)) positionsRef.value = parsed
+      const validPositions = Array.isArray(parsed)
+          ? parsed
+              .map(normalizePosition)
+              .filter(pos => isValidCoordinate(pos.lng, pos.lat))
+          : []
+      if (validPositions.length) positionsRef.value = validPositions
     } catch {
       console.warn('[parseRouteQuery] data 参数解析失败，使用默认节点数据')
     }
@@ -158,9 +152,14 @@ function parseRouteQuery(positionsRef) {
 
   const pointsStr = params.get('points')
   if (pointsStr) {
-    const segs = pointsStr.split(';').filter(Boolean)
+    const segs = pointsStr
+        .split(';')
+        .map(pt => pt.split(',').map(Number))
+        .filter(([lng, lat]) => isValidCoordinate(lng, lat))
+    if (!segs.length) return
+
     positionsRef.value = segs.map((pt, idx) => {
-      const [lng, lat] = pt.split(',').map(Number)
+      const [lng, lat] = pt
       const isFirst = idx === 0
       const isLast  = idx === segs.length - 1
       return {
@@ -173,16 +172,7 @@ function parseRouteQuery(positionsRef) {
   }
 }
 
-// ════════════════════════════════════════════════════════════════
-// 标记图标 & 内容生成
-// ════════════════════════════════════════════════════════════════
-
-/**
- * 根据节点类型返回对应的内部小图标 SVG 片段（仓库/中转站/配送点）。
- * 该图标会被嵌入到 createMarkerContent 生成的标记图钉中心。
- * @param {string} type - 节点类型：warehouse | checkpoint | delivery
- * @returns {string} SVG path/shape 字符串
- */
+/** 生成节点图钉里的小图标。 */
 function getMarkerIcon(type) {
   const fill = '#333'
   switch (type) {
@@ -202,13 +192,7 @@ function getMarkerIcon(type) {
   }
 }
 
-/**
- * 生成地图上节点标记（Marker）所用的自定义 HTML 内容：
- * 一个根据节点类型着色的水滴形图钉 + 类型小图标 + 状态色点 + 文字标签。
- * @param {Object} pos - 节点数据对象（含 type、status 等字段）
- * @param {number} idx - 节点在 positions 数组中的索引，用于生成唯一的渐变 id 及标签序号
- * @returns {string} 可直接传给 AMap.Marker 的 content HTML 字符串
- */
+/** 生成地图节点标记内容。 */
 function createMarkerContent(pos, idx) {
   const COLOR_MAP = {
     warehouse:  { fill: '#E74C3C', stroke: '#C0392B', label: '仓库' },
@@ -244,17 +228,7 @@ function createMarkerContent(pos, idx) {
   `
 }
 
-// ════════════════════════════════════════════════════════════════
-// 车辆图标生成
-// ════════════════════════════════════════════════════════════════
-
-/**
- * 生成实时车辆标记（Marker）所用的自定义 HTML 内容：
- * 顶部速度气泡 + 一个会随 heading 角度旋转、带 3D 渐变效果的卡车 SVG 图标。
- * @param {number} heading - 车辆朝向角度（度），用于 CSS rotate 实现车头转向效果
- * @param {number} [speed] - 当前车速（km/h），不传则显示"配送中"
- * @returns {string} 可直接传给 AMap.Marker 的 content HTML 字符串
- */
+/** 生成实时车辆标记内容。 */
 function buildVehicleContent(heading, speed) {
   return `
     <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
@@ -305,7 +279,6 @@ function buildVehicleContent(heading, speed) {
 
           <ellipse cx="22" cy="91" rx="18" ry="4.5" fill="#000" opacity="0.13"/>
 
-          <!-- 车轮 6个 -->
           <rect x="4.5"  y="8"  width="5"   height="9"  rx="2.5" fill="#181818"/>
           <rect x="5.5"  y="9"  width="3"   height="7"  rx="1.5" fill="#3A3A3A"/>
           <rect x="34.5" y="8"  width="5"   height="9"  rx="2.5" fill="#181818"/>
@@ -369,17 +342,10 @@ function buildVehicleContent(heading, speed) {
   `
 }
 
-// ════════════════════════════════════════════════════════════════
-// 响应式状态
-// ════════════════════════════════════════════════════════════════
-
 const loading        = ref(true)
 const panelCollapsed = ref(false)
 const rangingActive   = ref(false)
 
-// ── 地图核心 ──
-
-// ── 路线图层 ──
 const positions = ref([
   { lng: 116.506191, lat: 39.784916, title: '北京大兴仓库', address: '大兴区亦庄经济开发区', type: 'warehouse', status: 'done' }
 ])
@@ -402,35 +368,19 @@ const routeDistance = computed(() => {
 const realtimeServer   = ref('http://wxjsun.com:3001')
 const realtimeDeviceId = ref('truck-001')
 
-// ════════════════════════════════════════════════════════════════
-// 非响应式模块局部变量
-// ════════════════════════════════════════════════════════════════
-
-// 路线图层
 let markers          = []
 let polylines        = []
-let vehicleInfoWindow = null
+let routeInfoWindow  = null
 
-// 实时追踪
 let eventSource      = null
 let vehicleMarker    = null
+let latestVehicleData = null
 let realtimeInfoWindow = null
-
-// 测距工具
-let rangingTool = null  // 测距工具实例
-
-// ════════════════════════════════════════════════════════════════
-// 地图核心 — 初始化、控件、销毁
-// ════════════════════════════════════════════════════════════════
+let rangingTool = null
 
 /**
- * 初始化高德地图：加载 JS SDK、创建 Map 实例并添加常用控件（比例尺/工具条/3D控制条）。
- * 加载完成后会关闭 loading 遮罩；加载失败也会关闭遮罩并把错误继续抛出，
- * 调用方（onMounted）需自行 catch。
- *
- * 注意：key 与 securityJsCode 目前为硬编码示例值，
- * 实际项目中应改为从环境变量 / 后端配置读取，避免泄露到前端源码中。
- * @returns {Promise<{map: AMap.Map, AMap: object}>}
+ * 初始化高德地图。
+ * 注意：key 与 securityJsCode 建议改为从环境变量或后端配置读取。
  */
 function initMap() {
   window._AMapSecurityConfig = {
@@ -444,38 +394,36 @@ function initMap() {
   })
       .then((amap) => {
         AMap = amap
-        /**
-         * 初始化高德地图实例，挂载到 id="container" 的 DOM 元素上
-         */
         map = new AMap.Map('container', {
-          rotateEnable: true,    // 允许鼠标右键/双指旋转地图
-          pitchEnable: true,     // 允许鼠标滚轮/双指倾斜视角
-          zoom: 5,               // 初始缩放级别，5 = 省/城市级视野
-          pitch: 50,             // 初始俯仰角度，数值越大越接近俯视
-          rotation: -15,         // 初始旋转角度，负值向左旋转
-          viewMode: '3D',        // 3D 视图模式，显示立体建筑模型
-          zooms: [2, 20],        // 缩放范围：[最小, 最大]，2=全国，20=街道级
-          center: [116.397428, 39.90923]  // 初始中心点：[经度, 纬度]（北京）
+          rotateEnable: true,
+          pitchEnable: true,
+          zoom: 5,
+          pitch: 50,
+          rotation: -15,
+          viewMode: '3D',
+          zooms: [2, 20],
+          center: [116.397428, 39.90923]
         })
 
         map.addControl(new AMap.Scale())
         map.addControl(new AMap.ControlBar({ position: { right: '10px', top: '10px' } }))
         map.addControl(new AMap.ToolBar({ position: { right: '40px', top: '110px' } }))
 
-        // 初始化测距工具（默认关闭）
+        // 创建测距工具：支持在地图上点击绘制测距线段，实时显示两点间的实际距离
+        // lineWidth: 线段宽度 3px | lineColor: 线段颜色蓝色 | dashArray: [8,4] 虚线段8px、间隔4px
         rangingTool = new AMap.RangingTool(map, { lineWidth: 3, lineColor: '#0066ff', dashArray: [8, 4] })
 
         loading.value = false
         return { map, AMap }
       })
       .catch((e) => {
-        console.log(e)
+        console.error('[Map] 初始化失败:', e)
         loading.value = false
         throw e
       })
 }
 
-/** 销毁地图实例，释放相关资源。组件卸载时调用。 */
+/** 销毁地图实例。 */
 function destroyMap() {
   if (map) {
     map.destroy()
@@ -483,11 +431,7 @@ function destroyMap() {
   }
 }
 
-/**
- * 根据所有节点的经纬度范围自动调整地图视野，使所有节点都进入可视区域内
- * （四周各预留 60px 边距），随后恢复默认的俯仰角与旋转角。
- * 节点数小于 2 时不处理（一个点没有"范围"可言）。
- */
+/** 让所有节点进入可视区域。 */
 function fitBounds() {
   if (!map || positions.value.length < 2) return
   const lngs = positions.value.map(p => p.lng)
@@ -501,30 +445,21 @@ function fitBounds() {
   map.setRotation(-15)
 }
 
-/**
- * 将地图视角聚焦到指定节点：放大到 17 级并居中，同时调整俯仰角以获得更好的 3D 观察效果。
- * @param {Object} pos - 节点数据对象，需包含 lng/lat
- */
+/** 聚焦到指定节点。 */
 function focusNode(pos) {
+  if (!map || !pos) return
   map.setZoomAndCenter(17, [pos.lng, pos.lat])
   map.setPitch(60)
   map.setRotation(0)
 }
 
-// ════════════════════════════════════════════════════════════════
-// 路线图层 — 标记、折线、信息窗口
-// ════════════════════════════════════════════════════════════════
-
-/** 清除地图上所有节点标记，并清空 markers 数组。 */
+/** 清除节点标记。 */
 function clearMarkers() {
   markers.forEach(m => m.setMap(null))
   markers = []
 }
 
-/**
- * 根据 positions 数据在地图上渲染全部节点标记。
- * 会先清除已有标记，避免重复渲染；每个标记点击后弹出对应信息窗口。
- */
+/** 渲染节点标记。 */
 function renderMarkers() {
   clearMarkers()
   positions.value.forEach((pos, idx) => {
@@ -540,19 +475,13 @@ function renderMarkers() {
   })
 }
 
-/** 清除地图上所有路线折线，并清空 polylines 数组。 */
+/** 清除路线折线。 */
 function clearPolylines() {
   polylines.forEach(p => p.setMap(null))
   polylines = []
 }
 
-/**
- * 根据节点状态渲染路线折线：
- *   - "已完成"段（绿色实线）：从起点到第一个 status 为 active 的节点（若没有 active 节点则视为全部已完成）。
- *   - "规划中"段（灰色虚线）：剩余未完成的路段。
- * 同时据此计算并更新 completedPercent（完成进度百分比），供右侧面板展示。
- * 节点数小于 2 时不绘制任何折线（无法构成路线）。
- */
+/** 按节点状态渲染完成路线和规划路线。 */
 function renderRoute() {
   clearPolylines()
   if (positions.value.length < 2) return
@@ -583,14 +512,9 @@ function renderRoute() {
   completedPercent.value = Math.round((doneEnd - 1) / (coords.length - 1) * 100)
 }
 
-/**
- * 在指定节点位置打开信息窗口，展示节点名称、状态徽标、地址、坐标及所处站序。
- * 打开前会关闭已存在的信息窗口，保证地图上同时只有一个信息窗口。
- * @param {Object} pos - 节点数据对象
- * @param {number} idx - 节点索引，用于计算"第几站"
- */
+/** 打开节点信息窗口。 */
 function showInfoWindow(pos, idx) {
-  if (vehicleInfoWindow) vehicleInfoWindow.setMap(null)
+  if (routeInfoWindow) routeInfoWindow.setMap(null)
 
   const total    = positions.value.length
   const progress = idx === 0 ? '出发' : idx === total - 1 ? '终点' : `第 ${idx} 站 / 共 ${total - 1} 站`
@@ -609,30 +533,20 @@ function showInfoWindow(pos, idx) {
       <div style="color:#3498db;margin-top:4px;">${progress}</div>
     </div>
   `
-  vehicleInfoWindow = new AMap.InfoWindow({ content, offset: new AMap.Pixel(0, -45) })
-  vehicleInfoWindow.open(map, [pos.lng, pos.lat])
+  routeInfoWindow = new AMap.InfoWindow({ content, offset: new AMap.Pixel(0, -45) })
+  routeInfoWindow.open(map, [pos.lng, pos.lat])
 }
 
-/** 关闭并销毁节点信息窗口实例。 */
+/** 关闭节点信息窗口。 */
 function closeInfoWindow() {
-  if (vehicleInfoWindow) {
-    vehicleInfoWindow.setMap(null)
-    vehicleInfoWindow = null
+  if (routeInfoWindow) {
+    routeInfoWindow.setMap(null)
+    routeInfoWindow = null
   }
 }
 
-// ════════════════════════════════════════════════════════════════
-// 实时追踪 — SSE & 车辆标记
-// ════════════════════════════════════════════════════════════════
-
-/**
- * 打开实时车辆的信息窗口，展示设备号与当前时速。
- * 打开前会先关闭已存在的同类窗口，保证地图上只有一个实时信息窗口。
- * @param {number} lng - 车辆当前经度
- * @param {number} lat - 车辆当前纬度
- * @param {{speed?: number, heading?: number}} info - 速度与朝向信息（用于展示文案）
- */
-function openVehicleInfoWindow(lng, lat, { speed, heading }) {
+/** 打开实时车辆信息窗口。 */
+function openVehicleInfoWindow(lng, lat, { speed }) {
   if (realtimeInfoWindow) realtimeInfoWindow.setMap(null)
   const content = `
     <div style="padding:8px 12px;min-width:160px;">
@@ -645,14 +559,18 @@ function openVehicleInfoWindow(lng, lat, { speed, heading }) {
   realtimeInfoWindow.open(map, [lng, lat])
 }
 
-/**
- * 更新（或首次创建）地图上的实时车辆标记位置与朝向。
- * 首次调用时创建标记并将地图居中到车辆位置；
- * 之后的调用使用 moveTo 实现平滑移动动画，并重新生成图标内容以体现新朝向/速度。
- * @param {{lng: number, lat: number, heading?: number, speed?: number}} data - 车辆最新位置数据
- */
+/** 关闭实时车辆信息窗口。 */
+function closeVehicleInfoWindow() {
+  if (realtimeInfoWindow) {
+    realtimeInfoWindow.setMap(null)
+    realtimeInfoWindow = null
+  }
+}
+
+/** 更新实时车辆位置和朝向。 */
 function updateVehicleMarker({ lng, lat, heading, speed }) {
-  if (!map) return
+  if (!map || !isValidCoordinate(lng, lat)) return
+  latestVehicleData = { lng, lat, speed }
 
   if (!vehicleMarker) {
     vehicleMarker = new AMap.Marker({
@@ -661,7 +579,10 @@ function updateVehicleMarker({ lng, lat, heading, speed }) {
       offset:   new AMap.Pixel(-22, -112),
       zIndex:   200
     })
-    vehicleMarker.on('click', () => openVehicleInfoWindow(lng, lat, { speed, heading }))
+    vehicleMarker.on('click', () => {
+      if (!latestVehicleData) return
+      openVehicleInfoWindow(latestVehicleData.lng, latestVehicleData.lat, latestVehicleData)
+    })
     map.add(vehicleMarker)
     map.setCenter([lng, lat])
     return
@@ -671,20 +592,16 @@ function updateVehicleMarker({ lng, lat, heading, speed }) {
   vehicleMarker.setContent(buildVehicleContent(heading, speed))
 }
 
-/** 从地图上移除实时车辆标记。 */
+/** 移除实时车辆标记。 */
 function removeVehicleMarker() {
   if (vehicleMarker) {
     vehicleMarker.setMap(null)
     vehicleMarker = null
   }
+  latestVehicleData = null
 }
 
-/**
- * 建立与后端的 SSE（Server-Sent Events）长连接，持续接收车辆实时位置推送。
- * 若连接已存在则直接返回，避免重复建连。
- * 收到 type 为 'location' 的消息时，解析出经纬度/速度/朝向并更新车辆标记。
- * 浏览器原生 EventSource 在网络异常时会自动重连，因此 onerror 中仅做日志提示。
- */
+/** 建立 SSE 连接，接收车辆实时位置。 */
 function startSSEConnection() {
   if (eventSource) return
   const url = `${realtimeServer.value}/api/location/stream?deviceId=${realtimeDeviceId.value}`
@@ -710,7 +627,7 @@ function startSSEConnection() {
   }
 }
 
-/** 关闭 SSE 连接并清空引用，同时移除地图上的车辆标记。 */
+/** 关闭 SSE 连接并移除车辆标记。 */
 function stopSSEConnection() {
   if (eventSource) {
     eventSource.close()
@@ -720,46 +637,36 @@ function stopSSEConnection() {
   removeVehicleMarker()
 }
 
-// ════════════════════════════════════════════════════════════════
-// 事件处理
-// ════════════════════════════════════════════════════════════════
-
-/** 节点列表项点击事件处理：将地图视角聚焦到对应索引的节点。 */
+/** 聚焦节点列表选中的节点。 */
 function handleFocusNode(idx) { focusNode(positions.value[idx]) }
 
-/**
- * 测距工具开关——切换测距模式的启停状态。
- */
+/** 切换测距工具：开启/关闭测距模式，并同步更新状态。 */
 function toggleRanging() {
-  if (!rangingTool) return    //守卫逻辑 — 地图未就绪时静默退出
+  // 防御：测距工具未初始化时直接返回，避免空指针错误
+  if (!rangingTool) return
   if (rangingActive.value) {
-    rangingTool.turnOff(true) //调用 turnOff(true) 关闭测距并清除所有测量标记
+    // 关闭测距模式，传入 true 表示同时清除地图上已有的测距绘制结果
+    rangingTool.turnOff(true)
     rangingActive.value = false
   } else {
-    rangingTool.turnOn() //调用 turnOn() 进入测距模式，用户可在地图上点击绘制测距线段
-    rangingActive.value = true //同时将rangingActive设为true，按钮切换为激活态样式
+    // 开启测距模式，用户可在地图上点击绘制测距线段
+    rangingTool.turnOn()
+    rangingActive.value = true
   }
 }
 
-// ════════════════════════════════════════════════════════════════
-// 清理
-// ════════════════════════════════════════════════════════════════
-
-/** 组件卸载前的统一清理：清除标记/折线/信息窗口，关闭测距工具与 SSE 连接。 */
+/** 清理地图资源和实时连接。 */
 function cleanupAll() {
   clearMarkers()
   clearPolylines()
   closeInfoWindow()
+  closeVehicleInfoWindow()
   if (rangingTool) {
     rangingTool.close(true)
   }
   stopSSEConnection()
 }
 
-// ════════════════════════════════════════════════════════════════
-// 生命周期
-// ════════════════════════════════════════════════════════════════
-// 挂载后：初始化地图 → 渲染节点与路线 → 延迟 500ms 等待地图渲染稳定后自适应视野 → 开启实时追踪
 onMounted(() => {
   initMap()
       .then(() => {
@@ -770,7 +677,7 @@ onMounted(() => {
       })
       .catch(() => { /* 已在 initMap 中处理 loading */ })
 })
-// 卸载前：清理所有图层/连接资源，再销毁地图实例，避免内存泄漏
+
 onUnmounted(() => {
   cleanupAll()
   destroyMap()
