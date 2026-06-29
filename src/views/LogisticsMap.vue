@@ -91,7 +91,7 @@ import AMapLoader from '@amap/amap-jsapi-loader'
 
 let AMap = null
 let map   = null
-
+let rangingTool = null
 /** 节点状态文案。 */
 function statusText(status) {
   const MAP = { done: '已完成', active: '进行中', pending: '待处理' }
@@ -376,7 +376,7 @@ let eventSource      = null
 let vehicleMarker    = null
 let latestVehicleData = null
 let realtimeInfoWindow = null
-let rangingTool = null
+
 
 /**
  * 初始化高德地图。
@@ -410,9 +410,6 @@ function initMap() {
         map.addControl(new AMap.ToolBar({ position: { right: '40px', top: '110px' } }))
 
         // 创建测距工具：支持在地图上点击绘制测距线段，实时显示两点间的实际距离
-        // lineWidth: 线段宽度 3px | lineColor: 线段颜色蓝色 | dashArray: [8,4] 虚线段8px、间隔4px
-        rangingTool = new AMap.RangingTool(map, { lineWidth: 3, lineColor: '#0066ff', dashArray: [8, 4] })
-
         loading.value = false
         return { map, AMap }
       })
@@ -642,7 +639,7 @@ function handleFocusNode(idx) { focusNode(positions.value[idx]) }
 
 /** 切换测距工具：开启/关闭测距模式，并同步更新状态。 */
 function toggleRanging() {
-  // 防御：测距工具未初始化时直接返回，避免空指针错误
+   // 防御：测距工具未初始化时直接返回，避免空指针错误
   if (!rangingTool) return
   if (rangingActive.value) {
     // 关闭测距模式，传入 true 表示同时清除地图上已有的测距绘制结果
@@ -667,14 +664,25 @@ function cleanupAll() {
   stopSSEConnection()
 }
 
+/**
+ * 组件挂载入口：按异步流水线顺序初始化地图及所有附属功能。
+ * 流程：加载地图 SDK → 渲染标记/路径 → 自适应视野 → 建立实时连接。
+ */
 onMounted(() => {
+  // 1. 异步加载高德地图 SDK 并创建地图实例
   initMap()
       .then(() => {
+        // 2. 地图就绪后，依次执行：渲染节点标记、绘制路径线
         renderMarkers()
         renderRoute()
+        // 3. 延迟 500ms 等待渲染帧完成，再根据节点位置自适应缩放视野
         setTimeout(fitBounds, 500)
+        // 4. 开启 SSE 长连接，接收车辆实时位置推送
         startSSEConnection()
+        rangingTool = new AMap.RangingTool(map, { lineWidth: 3, lineColor: '#0066ff', dashArray: [8, 4] })
+
       })
+      // 5. 地图加载失败时静默处理，loading 状态已在 initMap 内部关闭
       .catch(() => { /* 已在 initMap 中处理 loading */ })
 })
 
